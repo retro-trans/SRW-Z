@@ -1,3 +1,36 @@
+# SOLVED 2026-08-25 - read this first
+
+**The pairing problem described below is fixed.** `tools/build_compare.py` pairs
+Japanese to English through the pointer table and achieves **100% on all 68,628
+dialogue rows**, including every record this file calls untrustworthy.
+
+The chain that works:
+
+    japanese string offset
+      -> the 4-aligned words in the JP record that point at it
+      -> the word at the SAME POSITION in the EN record
+      -> the english string offset
+
+Two earlier attempts failed and produced the numbers below:
+
+1. `export_review.py` resolves by JP offset and, when no pointer references that
+   offset, silently ASSUMES the English sits at the same place. That guess is
+   right for rows that never moved and wrong for every relocated row, which is
+   where the ~30% came from.
+2. My first "pointer pairing" test compared `jb[p]` with `eb[p]` directly
+   instead of keying by string offset, got mid-string garbage on rec127, and I
+   concluded records used different referencing schemes. They do not. The method
+   was wrong, not the data.
+
+So proofreading is NOT blocked on any record. Use build_compare.py, and filter
+on the pairing method - it labels every row `pointer`, `same-offset` or
+`suspect` rather than presenting a guess as fact.
+
+The measurements below are kept because they describe what the OLD exporter
+does, and it is still in the tree.
+
+---
+
 # Export pairing trust, per record
 Generated 2026-08-24 against v0.8.72. For each record: of the JP rows that are
 dialogue, how many resolve to an English string that is ALSO dialogue.

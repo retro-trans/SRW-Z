@@ -37,6 +37,35 @@ Round-trip is exact: extract, change nothing, apply, and the image is
 byte-identical. If you see rows being written when you changed nothing, that is
 a bug — please report it.
 
+## Comparing the Japanese against a translation
+
+To proofread, or to see how somebody else rendered a line, build a side-by-side
+table from your own two images:
+
+```sh
+python tools/build_compare.py japanese.chd translated.chd compare.html
+```
+
+It takes `.chd`, `.bin`, `.iso` or `.cue` (a `.chd` is extracted with chdman),
+and writes ONE self-contained HTML file - open it in any browser, no server and
+no internet. Search either language, filter by record, dialogue only, or rows
+that overflow the box.
+
+Nothing is distributed with this: the comparison is generated locally from discs
+you own.
+
+Every row is labelled with HOW it was paired:
+
+| label | meaning |
+|---|---|
+| `pointer` | matched through the pointer table — reliable |
+| `same-offset` | no pointer referenced it, so the English is assumed to sit where the Japanese did |
+| `suspect` | paired, but the English is empty or does not look like text |
+
+On this translation it reports **100% `pointer`** across all 68,628 dialogue
+rows. If a fork sees `same-offset` or `suspect` rows, those are the ones not to
+trust.
+
 ## Rules the engine enforces
 
 `apply_script.py` refuses to write a row that breaks any of these, because every

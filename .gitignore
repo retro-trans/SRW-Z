@@ -1,0 +1,30 @@
+# Never commit the game or anything derived from its data.
+*.bin
+*.cue
+*.chd
+*.iso
+*.img
+*.elf
+SLPS_*
+DATA_*.BIN
+MTVZKN*
+extracted/
+iso/
+patched/
+dist/
+
+# Third-party binaries - get them from their own projects
+*.exe
+*.zip
+
+# Bulk dumps of the original japanese script
+*_jp.json
+zkn_jp.json
+rec*_script.json
+caption_pairs.json
+btl_srvc_jp.json
+
+# Python
+__pycache__/
+*.pyc
+*.bak

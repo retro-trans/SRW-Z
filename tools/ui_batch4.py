@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+"""Save/memory-card system messages + series titles (0x33Axxx)."""
+
+BATCH = {
+    0x33A240: "Char's Counterattack",
+    0x33A290: "Gundam SEED DESTINY",
+    0x33A958: "None",
+    0x33A9F0: "Checking the memory card (PS2).",
+    0x33AA20: "No memory card (PS2) is inserted\n in MEMORY CARD slot 1.\n Saving requires a memory card\n (PS2) with at least 999KB free.",
+    0x33AAD0: "The memory card (PS2) is not\n formatted.\n Format it now?",
+    0x33AB30: "The memory card (PS2) was\n swapped.",
+    0x33AB60: "Formatting the memory card (PS2).\n Do not remove the card or\n turn off the power.",
+    0x33ABF0: "Checking the system file.",
+    0x33AC20: "Failed to read the system file.",
+    0x33AC50: "No system file found.\n Create one now?",
+    0x33AC90: "Saving. Do not remove the memory\n card (PS2) or turn off the\n power.",
+    0x33ACF0: "Failed to save the file.",
+    0x33AD20: "Loading. Do not remove the memory\n card (PS2) or turn off the\n power.",
+    0x33AD80: "Failed to load the file.",
+    0x33ADF0: "Not enough free space.\n Saving the game requires a\n memory card (PS2) with at least\n 999KB free.",
+    0x33AE70: "Not enough free space.\n Saving stage data requires a\n memory card (PS2) with at least\n 99KB free.",
+    0x33AEF0: "No memory card (PS2) is inserted\n in MEMORY CARD slot 1.",
+    0x33AF70: "Finished loading the file.",
+    0x33AFA0: "Finished saving the file.",
+    0x33AFD0: "Finished checking the memory\n card (PS2).",
+    0x33B110: "Super Robot Wars Z system data",
+    0x33B390: "Super Robot Wars Z stage data",
+    0x33B440: "Rand",
+    0x33B448: "Travis",
+    0x33B458: "Setsuko",
+    0x33B460: "Ohara",
+}

@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+"""Stage record 46 dialogue (re-wrapped to box width)."""
+
+T = {
+    0: 'Dokuganki\n"They\'re here, Marshal Hydler!\nThose are the $c!"',
+    1: 'Hydler\n"So Getter Robo and Aquarion are\nwith that unit too."',
+    2: 'Dokuganki\n"Yes! Scramble interceptors,\nquick!"',
+    3: 'Tekkoki\n"Don\'t panic, Dokuganki. This\nlab\'s defenses are perfect."',
+    4: 'Torres\n"No movement from the Photon Power\nLab!"',
+    5: 'Bright\n"You mean they don\'t intend to\nintercept us?"',
+    6: 'Ichitaro\n"Kouji-san\'s Double Spazer has\nlaunched!"',
+    7: 'Gengoro\n"Don\'t be reckless, Kouji! Watch\nhow the enemy moves!"',
+    8: 'Kouji\n"No time! Dawdle and the lab uses\nthat thing on us!"',
+    9: 'Talia\n"We\'ll follow Kouji\'s lead too!\nMinerva, full speed!"',
+    10: 'Arthur\n"Roger! Minerva, full speed!"',
+    11: 'Tekkoki\n"Heh... moths flying into the\nflame!"',
+    12: 'Hydler\n"Activate barrier generator and\ninterception system!!"',
+    13: 'Kouji\n"Waaaaugh!!"',
+    14: 'Maria\n"Kouji!!"',
+    15: 'Ichitaro\n"Father! Stay here and we\'re just\nsitting targets!"',
+    16: 'Gengoro\n"But with that barrier up, we\ncan\'t advance...!"',
+    17: 'Heizaemon\n"Fall back, Gengoro! Signal\nMinerva and Argama!"',
+    18: 'Gengoro\n"Understood! Recovering Kouji,\nthen falling back!"',
+    19: 'Kouji\n"Damn iiiiit!"',
+    20: 'Hydler\n"Hahaha! Look at them run, tails\nbetween their legs!"',
+    21: 'Hydler\n"Well done, Tekkoki. Seizing the\nlab as a base - I commend it."',
+    22: 'Tekkoki\n"Nothing anyone couldn\'t think\nof."',
+    23: 'Tekkoki\n"If anyone deserves praise, it\'s\nProf. Yumi for the barrier."',
+    24: 'Sayaka\n"Father..."',
+    25: 'Hydler\n"Come as often as you like,\n$c. We\'ll crush you each\ntime."',
+    26: 'Tekkoki\n(Now, Getter Robo, try to break my\nplan...)',
+}

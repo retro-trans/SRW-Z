@@ -1,45 +1,36 @@
-# Super Robot Taisen Z — English translation toolchain
+# Super Robot Taisen Z — translation project
 
-Tooling, documentation and terminology research for the English fan translation
-of **Super Robot Taisen Z** (PlayStation 2, SLPS-25887).
+An open toolchain for translating **Super Robot Taisen Z** (PlayStation 2,
+SLPS-25887), plus the English translation built with it.
 
-This repository contains the **tools and research only**. It does not contain
-the game, any part of the game's data, or the translated disc image — see
-[What is deliberately not here](#what-is-deliberately-not-here).
+Fork it to fix the English, or to take the game into another language. Start
+with **[TRANSLATING.md](TRANSLATING.md)**.
+
+```sh
+python tools/extract_script.py mygame.bin script.json   # pull the text out
+#   ... edit the "text" fields ...
+python tools/apply_script.py mygame.bin script.json --write
+python tools/verify_pointers.py mygame.bin --min 85     # never skip this
+```
+
+Round-trip is exact by construction: extract, change nothing, apply, and the
+image is byte-identical.
+
+You need your own copy of the game. This repository contains no disc image, no
+game data and no dump of the original Japanese script — `extract_script.py`
+reads those from the disc you dump yourself.
 
 ## What is here
 
 | Path | Contents |
 |---|---|
+| `TRANSLATING.md` | **start here** — the edit loop and the rules the engine enforces |
 | `tools/` | ~490 Python tools: the LZ codec, patchers, verifiers, scanners |
-| `docs/BASE_RULES.md` | Portable rules for running a translation project like this |
-| `docs/TECHNICAL.md` | How the data, the engine and the pipeline actually work |
-| `analysis/english_script.json` | **the translation itself** — 89,128 English strings |
-| `analysis/glossary.json` | 1000 Japanese→English terms used by the translation |
-| `analysis/glossary_sources.json` | Provenance for every glossary entry |
-| `analysis/review/` | Proofreading brief and export-reliability report |
-| `CHANGELOG.md` | Every build, what changed, and what broke |
-
-## The translation is in here
-
-`analysis/english_script.json` holds all 89,128 translated strings (68,414 of
-them dialogue), keyed by record index and byte offset, with **no Japanese
-original** — the pairs are what would make it a dump of the publisher's script.
-
-That file is what makes this repository forkable. Without it the translation
-would exist only inside a disc image that cannot be published, and losing that
-image would lose the work.
-
-```sh
-python tools/export_english_script.py <iso> english_script.json   # dump
-python tools/apply_english_script.py <iso> english_script.json --write
-```
-
-`apply_english_script.py` restores the translation onto a build in this
-lineage. It is **not** a one-click "translate a fresh ISO" button: rows that
-outgrew their original slot were relocated to the end of their record, so their
-offsets do not exist in an unpatched image. Those are reported and skipped
-rather than written to a wrong address.
+| `analysis/english_script.json` | the English translation — 89,128 strings |
+| `analysis/glossary.json` | 1000 terms, with provenance in `glossary_sources.json` |
+| `docs/TECHNICAL.md` | how the data, the engine and the pipeline actually work |
+| `docs/BASE_RULES.md` | portable rules for running a project like this |
+| `CHANGELOG.md` | every build, what changed, and what broke |
 
 ## The interesting parts
 

@@ -1,0 +1,118 @@
+# Starting your own translation
+
+This project is built so you can fork it and either fix the English or take the
+game into another language entirely. Everything below works from a disc image
+you dump from your own copy.
+
+## What you need
+
+- A PS2 copy of **Super Robot Taisen Z** (SLPS-25887) and a way to dump it
+- Python 3
+- [`chdman`](https://www.mamedev.org/) if you want to build a `.chd` for emulators
+- [`xdelta3`](https://github.com/jmacd/xdelta) if you want to distribute a patch
+
+None of those binaries are in this repo — get them from their own projects.
+
+## The loop
+
+```sh
+# 1. pull every string out of YOUR image
+python tools/extract_script.py mygame.bin script.json
+
+# 2. edit the "text" fields in script.json - that is the whole job
+
+# 3. write it back (refuses to write anything if a row is invalid)
+python tools/apply_script.py mygame.bin script.json --write
+
+# 4. check you did not break the image
+python tools/verify_pointers.py mygame.bin --min 85
+python tools/scan_visible_defects.py mygame.bin
+```
+
+`extract_script.py` tells you which situation you are in. A Japanese image gives
+you the original script to translate from; an image patched with our English
+gives you the current translation to revise.
+
+Round-trip is exact: extract, change nothing, apply, and the image is
+byte-identical. If you see rows being written when you changed nothing, that is
+a bug — please report it.
+
+## Rules the engine enforces
+
+`apply_script.py` refuses to write a row that breaks any of these, because every
+one of them has broken this game at least once.
+
+**The box is 3 lines by 34 columns.** Fullwidth characters count 2. Line 1 of a
+row is the speaker name and is structural — do not translate it into a sentence.
+
+**Placeholders expand at runtime.** `$n` and `$f` are 7 columns, `$F` is 14,
+`$l` is 6, `$c` is a player-entered squad name and is unbounded. Count the
+expanded width, not the 2 characters you see.
+
+**`《term》` links must resolve.** The term has to exist in the keyword bank or
+the scene *crashes*. A term and its links are ONE edit; if you rename one,
+rename the other. Rename the bank first — an entry with nothing pointing at it
+is harmless, a link pointing at nothing is not. Check with
+`python tools/fix_dead_links.py <iso> --dry-run`.
+
+**Text must encode as cp932.** Em-dashes, curly quotes and most accented
+characters do not. `ö/ä/ü` are unavailable, which is why the German-named
+characters here ship without umlauts. `β` does exist (`0x83C0`).
+
+**Replacements must fit their slot.** A longer string needs relocating to the
+end of the record with its pointer rewritten — see "option 3" in
+[`docs/TECHNICAL.md`](docs/TECHNICAL.md). `apply_script.py` does not do this for
+you; it will tell you the row does not fit.
+
+**Menus are drawn by a different renderer** where ASCII `0x2E–0x3D` (`.` and the
+digits) are *control codes*. Menu and library text uses fullwidth `．` and `０`
+on purpose. Do not "fix" those to ASCII — the renderer will break the line at
+every period.
+
+## Before you build
+
+```sh
+python tools/verify_pointers.py <iso> --min 85    # catches the save-load freeze
+python tools/verify_elf_patches.py <iso>          # catches reverted ELF patches
+python tools/fix_dead_links.py <iso> --dry-run    # must report 0
+python tools/scan_visible_defects.py <iso>        # must report 0
+```
+
+The first one matters most. An edit that moves bytes inside a record while
+leaving its pointer table alone produces an image that boots, plays fine, and
+freezes when you load a save — and every length-based check passes. That
+shipped here once.
+
+## Naming
+
+`analysis/glossary.json` maps Japanese terms to the English this translation
+uses, and `analysis/glossary_sources.json` records where each came from and how
+far to trust it:
+
+| status | meaning |
+|---|---|
+| `cited` | verified against a named source |
+| `corrected` | fixed, with the reasoning recorded |
+| `chosen` | no official English exists; a decision was made |
+| `corroborated` | matches our own script — circular, **not** evidence |
+| `legacy-unverified` | inherited, source never recorded |
+| `ambiguous` | the same katakana is two different characters — **never** rename globally |
+
+If you are translating to another language, the glossary is still useful as a
+list of *which* terms are proper nouns and which are ordinary words, even though
+the English side will not be.
+
+The `ambiguous` entries are the trap. サラ is three different characters
+depending on the series; メサ is a God Sigma character and not Jerid's surname.
+A global find-and-replace on those renames the wrong person.
+
+## Contributing back
+
+Pull requests welcome, especially:
+
+- proofreading — 141 of the 205 scenario records have never been read by a human
+- the export-pairing problem in `analysis/review/EXPORT_TRUST.md`
+- other languages, as separate branches or forks
+
+Please do not add the original Japanese script, disc images, or third-party
+binaries to the repository.

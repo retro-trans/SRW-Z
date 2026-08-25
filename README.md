@@ -14,10 +14,32 @@ the game, any part of the game's data, or the translated disc image — see
 | `tools/` | ~490 Python tools: the LZ codec, patchers, verifiers, scanners |
 | `docs/BASE_RULES.md` | Portable rules for running a translation project like this |
 | `docs/TECHNICAL.md` | How the data, the engine and the pipeline actually work |
+| `analysis/english_script.json` | **the translation itself** — 89,128 English strings |
 | `analysis/glossary.json` | 1000 Japanese→English terms used by the translation |
 | `analysis/glossary_sources.json` | Provenance for every glossary entry |
 | `analysis/review/` | Proofreading brief and export-reliability report |
 | `CHANGELOG.md` | Every build, what changed, and what broke |
+
+## The translation is in here
+
+`analysis/english_script.json` holds all 89,128 translated strings (68,414 of
+them dialogue), keyed by record index and byte offset, with **no Japanese
+original** — the pairs are what would make it a dump of the publisher's script.
+
+That file is what makes this repository forkable. Without it the translation
+would exist only inside a disc image that cannot be published, and losing that
+image would lose the work.
+
+```sh
+python tools/export_english_script.py <iso> english_script.json   # dump
+python tools/apply_english_script.py <iso> english_script.json --write
+```
+
+`apply_english_script.py` restores the translation onto a build in this
+lineage. It is **not** a one-click "translate a fresh ISO" button: rows that
+outgrew their original slot were relocated to the end of their record, so their
+offsets do not exist in an unpatched image. Those are reported and skipped
+rather than written to a wrong address.
 
 ## The interesting parts
 

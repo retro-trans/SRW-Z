@@ -269,8 +269,17 @@ apply();
 """
 
 
-def stage_synopses():
-    """Per-stage synopsis text from DATA_HSFC.BIN, keyed by STAGE record index.
+HSFC_LBA = 1568541
+
+
+def stage_synopses(img=None):
+    """Per-stage recap text keyed by STAGE record index.
+
+    Reads HSFC from the IMAGE being compared (LBA 1568541), not from
+    extracted/DATA_HSFC.BIN. The extracted copy is the untranslated Japanese
+    original; patch_hsfc_recaps.py translates this bank, so reading the image
+    gives the English recap when comparing against a patched build - which is
+    what the header above the table should show.
 
     This game has no stage->record table: scenario titles are composed at
     runtime from format strings, which is why findstage.py identifies records by
@@ -289,12 +298,23 @@ def stage_synopses():
     synopsis and never as an authoritative stage number.
     """
     import collections
-    here = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(os.path.dirname(here), "extracted", "DATA_HSFC.BIN")
-    if not os.path.exists(path):
-        return {}
+    raw = None
+    if img and os.path.exists(img):
+        try:
+            f = open(img, "rb")
+            f.seek(HSFC_LBA * SECTOR)
+            raw = f.read(300000)
+            f.close()
+        except Exception:
+            raw = None
+    if raw is None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(os.path.dirname(here), "extracted", "DATA_HSFC.BIN")
+        if not os.path.exists(path):
+            return {}
+        raw = open(path, "rb").read()
     try:
-        rec0 = banlz.decompress_all(bytearray(open(path, "rb").read()))[0][1]
+        rec0 = banlz.decompress_all(bytearray(raw))[0][1]
     except Exception:
         return {}
     b = bytes(rec0)
@@ -308,14 +328,29 @@ def stage_synopses():
                 t = b[i:j].decode("cp932")
             except Exception:
                 t = None
-            if t and len(JP_RE.findall(t)) >= 4:
+            # accept BOTH the japanese original and an english recap - the
+            # bank is translated in a patched image, so requiring japanese
+            # here would silently return nothing
+            if t and (len(JP_RE.findall(t)) >= 4
+                      or len(re.findall(r"[A-Za-z]", t)) >= 8):
                 lines.append((i, t))
         i = j + 1
     g = collections.OrderedDict()
     for off, t in lines:
         g.setdefault((off - 182) // 150, []).append(t)
-    syn = [("".join(v)).replace(IDSPACE, "") for k, v in sorted(g.items())]
-    return dict((i + 1, t) for i, t in enumerate(syn))
+    out = {}
+    for i, (k, v) in enumerate(sorted(g.items())):
+        # Each entry is three 48-byte lines. Japanese needs no separator, but an
+        # english recap is hard-wrapped mid-sentence, so joining bare produces
+        # "Koujiand Tetsuya" / "asDouble Mazinger". Join with a space and
+        # collapse, and fold the fullwidth punctuation the menu renderer
+        # requires back to ASCII - this is a UI label, not game data.
+        t = " ".join(x.strip() for x in v)
+        t = t.replace(IDSPACE, " ")
+        for fw, asc in ((u"．", "."), (u"，", ","), (u"！", "!"), (u"？", "?")):
+            t = t.replace(fw, asc)
+        out[i + 1] = " ".join(t.split())
+    return out
 
 
 def main():
@@ -328,8 +363,10 @@ def main():
         only_rec = int(sys.argv[sys.argv.index("--rec") + 1])
 
     tmp = tempfile.mkdtemp(prefix="srwzcmp")
-    jp_items = load(as_image(jp_path, tmp))
-    en_items = load(as_image(en_path, tmp))
+    jp_img = as_image(jp_path, tmp)
+    en_img = as_image(en_path, tmp)
+    jp_items = load(jp_img)
+    en_items = load(en_img)
 
     import collections
     rows, meth = [], {"pointer": 0, "same-offset": 0, "suspect": 0}
@@ -354,7 +391,7 @@ def main():
                     cast[idx][sp] += 1
             rows.append([idx, jo, jt, eo, et, method, 1 if over else 0])
 
-    syn = stage_synopses()
+    syn = stage_synopses(en_img)
     label = {}
     for idx in sorted(set(list(cast.keys()) + list(syn.keys()))):
         top = [n for n, _ in cast[idx].most_common(3)] if idx in cast else []

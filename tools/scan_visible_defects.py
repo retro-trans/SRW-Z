@@ -99,7 +99,10 @@ def check(idx, off, s, found):
         if ecols(b) > WIDTH:
             found["overflow_cols_squadname" if has_c else "overflow_cols"].append(rec)
             break
-    if BS + "n" in s or BS + "t" in s:
+    # backslash-quote was NOT checked here originally, so it survived every
+    # sweep until a screenshot caught Tekkouki saying \"researcher's soul\".
+    # Check every escape a JSON/py source could leak, not just the newline.
+    if any(BS + c in s for c in ("n", "t", '"', "'", BS, "r")):
         found["literal_escape"].append(rec)
     for m in re.finditer(r"\$(.)", s):
         if m.group(1) not in KNOWN_PH:

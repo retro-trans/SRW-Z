@@ -10,6 +10,52 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.97 (2026-08-27) - a line that named the wrong enemy
+
+From a screenshot: a caption overflowing its box and ending `down Teral!"!"`.
+The row had THREE faults, not one.
+
+    stored : Kazuki / people of Io, make sure you take / down Teral!"!"
+    japanese: 香月「頼むぜ、闘志也さん、テラル…！
+                　イオの人達のためにも、
+                　絶対に[JP name]を倒してくれよ！」
+
+It had lost its first body line, doubled its terminator, and - the serious one
+- named **Teral** as the target. Kazuki is asking Toshiya AND Teral to defeat
+Gagan; the english turned an ally into the enemy. Now:
+
+    Kazuki
+    「I'm counting on you, Toshiya,
+    　Teral! For the people of Io,
+    　you have to take down Gagan!」
+
+31/30/32 columns, written in place - 102 bytes into a 112-byte slot, so no
+pointer moved.
+
+### Two names that disagreed with themselves
+
+テラル shipped as both Teral and **Teraru** - 85 battle captions used the
+second. Akurasu spells it **Teral** ("The Secret of Enemy General Teral"), and
+605 uses in the script already agreed, so the 85 are normalised.
+
+ガガーン shipped as Gagan (x8) and **Gagaan** (x1). Akurasu's character list
+for this series is unfinished, so this one follows the build's own majority
+rather than the wiki - worth revisiting if the page is ever filled in.
+
+### New: tools/fix_row.py
+
+Screenshot bugs arrive one row at a time, so they get a tool. Corrections live
+in analysis/row_fixes.json and each carries a `was` field that must match the
+row currently on disc - if another pass already touched it, the fix is refused
+instead of overwriting work. The 3-line/34-column box and cp932 are checked
+before anything is written.
+
+### Gates
+
+    integrity.py                 problems: 0
+    verify_elf_patches.py        all ELF patches present
+    verify_pointers.py --against 81,286 resolving, 0 broken
+
 ## 0.8.96 (2026-08-27) - one character, eleven spellings
 
 Reported from a screenshot: "here it's still Reben". It was worse than one
@@ -2041,9 +2087,9 @@ Also this build:
   - rec012 dialogue, 2 lines rewritten (both were also padded with
     FULLWIDTH periods - 2 columns each - which is what pushed them past
     the box edge):
-      [JP source line, 41 columns]
+      「…僕はまた罪を重ねる。僕が生きるために」
         -> "...I'll add to my sins again. / All so that I can live."
-      [JP source line, 57 columns]
+      「これは発端…悲劇の始まり。そして、果てなき暗獄へ堕ちる」
         -> "This is where it begins... the / start of a tragedy. And
             then, a / fall into endless darkness."
 
@@ -2109,7 +2155,7 @@ Applied through tools/patch_elf_labels.py, and the SOURCE tables were
 updated too (elf_ui_en.py for two, ui_batch2.py for the other two) so a
 future re-apply of either cannot silently restore the long names.
 
-CAPTION 12243: [JP source line, 46 columns] was
+CAPTION 12243: 桂ならいざ知らず、俺を後ろから攻めても無駄だぜ was
 "Katsura maybe, but...
 from behind? No good." - terse to the point of
 being cryptic (a leftover of the byte-budget era; captions have had no
@@ -2142,7 +2188,7 @@ re-wrapped, 9 left alone because they would need a 4th line. The other
 NOTE for that pass: measure in COLUMNS (fullwidth = 2), not characters -
 this is the same class of mistake as 0.8.14 wrapping at 37-40.
 
-WORDING: [JP source line, 58 columns]
+WORDING: 「頭上にはユニウスセブンが迫っているというのに、自国の利益
 ばかりを追うとは…！」 was "Junius Seven bears down overhead, yet they
 chase only their own nation's profit...!" - stilted. Now:
   「Junius Seven is falling on us,
@@ -2589,7 +2635,7 @@ offsets drift but field ORDER matches):
 mine!" (over-clipped) ->
   "Sorry…
 I'll take it!" (both occurrences)
-- [JP source line, 40 columns] -> "Emaan's devices, no matter
+- エマーンのデバイスなど、いくら来ようと！ -> "Emaan's devices, no matter
   how many!" verified FAITHFUL (JP dangles identically) - kept.
 Speaker 桂 in captions comes from the COMPDATA pilot table - already
 "Katsura" since 0.8.24 (user was on an older build).

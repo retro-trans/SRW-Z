@@ -19,7 +19,7 @@ Two warnings that are not obvious from any docstring:
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 11 |
 | [Applying text to the image](#applying-text-to-the-image) | 4 |
-| [Fixing specific defects](#fixing-specific-defects) | 14 |
+| [Fixing specific defects](#fixing-specific-defects) | 15 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 35 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 7 |
@@ -227,6 +227,9 @@ Restore the line breaks that translation dropped from long STAGE strings.
 
 **`fix_rank.py`**  
 \u51c6\u5c06 (Brigadier General) ships six different ways across 131 rows: General 79, Colonel 20, Vice Admiral 12, Brigadier General 10, Major General 6, Commodore 4. Agents keep fixing it one row at a time; this settles it.
+
+**`fix_row.py`**  
+Replace individual dialogue rows, from a list of hand-written corrections.
 
 **`fix_terms_global.py`**  
 Term fixes across ALL 205 STAGE records, not just the 26 that were exported.

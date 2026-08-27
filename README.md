@@ -25,11 +25,14 @@ reads those from the disc you dump yourself.
 | Path | Contents |
 |---|---|
 | `TRANSLATING.md` | **start here** — the edit loop and the rules the engine enforces |
-| `tools/` | ~490 Python tools: the LZ codec, patchers, verifiers, scanners |
-| `analysis/english_script.json` | the English translation — 89,128 strings |
+| `TOOLS.md` | every tool, what it is for, and when you need it |
+| `tools/` | 158 tools: the LZ codec, the pipeline, patchers, verifiers, gates |
+| `analysis/english_script.json` | the English translation — 167,613 strings |
 | `analysis/glossary.json` | 1000 terms, with provenance in `glossary_sources.json` |
 | `docs/TECHNICAL.md` | how the data, the engine and the pipeline actually work |
 | `docs/BASE_RULES.md` | portable rules for running a project like this |
+| `docs/RENDERER.md` `VWF.md` `CUSTOM_FONT.md` | how the text engine draws, and the font work |
+| `docs/LZ_FORMAT.md` `DEBUGGER_TRACE.md` `FINDINGS.md` | the container format and the live-tracing method |
 | `CHANGELOG.md` | every build, what changed, and what broke |
 
 ## The interesting parts

@@ -2,50 +2,45 @@
 
 The patch contains none of the game — you apply it to your own copy.
 
-## Two commands
-
-If you have the Japanese game as a `.chd`:
+## Three commands
 
 ```sh
-chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o game.cue -ob game-jp.bin
+chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
 
-xdelta3 -d -s game-jp.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.bin"
+xdelta3 -d -s game.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+
+chdman createcd -i "SRWZ English.iso" -o "SRWZ English.chd"
 ```
 
-That is it. Drag **`SRWZ English.bin`** into PCSX2 and play.
+Load **`SRWZ English.chd`** in PCSX2 and play. You can delete `game.bin`,
+`tmp.cue` and the `.iso` afterwards.
 
-If your copy is already a `.iso` or `.bin`, skip the first command and use your
-file in place of `game-jp.bin`.
+**In a hurry?** Stop after the second command — PCSX2 plays `SRWZ English.iso`
+directly. The third command just makes it about a third the size.
 
-You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases) and, for the
-first command only, `chdman` from [MAME](https://www.mamedev.org/). Neither
-ships here.
+**Already have a `.iso` or `.bin`?** Skip the first command and use your file
+in place of `game.bin`.
 
-Prefer clicking to typing? **DeltaPatcher** does the second command for you:
-original file `game-jp.bin`, patch `SRWZ-English-v0.8.96.xdelta`, Apply.
+You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases) and `chdman`
+from [MAME](https://www.mamedev.org/). Neither ships here.
 
-## Optional — make a .chd
+Prefer clicking to typing? **DeltaPatcher** does the middle command for you:
+original file `game.bin`, patch `SRWZ-English-v0.8.96.xdelta`, Apply.
 
-A CHD is about a third the size. Save this as `en.cue` next to the patched file:
+## Why not just patch the .chd directly?
 
-```
-FILE "SRWZ English.bin" BINARY
-  TRACK 01 MODE1/2048
-    INDEX 01 00:00:00
-```
+Because it would only work for some people, and would fail for everyone else in
+a way that looks like a corrupt download.
 
-then:
+A CHD is compressed in blocks, and two CHDs of the *same disc* contain different
+bytes if they were built by different `chdman` versions. We measured it:
+rebuilding a Japanese CHD with our own `chdman` produced a file **4 MB
+different** from the original, despite identical contents, identical CHD version,
+identical 19,584-byte hunks and identical `cdlz`/`cdzl`/`cdfl` compression.
 
-```sh
-chdman createcd -i en.cue -o "SRWZ English.chd"
-```
-
-**Do not** expect an xdelta built for a `.chd` to work. A CHD compresses in
-blocks, and two copies of the *same* disc compress to different bytes if they
-were made by different `chdman` builds — we measured a 4 MB size difference
-between two CHDs of identical content. That is why the patch targets the
-uncompressed image: built against a CHD it came out over 1.5 GB, against the
-image it is 6 MB.
+A patch built against one of those CHDs is 7.5 MB; the same patch against the
+other passed **1.5 GB** and was still growing. So the patch targets the
+uncompressed image, where a byte is a byte, and you rebuild the CHD locally.
 
 ## Optional — sharper UI art
 
@@ -64,38 +59,35 @@ keyed to the disc's CRC, so they silently reset every time you update the patch.
 
 **`target window checksum mismatch: XD3_INVALID_INPUT`**
 
-The file you pointed `-s` at is not the Japanese original the patch expects.
-Almost always one of:
+The file you gave `-s` is not the Japanese original the patch expects. Almost
+always one of:
 
-- it is an already-patched image (start again from your clean copy)
-- it was ripped at 2352 bytes per sector — the file will not be
-  3,758,358,528 bytes. Convert it: `python tools/bin2iso.py yours.bin game-jp.bin`
+- it is already patched — start again from your clean copy
+- it was ripped at 2352 bytes per sector, so it is not 3,758,358,528 bytes.
+  Convert it: `python tools/bin2iso.py yours.bin game.bin`
 
-To check your copy is the right one:
+To check:
 
 ```sh
-sha1sum game-jp.bin                    # Linux / macOS / Git Bash
-certutil -hashfile game-jp.bin SHA1    # Windows
+sha1sum game.bin                    # Linux / macOS / Git Bash
+certutil -hashfile game.bin SHA1    # Windows
 ```
 
-    3,758,358,528 bytes    sha1 e8dbe37e88afe8f82d48889b0775274ccde3cf99
+    before   3,758,358,528 bytes   sha1 e8dbe37e88afe8f82d48889b0775274ccde3cf99
+    after    3,758,358,528 bytes   sha1 d1d91523d32d646fbcf97251e39bd5b8f1d2397f
 
-and the patched result should be:
-
-    3,758,358,528 bytes    sha1 d1d91523d32d646fbcf97251e39bd5b8f1d2397f
-
-**`using default source filename: game-jp.bin`**
+**`using default source filename: game.bin`**
 
 You left out `-s`. The source filename is stored inside the patch, so xdelta
-guesses at one and then cannot find it — which looks like a missing-file error
+guesses at one and then cannot find it — which reads like a missing-file error
 rather than a missing flag.
 
 **`file open failed: read: ...`**
 
-Wrong path. On Windows, put quotes around anything containing spaces.
+Wrong path. On Windows, quote anything containing spaces.
 
 **It plays, but something looks wrong.**
 
-Please [open an issue](../../issues) with a screenshot. Most of the real bugs
-in this project were found by someone playing it and noticing something odd on
+Please [open an issue](../../issues) with a screenshot. Most of the real bugs in
+this project were found by someone playing it and noticing something odd on
 screen, not by any automated check.

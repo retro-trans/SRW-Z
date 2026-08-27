@@ -17,6 +17,18 @@ the baseline:
 
     verify_pointers.py <iso>              # report
     verify_pointers.py <iso> --min 99     # exit 1 if any record falls below
+    verify_pointers.py <iso> --against <ref-iso>   # STRONGER, size-independent
+
+THE RATIO HAS A BLIND SPOT. Its denominator counts every 4-aligned word whose
+value happens to fall inside the record, so it INFLATES when a record grows -
+and relocating a row (append + repoint) grows the record legitimately. rec48
+went 86.0% -> 84.9% across this session with the numerator unchanged at 1087 and
+not one pointer broken; the ratio fell purely because 16 more coincidental words
+came into range. Lowering the threshold to pass would have been the wrong fix.
+
+--against is immune to that: it takes every pointer that RESOLVES in a known-good
+image and requires it to still resolve in this one. Size changes cannot affect
+it, and a genuinely broken pointer cannot hide behind a big denominator.
 """
 import os
 import struct
@@ -43,8 +55,55 @@ def score(data):
     return tot, ok
 
 
+def against(cur_path, ref_path):
+    """Every pointer that resolves in ref must still resolve in cur."""
+    def load(p):
+        f = open(p, "rb"); f.seek(LBA * SECTOR)
+        it = banlz.decompress_all(f.read(SIZE)); f.close()
+        return it
+
+    cur, ref = load(cur_path), load(ref_path)
+    broken = 0
+    checked = 0
+    for i in range(min(len(cur), len(ref))):
+        a, b = ref[i][1], cur[i][1]
+        if a is None or b is None:
+            continue
+        a, b = bytes(a), bytes(b)
+        for p in range(0, min(len(a), len(b)) - 4, 4):
+            v = struct.unpack_from("<I", a, p)[0] - BASE
+            if not (0 <= v < len(a)) or (v and a[v - 1] != 0):
+                continue
+            # Require a NON-EMPTY target. A word pointing at a NUL "resolves" to
+            # an empty string, and most such words are not pointers at all -
+            # they are bytes inside TEXT that happen to read as an address. Any
+            # edit to that text changes them, which would otherwise report
+            # hundreds of phantom breakages.
+            if v >= len(a) or a[v] == 0:
+                continue
+            # And require the target to look like a ROW - a dialogue row is
+            # 'speaker' + newline + body. Single characters ('7', '+') are
+            # text bytes that read as an address, not pointers; without this
+            # they report as phantom breakages whenever the text is edited.
+            end = a.find(bytes([0]), v)
+            if end < 0 or end - v < 6 or 10 not in a[v:end]:
+                continue
+            checked += 1
+            w = struct.unpack_from("<I", b, p)[0] - BASE
+            if not (0 <= w < len(b)) or (w and b[w - 1] != 0):
+                broken += 1
+                if broken <= 8:
+                    print("   rec%-4d word %#08x no longer resolves" % (i, p))
+    print("pointers resolving in %s : %d" % (ref_path, checked))
+    print("no longer resolving in %s : %d" % (cur_path, broken))
+    return broken
+
+
 def main():
     iso = sys.argv[1]
+    if "--against" in sys.argv:
+        ref = sys.argv[sys.argv.index("--against") + 1]
+        sys.exit(1 if against(iso, ref) else 0)
     floor = None
     if "--min" in sys.argv:
         floor = float(sys.argv[sys.argv.index("--min") + 1])

@@ -654,3 +654,30 @@ WORDS = {
     'ショット': 'Shot',
     'Ⅸ': ' IX',
 }
+
+# --- katakana that the tokenizer was leaving as romaji (2026-08-26 review) ---
+# These are LOANWORDS: the japanese is a katakana rendering of an English/Latin/
+# German word, so writing the source word back is recovery, not a naming choice.
+# The Gundam SEED entries are documented weapon names, not inventions.
+KATA_LOANWORDS = {
+    u"リニア・ガン": "Linear Gun",
+    u"エクスカリバー": "Excalibur",
+    u"ケルベロス": "Cerberus",
+    u"オルトロス": "Orthros",
+    u"カリドゥス": "Calidus",
+    u"アロンダイト": "Arondight",
+    u"アムフォルタス": "Amfortas",
+    u"バラエーナ": "Ballaena",
+    u"グリフォン": "Gryphon",   # the build already ships Gryphon elsewhere
+    u"タンホイザー": "Tannhauser",
+    u"イーゲルシュテルン": "Igelstellung",
+    u"ファトゥム": "Fatum",
+    u"バンカー": "Bunker",
+    u"バンドック": "Bandock",
+    u"プロペラ・アーム": "Propeller Arm",
+    u"パルサー・ショット": "Pulsar Shot",
+    u"トレンブル・ホーン": "Tremble Horn",
+    u"ミーティア・サーベル": "METEOR Saber",
+    u"ヤタノカガミ": "Yata-no-Kagami",
+}
+WORDS.update(KATA_LOANWORDS)

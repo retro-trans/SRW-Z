@@ -198,3 +198,43 @@ General". β IS encodable (0x83C0), so "Galbaldy β" is fine.
 Provenance lives in `analysis/glossary_sources.json`: every entry carries
 status (cited / corrected / chosen / corroborated / legacy-unverified /
 ambiguous / CONFLICT), a source, and a note.
+
+## COMPDATA string pool: names have no byte budget
+
+COMPDATA.BN is a single banlz record that decompresses to 524,032 bytes and is
+loaded at a **hardcoded 0x006D6800**. It ends in a string pool holding weapon,
+item and ability text:
+
+    0x00904 .. 0x61658   pointer tables (9,483 pointer words)
+    0x61680 .. 0x7FF00   string pool    (~3,433 entries, 8-byte aligned)
+
+Each string is reached through an **absolute PS2 RAM pointer** stored in the
+tables - a reference to the name at record offset `0x66E28` is stored as
+`0x0073D628`. The file bytes and the RAM bytes at the tables are byte-for-byte
+identical, so nothing is relocated at load time.
+
+Two consequences:
+
+1. **A name cannot be lengthened in place.** The following string's pointer is
+   unchanged and ends up aimed into the middle of the new text. Growing
+   `MusouSw` to `Musou Sword` made the next entry render as `ord`.
+2. **The pool can be repacked freely if the pointers move with it**, which is
+   what `tools/pool.py` does. There is therefore no per-name byte budget; the
+   only limit left is how wide the UI draws. Repacking also reclaims ~22 KB.
+
+Use `tools/apply_pool.py <iso> --from names.json --write`, where the JSON maps
+original pool offsets to text. Text is encoded with `patch.encode(s, "menu")`,
+not cp932, because the 0x13A290 reader treats 0x2E-0x3D as control codes.
+
+**Only rewrite words that land exactly on a string start.** 91 words inside the
+record and ~173 in the ELF look like pointers into the pool but are u16 pairs
+whose high half is 0x0074 (`00 a2 74 00`). Nothing outside COMPDATA holds a real
+pointer into the pool - verified against the ELF on disc and a 32 MB EE dump.
+
+**Method note.** Every static search for this reference failed - index,
+record-relative offset, offset/8, and the target unit's six-weapon sequence at
+every stride across the whole 3.7 GB image - because the stored value is an
+absolute address in a range that looks like nothing on disc. Dumping EE RAM and
+searching for pointers into the loaded pool found it immediately. When a
+reference cannot be found statically, dump RAM before concluding it is computed
+at runtime.

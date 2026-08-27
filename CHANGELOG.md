@@ -10,6 +10,836 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.95 (2026-08-27) - scenario-chart recaps, Chimera/Lowen, LIBRARY menu for real
+
+Reported from a screenshot: "the scenario chart still have some bug lik missing
+text here or Chimera is still translated as Kaimera". Two separate bugs, plus a
+third found while fixing the second.
+
+### The recaps were wrapped a third too narrow
+
+The recap in the screenshot is COMPLETE in the data (382 bytes, rec0 0x004da0,
+slot 480) - that shot caught the typewriter mid-draw, the corner still showing
+"Speed Up". But measuring all 210 recaps found a real systematic fault:
+
+    japanese line counts cluster at 10-11, max 22
+    english  line counts spread to 25, and 113 of 210 use MORE lines than the
+             japanese they replace
+    english  max line width: mean 40, but the WIDEST already reach 56
+
+The box is 56 columns - the japanese uses all of it and some english lines
+already do - so most english was wrapped at ~38-40, wasting a third of the box
+and spilling lines out of the bottom. Rewrapped to 56:
+
+    recaps still longer than their japanese :  113 -> 0
+    recaps that grow in bytes               :        0
+    209 recaps rewrapped, 708 lines saved, 46 records rebuilt
+
+Nothing grew, so every one went back into its own slot: no relocation, no
+repointing, and the pointers repaired in 0.8.90 are untouched (81,286 resolving,
+0 broken, checked with verify_pointers --against).
+
+These live in STAGE.BIN, not HSFC - which is why find_row never showed them (it
+only matches rows containing the opening quote bracket) and why searching HSFC,
+COMPDATA and the ELF found nothing. HSFC holds the SHORT map-select one-liners
+("AEUG raids Lutetium Base"), a different thing.
+
+### Kaimera -> Chimera, and a FIFTH spelling of Lowen
+
+8 battle captions read "Kaimera" for the faction. Fixing them exposed the other
+half of the same line:
+
+    "I am Raven General! The young lion of Kaimera!"
+    JP: the speaker is Lowen General, not Raven
+
+So "Raven General" is a fifth spelling of that name after Raben, Reeven and
+Lowen. 12 captions corrected. Both replacements are the SAME LENGTH as what they
+replace, so this was a byte substitution - no slot maths, no repointing, no
+recompression. 20 of 20 verified.
+
+SRVC exists TWICE in the image (the original extent, and the relocated copy
+srvc_apply --free created), so the pass fixes every occurrence in the whole
+image rather than one file's. Each hit is checked to sit inside a printable
+NUL-terminated caption first, so a coincidental match in binary data cannot be
+hit.
+
+### The LIBRARY menu, patched in the ISO this time
+
+0.8.94 repainted /DATA/JTIM.BIN image #5 - which looks exactly like this menu
+but is NOT what the screen blits, so nothing changed in game - and the menu was
+then translated with a PCSX2 texture replacement instead. That replacement is
+not portable: PCSX2 dumped the page as 512x256 with no region field, so its hash
+covers areas outside the art, and build_texture_pack correctly dropped it. A
+replacement that cannot apply on another machine is not acceptable, so the art
+itself had to be found.
+
+Found by scanning the disc for the dump's own CLUT entries, then searching
+inside the banlz records that the raw scan cannot see through:
+
+    /DATA/NISVDATA.BIN   LBA 1568269, banlz record 0 (647,136 bytes plain)
+    256x256, 8bpp, PSMT8-SWIZZLED
+    pixels at 0x8c900, CLUT at 0x9c900 (the usual 0-7,16-23,8-15,24-31 tiling)
+
+Confirmed by decoding it and matching the PCSX2 dump: 150 of 150 sampled pixels.
+The 512x256 dump is the containing GS page, which is why no 512-wide layout ever
+matched - the texture is 256 wide. Read and write both go through the swizzle
+map, so the data is never deswizzled and reswizzled.
+
+The CLUT is untouched; english is painted with the art's own palette indices,
+sampled per row from the label being replaced and ranked by BRIGHTNESS (ranking
+by frequency picks the shadow on rows where the glyph had more shadow than fill,
+which drew dark bands through the letters). All six labels share ONE point size,
+the largest that fits every one, so the menu still reads as a single menu.
+
+    rec0 recompressed to 160,749 bytes in its 169,504-byte slot
+
+The two LIBRARY replacement PNGs are retired - repainting the art moves its
+hash, so they would no longer match anyway. The pack now drops only the three
+prologue cards, as designed.
+
+### Gates
+
+    integrity.py                            problems: 0
+    verify_elf_patches.py                   all ELF patches present
+    verify_pointers.py --against            81,286 resolving, 0 broken
+
+## 0.8.94 (2026-08-27) - the LIBRARY menu (art, not text)
+
+The six LIBRARY entries are not text anywhere on the disc. Searching the whole
+3.7GB image for ロボット大図鑑 / サウンドセレクト / シナリオチャート / 用語事典 /
+キャラクター事典 returns NOTHING, and neither does every banlz archive (ZKN x3,
+HSFC, MAPNAME) nor the ELF nor COMPDATA. They are pixels:
+
+    /DATA/JTIM.BIN  LBA 1568664, image #5 at file offset 0x394150
+    512x256, 8bpp palettised, 256-colour CLUT
+
+Stored LINEARLY, not swizzled - tim2_dump reads it row-major and the result is
+correct, unlike the OP title cards which are PSMT8-swizzled.
+
+Each entry appears TWICE, identical but for colour: yellow (selected) right-
+aligned to x=189, teal (normal) right-aligned to x=389. Both redrawn.
+
+    ロボット大図鑑    -> Robot Data
+    キャラクター事典  -> Character Data
+    用語事典         -> Glossary
+    サウンドセレクト  -> Sound Select
+    シナリオチャート  -> Scenario Chart
+    攻略 Q&A         -> Strategy Q&A
+
+"Robot Data" / "Character Data" rather than the more literal "Robot
+Encyclopedia" / "Character Encyclopedia": the label boxes are 159 and 186 px, so
+the longer wording auto-fits to about 12px tall against 20-22px for the rest and
+the menu stops looking like one menu. Consistent size beat literal wording.
+
+### How
+
+THE CLUT IS NEVER TOUCHED. English is painted with the artwork's own palette
+indices, sampled per row from the label being replaced, so the vertical gradient
+and drop shadow come out of the original art rather than being invented -
+yellow 46 (240,248,136) down to 62 (224,200,0), teal 87 down to 85, shadow
+33/65.
+
+The first attempt ranked each row's indices by HOW OFTEN they occur and drew
+dark bands straight through the letters: on any row where the original glyph had
+more shadow than fill, the most common index IS the shadow. Ranking by
+brightness fixed it.
+
+Text is fitted inside the original bounding box and right-aligned to the same
+edge, because the game blits each entry from its own UV rect and anything wider
+would clip.
+
+### Gates
+
+`integrity` 0 problems. File size unchanged, TIM2 header intact, CLUT unchanged,
+and 0 bytes differ outside the 512x256 index block.
+
+## 0.8.93 (2026-08-27) - 250 rows attributed to the wrong character
+
+tools/scan_speaker_mismatch.py reported 356 rows whose english speaker label
+disagrees with its own japanese speaker group. rec53 shows the cause: five
+consecutive ギンガナム lines are labelled Ghingnham, Dianna and Agrippa, and the
+wrong ones carry the first character NAMED IN THE BODY - a pass took the speaker
+from the sentence instead of the speaker field.
+
+250 fixed, all in place:
+
+    ギンガナム   -> Ghingnham   (was Dianna 16, Agrippa 2)
+    サンドマン   -> Sandman     (was Leele 10, Eiji 6, Raven 5, Kazami 3)
+    エウレカ    -> Eureka      (was Fudo 13)
+    アポロ/レコア/サラ -> (was Fudo, 20 rows)
+    ？？？     -> ???         (was ?, 16)
+    シロッコ -> Scirocco, グエン -> Guin, ロラン -> Loran, クワトロ -> Quattro
+
+This is NOT majority-voting a name. The replacement is the label the rest of
+that character's own rows already carry, and each matches a form established
+elsewhere - Ghingnham is fix_terms_grow's canonical spelling, Guin is Turn A's
+Guin Sard Lineford. What changes is WHO is speaking, not how it is spelt.
+
+### Left alone: 91 rows
+
+82 are the same character spelt differently (Kiel/Kihel 13, Orba/Olba 12,
+Quenstein/Quinstein 6, Astonaji/Astonage, Shran/Schlan). Choosing between those
+belongs to the akurasu baseline, not to a count of occurrences. Separated from
+the wrong-character rows by string similarity: below 0.55 they are different
+people, above it they are spellings.
+
+The other 9 have an ideographic space as the japanese speaker and an ASCII space
+in english. Both render blank, nothing is reported, and rewriting them risks the
+empty-speaker bug 0.8.85 fixed.
+
+### The pointer gate cried wolf, and the gate was wrong
+
+verify_pointers reported rec48 at 84.9% against an 85% threshold. The numerator
+was UNCHANGED at 1087; the denominator grew 1264 -> 1280 because relocating rows
+appends text and more 4-aligned words fall into range and look pointer-shaped.
+The ratio drops with record size while nothing is broken. Lowering the threshold
+would have been the wrong fix.
+
+Added `verify_pointers --against <ref-iso>` instead: every pointer that resolves
+in a known-good image must still resolve. Immune to size changes. Getting it
+honest took three filters, each of mine being too loose:
+
+    any in-range word                 815 "broken"  (text bytes as addresses)
+    + non-empty target                 35 "broken"  (targets like '7', '+')
+    + row-shaped target (newline, 6B)   0 broken    of 81,286
+
+The old ratio check is unchanged. It is the check that caught v0.8.72's
+save-load freeze at 26%, and it is better for it to cry wolf on a grown record
+than to be weakened.
+
+### Gates
+
+`--against` 0 of 81,286 broken, `integrity` 0 problems, mismatches 341 -> 91.
+
+## 0.8.92 (2026-08-26) - "Emperor Bry" -> "Emperor Burai"
+
+Reported from a screenshot: Hidler says "Great Emperor Bry". ブライ is Getter
+Robo's 百鬼帝国 ruler, Emperor Burai.
+
+fix_terms_grow.py already renames ブライ from Bray, Brya and Brai. It does not
+cover "Bry" - a FOURTH spelling - so 13 rows were left. Every match is
+conditioned on the japanese containing ブライ, resolved through the row's
+pointer, so nothing beginning "Bry" is renamed by accident. The rule is now in
+fix_terms_grow.py so a later rename pass cannot reintroduce it.
+
+Burai is two columns wider than Bry, which pushed one row over the 34-column
+limit; it is re-wrapped rather than dropped:
+
+    「Long live Great Emperor Burai!!」   ->   「Long live
+                                              　Great Emperor Burai!!」
+
+10 rows fixed in place, 3 relocated and repointed.
+
+### One speaker as well
+
+rec48 0x017a70 was attributed to "Burai" where the japanese speaker is 風見
+(Kazami) - the body mentions 百鬼ブライ, so the speaker had been taken from the
+sentence. Same bug tools/scan_speaker_mismatch.py reports across 356 rows.
+
+### Gates
+
+`verify_pointers --min 85` OK, `integrity` 0 problems, 0 rows still containing
+"Bry".
+
+## 0.8.91 (2026-08-26) - weapon-name review: 77 shredded model numbers, 39 loanwords
+
+Full review of all 769 weapon-name entries, requested by the owner.
+
+### The model-number bug (77 names)
+
+gen_weapons.translate() joined model numbers with
+
+    re.sub(r"([A-Za-z0-9]) ([A-Za-z0-9])", r"", out)
+
+re.sub matches NON-OVERLAPPING pairs. The tokenizer emits every fullwidth char
+as its own token, so "ＭＭＩ－ＧＡＵ２５Ａ" arrives as "M M I - G A U 2 5 A" and
+pairs up as (M,M)(G,A)(U,2)(5,A) -> "MM I-GA U25A". The next pass cannot help
+because nothing is a single character any more, so the loop exits satisfied.
+
+    MMI-GAU25A  ->  MM I-GA U２ ５A        MA-BAR72  ->  MA-BA R７ ２
+    MMI-M633    ->  MM I-M６ ３３           M181SE    ->  M１ ８１ SE
+    200mm       ->  ２０ ０mm               127mm     ->  １２ ７mm
+
+Fixed by joining whole RUNS of single tokens, then binding across the hyphen.
+U+3000 (which separates a model number from its calibre) mapped to a plain
+space, indistinguishable from an inserted one, so the joiner merged across it
+and gave "MMI-GAU25A20mm"; it is now a non-alphanumeric sentinel, restored to a
+space at the end of translate().
+
+### Untranslated katakana (39 names)
+
+23 distinct katakana words were being romanised rather than translated. Those
+that are LOANWORDS - the japanese is a katakana rendering of an English, Latin
+or German word - are recovered, which is not a naming decision:
+
+    Ekusukariba -> Excalibur     Keruberosu -> Cerberus    Orutorosu -> Orthros
+    Karidusu    -> Calidus       Arondaito  -> Arondight   Riniagan  -> Linear Gun
+    Amuforutasu -> Amfortas      Igerushuterun -> Igelstellung
+    Torenburu   -> Tremble       Bandokku   -> Bandock     Banka -> Bunker
+
+グリフォン was going to become "Griffon" while the build already shipped
+"Gryphon" for another entry; matched to Gryphon rather than introduce the same
+word twice.
+
+### What was deliberately NOT changed
+
+Regenerating wholesale would have REGRESSED names the canon dictionary already
+gets right - the generator produces "Merutoshawa" where the build ships "Melt
+Shower", "Badogan" for "Bird Gun", "Shimita" for "Scimitar". Only two classes
+were applied: pure re-spacing (identical characters) and katakana loanwords.
+589 of 769 now match the generator exactly; the rest differ because the SHIPPED
+name is better, or because fullwidth and ASCII digits compare unequal while
+encoding identically.
+
+All fixes are shorter than what they replace, so each was written into its
+existing slot - no repack, which would have disturbed the pointers repaired in
+0.8.90. Entry starts verified unchanged: 3,433 before and after.
+
+### Left for a naming decision
+
+8 names still contain romaji. Two are correct as they are - ヒャクライ (百雷) and
+イカヅチ (雷) are japanese proper names. The other six have no obvious English:
+Arudoru, Gagundura, Jinba, Potan, Toraparuza, and Baraena (which SHOULD be
+Ballaena but needs 40 bytes in a 40-byte slot).
+
+### Gates
+
+`integrity` 0 problems, `verify_pointers --min 85` OK, pool entry starts
+unchanged, Gryphon spelling consistent across both entries.
+
+## 0.8.90 (2026-08-26) - repair 62 pool pointers broken by 0.8.81
+
+### The bug I introduced
+
+0.8.81 repacked the COMPDATA string pool to lift the weapon-name byte limit and
+rewrote 9,483 pointers with it. 91 pointer-shaped words did NOT land on a string
+start; I decided they were u16 pairs reading as addresses by coincidence, left
+them alone, and wrote that justification into tools/pool.py and the changelog as
+if it had been established.
+
+It had not. Testing it: 60 of the 91 sit precisely on a pointer-table stride -
+4 or 32 bytes from a confirmed pointer - so they are entries in the same tables.
+They point at one of two things:
+
+    +24 into 'Barrier Field'       into the NUL PADDING = an EMPTY string,
+    +24 into 'Guidance Scenario'   which is how a BLANK SLOT is drawn
+    +33 into 'MG X-2235 Karidusu'  a few bytes in = a deliberate substring
+
+Repacking removed the padding and moved every string, so a pointer that used to
+resolve to "" now lands in whatever text moved there, and a substring pointer
+lands mid-way through something unrelated. One target has 38 references and
+another 16, so this is not obscure. It was live in 0.8.81 through 0.8.89.
+
+### The repair
+
+The repack preserved entry ORDER and count, so entry i in a pre-repack image is
+entry i now. tools/fix_pool_strays.py recovers each broken pointer's owning
+string and its byte offset from iso/srwz_dlg.bin (2026-08-22, pre-repack) and
+repoints it to the same offset in that string's new location. A padding pointer
+goes to the string's own NUL terminator, so it resolves to "" exactly as before.
+
+62 repaired, 34 correctly left alone (not on any stride - those really are u16
+pairs). VERIFIED BY RESOLVING: all 62 now yield byte-identical text to the
+pre-repack image, 0 differing.
+
+### Lesson
+
+The emptiness/coincidence argument was plausible and wrong, and it was recorded
+as fact rather than as an assumption. The stride test that disproved it takes
+one pass over data already in hand. tools/pool.py now runs it and reports any
+stray sitting on a pointer stride instead of asserting they are all coincidence.
+
+### Gates
+
+`integrity` 0 problems, `verify_pointers --min 85` OK, all ELF patches present,
+62/62 pointers resolve to their pre-repack text.
+
+### Note
+
+Contains everything up to 0.8.89, i.e. WITHOUT the VWF proportional advances -
+those stay reverted pending the spirit-strip diagnosis. 0.8.89 remains available
+as the single-variable test for that.
+
+## 0.8.89 (2026-08-26) - VWF advance patch reverted (bisect)
+
+Owner reported the spirit-command strip rendering as repeated vertical bars on
+the squad and unit screens, and asked to roll the font change back to test
+whether it is the cause. Advance hook at 0x78BA94 restored to stock
+(`lhu t0,0xc(s0)` / `beq` / `addiu v1,t0,1`), trampoline and width table
+cleared. Every glyph advances a flat 13px again, as before 0.8.84.
+
+The atlas is unchanged (MS Gothic, restored in 0.8.88), so this build differs
+from 0.8.82 only in the dialogue fixes of 0.8.85.
+
+This is a BISECT STEP, not a diagnosis. The patch only ever changed the pen
+advance for codes 0x8540..0x85C9; a wrong advance makes glyphs overlap, it does
+not turn them into bar patterns, and the micro-glyph codes 0x85CA..0x85DB used
+by the terrain icons are outside the patched range entirely. If the strip still
+renders as bars, the cause is elsewhere and the advance patch can go back in.
+
+### Gates
+
+`verify_elf_patches` all present, `integrity` 0 problems, advance hook byte-
+compared against stock.
+
+## 0.8.88 (2026-08-26) - font rolled back to MS Gothic
+
+0.8.87's BIZ UDGothic was tried in game and did not feel as good as MS Gothic
+(owner call). Atlas restored from analysis/atlas_shipped.bin and the advance
+table regenerated from it, since advances are measured FROM the atlas. Nothing
+else changed - the advance hook, stamper and sprite-width cave are as they were.
+
+### What the exercise established, for the record
+
+  * Only faces with half-width (hankaku) Latin fit a 12px cell at 18px cap
+    height. Tahoma/Verdana/Segoe UI/Meiryo/Yu Gothic are 9-11px too wide.
+  * BIZ UDGothic and UD Digi Kyokasho fit; UD Digi is inherently thin (52%
+    solid at every size). BIZ at cap 17 bias 20 measured objectively BETTER than
+    MS Gothic (71% vs 65% solid ink, 10.8 vs 11.6 mean advance, w/W/m solid
+    rather than grey, SIL OFL) and was still rejected on look. Measurements do
+    not settle taste.
+  * Softness is the QUANTISER, not the face: rasterise_font.py --bias lowers the
+    64/128/192 thresholds so half-covered pixels round up. bias 0 -> 56% solid,
+    bias 20 -> 71%.
+
+### The real anti-aliasing finding
+
+The jagged edges are NOT a resolution limit. The engine's master font is 4bpp -
+SIXTEEN alpha levels - and the game's own japanese glyphs use all 16 (measured
+from a RAM dump at the font base in BSS global 0x0046E3A8). Our Latin atlas
+stores 2bpp, FOUR levels (0/5/10/15), purely to fit the cave. That is what makes
+the edges look stepped.
+
+Going to 16 levels fits, if the rows are stored variably - mean inked height is
+16.7 of 24 rows:
+
+    2bpp fixed 24 rows (today)          4968 B
+    3bpp fixed 24 rows  (8 levels)      8280 B   fits, 715 spare
+    4bpp variable height (16 levels)    7032 B   fits, 1963 spare
+
+The cost is rewriting the stamper, which unpacks 2bpp into nibbles today and
+would need to handle 4bpp plus a per-glyph top-row/height header. It runs on
+EVERY setText, so it is the hot path - the same class of change that shipped
+broken in 0.8.83. Not attempted here; simulate before writing.
+
+tools/preview_16level.py renders 4-level vs 16-level side by side.
+
+## 0.8.87 (2026-08-26) - font swapped to BIZ UDGothic
+
+### Why
+
+'w', 'W' and 'm' rendered as grey blurs (user report). Three vertical strokes
+have to fit a ~10px ink box, so the middle stroke lands between pixel columns,
+covers about half of each, and the 4-level quantisation keeps it grey.
+
+### What was ruled out first
+
+  * a wider cell - 16px would FIT the cave (6624 B of ~8995 available), but 12px
+    is half the 24px japanese cell and all 68,340 rows are wrapped to that
+    ratio. Widening means every line renders ~33% wider than it was wrapped for.
+  * a nicer Latin face - at the required 18px cap height, Tahoma/Verdana/Segoe
+    UI/Meiryo/Yu Gothic measure 9-11px TOO WIDE for the 12px cell. Only faces
+    with half-width (hankaku) Latin fit. MS Gothic was not an arbitrary choice.
+  * PCSX2 texture replacement - the dump settles it. The font is a 512x256
+    DEMAND-DECODED cache page: four different hashes appeared in one scene, each
+    holding whatever text had been shown ("Johannes「Touma... Let us hear the
+    dream you saw.」", "~Atlandia~Katsuragi..."). A replacement is matched on
+    that hash, so it would apply for one instant and differ per player.
+  * an AI-generated sheet - two attempts, both rendered '?' as '2', both drawn
+    on an ~11px grid where 8.71px was needed.
+
+### What shipped
+
+BIZ UDGothic, cap height 17, quantisation bias 20. Measured against MS Gothic:
+
+    solid ink        65% -> 71%   (BOLDER, not softer)
+    w / W / m        grey -> solid
+    mean advance     11.6 -> 10.8 (8% tighter)
+    edge clipping    0    -> 0
+    missing glyphs   0    -> 0
+    licence          Microsoft -> SIL OFL
+
+The first attempt at cap 18 measured SOFTER (56% solid) and clipped 11 glyphs at
+the cell edge. Both were process, not the face: cap 17 restores the right
+bearing, and the softness was the quantiser rounding half-covered pixels DOWN.
+`--bias` lowers those thresholds so they round up. UD Digi Kyokasho was tried
+and rejected - 52% solid at every size, a textbook face with calligraphic stroke
+variation, inherently thin.
+
+The tighter advance is free: advances can only shrink against the old table, so
+no line can widen and nothing needed rewrapping.
+
+New tools: rasterise_font.py (any TTF -> atlas, --cap/--gap/--bias),
+compare_atlases.py, font_texture.py (export/import the atlas as an editable
+144x144 PNG, round-trip verified), set_atlas.py, export_font_sheet.py.
+
+Reversible: the previous atlas is analysis/atlas_shipped.bin ->
+`set_atlas.py <iso> analysis/atlas_shipped.bin --write`, then rerun
+patch_vwf_widths.py (--revert then apply) so the advances match.
+
+### Gates
+
+`verify_elf_patches` all present, `integrity` 0 problems, trampoline simulated
+over all 138 indices, atlas in image byte-compared against the candidate.
+
+## 0.8.86 (2026-08-26) - the VWF trampoline was eating lowercase 'z'
+
+Reported from a screenshot: the letterforms looked right but 'z' had noise along
+its bottom edge.
+
+### The bug
+
+The glyph atlas runs 0x78A5B3 .. 0x78B91B (69 glyphs x 72 bytes). 0.8.84 put the
+advance trampoline at 0x78B910 - ELEVEN BYTES INSIDE IT - and overwrote the
+bottom rows of glyph 68, lowercase 'z'.
+
+The freshness check did not catch it because those bytes ARE all zero: they are
+the blank rows below 'z'. An all-zero block inside the atlas is not free space,
+it is an empty part of a glyph. The check tested emptiness and inferred
+availability, which is not the same thing.
+
+It also corrupted the measurement: with garbage in its bottom rows 'z' measured
+an ink right edge of 11 and an advance of 13 instead of its true 9 and 11.
+
+### The fix
+
+Trampoline moved to 0x78B91C, the first 4-aligned byte AFTER the atlas (66 free
+bytes there, 52 needed). The table at 0x78C110 was always clear of it.
+
+patch_vwf_widths.py now refuses any placement overlapping 0x78A5B3..0x78B91B,
+and refuses a misaligned code address, instead of trusting a zero-fill test.
+
+Verified by diffing the whole atlas against a pre-VWF build (iso/srwz_dlg.bin):
+byte-identical, and glyph 68's tail is back to `f0 1a aa 50 00 00 ...`.
+
+### Not a bug: 'w'
+
+'w', 'W' and 'm' look washed out next to other letters. They need three vertical
+strokes inside a 10px ink box, so the middle stroke falls between pixel columns
+and the 4-level quantisation renders it at half intensity. Spacing is fine - all
+three advance 12px, same as 'v', 'n', 'u'. Fixing it means redrawing those
+glyphs, not changing advances.
+
+tools/export_font_sheet.py dumps all 69 letterforms out of a built image.
+
+### Gates
+
+`verify_elf_patches` all present, `integrity` 0 problems, atlas diff clean.
+
+## 0.8.85 (2026-08-26) - 18 location cards that rendered as an empty box
+
+### The report
+
+A screenshot showed a completely blank message box immediately before Johannes's
+first line in the Atlandia scene, and its backlog entry was blank too.
+
+### The cause
+
+A row is `speaker
+body`. Location cards and narration carry a FULLWIDTH SPACE
+as the speaker line, so no name is drawn but the line still exists:
+
+    JP  '　
+　　...～アトランディア～'
+    EN  '
+            ~Atlandia~'
+
+The translation dropped it, so the row begins with a bare 0x0A and the renderer
+produces nothing at all - no name, no body, and an empty backlog entry.
+
+20 rows are affected and every one is a scene-setting card: ~Nox, City Streets~,
+~Argama Mess Hall~, ~Skull Moon Base - Great Hall~, ~Paradigm City Underground
+Labyrinth~, ~Fortress Algol, Command Center~ and the rest. All of them have been
+invisible.
+
+scan_visible_defects.py checks for an empty BODY but never an empty SPEAKER
+line, which is why nothing caught this. tools/scan_empty_speaker.py now does.
+
+### The fix
+
+Each row gets back exactly the leading whitespace its OWN japanese source had -
+one or two fullwidth spaces, resolved through the pointer - with the body left
+byte-identical. 18 fixed in place, none needed relocating.
+
+Two rows that also open with 0x0A are deliberately left alone: rec84 0x011a31
+and rec132 0x019910 are mid-string CONTINUATION FRAGMENTS. Both japanese sources
+begin on a cp932 trail byte, so the pointer addresses the middle of a longer
+line and that newline is a real line break.
+
+### Noted, not fixed
+
+Seven of these cards are ALREADY wider than 34 columns in the shipped image
+(seven fullwidth spaces plus a long name) and may clip at the right edge. That
+is a separate pre-existing defect. The first draft of the validator rejected
+those rows because of it, which would have refused to fix a blank box over a
+fault this pass does not touch; the check was narrowed to the speaker line only.
+
+~Atlandia~ uses an ASCII `~` where the other cards use fullwidth `～`.
+
+### Gates
+
+`verify_pointers --min 85` OK, `integrity` 0 problems, all ELF patches present.
+scan_empty_speaker: 20 -> 2 (both the intended continuations).
+
+## 0.8.84 (2026-08-26) - proportional font, second attempt (advance-only)
+
+0.8.83 SHIPPED BROKEN. Text collapsed into overlapping clusters - see the
+screenshot report. Do not use it.
+
+### What 0.8.83 got wrong
+
+It changed two things it did not need to change:
+
+  * the per-glyph width field the stamper writes (`sh t2,0xc(s0)`, constant
+    0x0C at 0x78A2AC), and
+  * the `width == 0x0C` test in the sprite-width cave at 0x78BAD0, nopped so
+    that test would keep passing once widths varied.
+
+That field is read by more than the pen advance. Rewriting it changed glyph
+handling this patch has no business touching, and the result was a pile-up
+consistent with an advance of ~1px. The dest-width nop is a second suspect;
+neither was isolated, which is exactly the problem - two changes, one symptom.
+
+### What 0.8.84 does instead
+
+The stamper and the sprite-width cave are left COMPLETELY ALONE. The width field
+stays 0x0C for every glyph, so everything that reads it behaves as it does
+today, including the 0x78BAC0 test.
+
+The ONLY change is the pen advance. The advance hook at 0x78BA60 ended with
+
+    0x78ba94  lhu   t0,0xc(s0)          ; always 0x0C
+    0x78ba98  beq   zero,zero,0x78bab0
+    0x78ba9c  addiu v1,t0,1             ; 13px, every glyph
+
+and those three instructions now jump to a 13-instruction trampoline at
+0x78B910 that indexes a 69-byte table at 0x78C110 by (code - 0x8540) and returns
+the glyph's own advance in v1. Bold/menu glyphs (indices 69..137) are the same
+art dilated 1px right, so they get +2 instead of +1.
+
+t0 is safe to clobber: the hook saves it at 0x78BA60 and restores it at 0x78BAB4.
+
+Advance is ink right edge + 2, measured from the atlas actually stamped into the
+master font (0x78A5B3, 72 B/glyph, 24 rows of 12px 2bpp). Range 7..12 against a
+flat 13 - simulated over all 138 indices, MAX 13, so no advance can exceed the
+current one, no line can get wider, and the 34-column wrap stays valid.
+
+If this still collapses, the fault is the table memory at 0x78C110 rather than
+the approach, and the next step is PINE rather than another guess.
+
+Also: v1's `--revert` restored the code sites but left its trampoline and table
+in the cave. Cleared before applying v2; v2's revert clears them.
+
+### Gates
+
+`verify_elf_patches` all present, `integrity` 0 problems. Stamper 0x78A2AC and
+dest-width test 0x78BAD0 re-read from the image and confirmed stock.
+
+### CONFIRMED IN GAME (user screenshot, 2026-08-26)
+
+Renders correctly, and measurably proportional. Screen scale taken from the
+pillarbox (920px game area / 640 = 1.4375), independent of the text:
+
+    line                           fixed would be   prop predicts   MEASURED
+    「Lord Shiruha, Lord Goushi,        520 px          461 px         441
+    Touma won't run off.」              408 px          374 px         350
+
+Within a few percent of proportional and 14-15% short of fixed; the measured
+ends slightly UNDER-read (trailing commas and thin strokes fall below the
+detection threshold), so the true widths are closer to prop still.
+
+Worth measuring rather than eyeballing: if the table read had returned 12 the
+advance would be 13 and the result would look identical to the old font, so
+"renders correctly" alone does not distinguish success from a no-op.
+
+This also confirms 0.8.83's culprit was the per-glyph width field, not the
+dest-width nop and not the table memory.
+
+## 0.8.83 (2026-08-26) - the Latin font is proportional
+
+### What it was
+
+Half-width, but NOT variable-width. patch_hwfont's stamper wrote a CONSTANT into
+the per-glyph width field:
+
+    0x78a2ac  addiu t2,zero,0xc      <- 12, for every glyph
+    0x78a2b0  sh    t2,0xc(s0)
+
+and the advance hook at 0x78BA60 reads that field and adds 1, so every Latin
+glyph advanced exactly 13px regardless of shape - `l` took the same space as `W`.
+The field is per-glyph and the hook already honoured it; only the constant stood
+in the way. The tool names are misleading here: patch_vwf1.py / patch_font_
+advance.py describe VWF as the GOAL, and what shipped was patch_hwfont.
+
+### The change
+
+  * a 69-byte width table in cave padding at 0x78C110, measured from the atlas
+    actually stamped into the master font (0x78A5B3, 72 B/glyph, 24 rows of 12px
+    2bpp). advance = ink right edge + 2, so `l`=7, `I`=8, `i`=9, `.`=10,
+    `M`/`W`/`0`=12, against a flat 13 before.
+  * 0x78A2AC -> `j 0x78B910`, a 15-instruction trampoline that indexes the table
+    by code-0x8540 and adds 1px for the bold/menu half (indices 69..137, which
+    the stamper makes by dilating the same art 1px right).
+  * the sprite-width cave at 0x78BAC0 halved the drawn sprite only when the
+    marker byte at +0x13 was 0xA7 AND the width field was exactly 0x0C. The
+    marker test is correct and stays; the width test would now fail for every
+    glyph that is not 12 wide and the sprite would draw 24px and ghost. Nopped.
+
+THE ART IS NOT TOUCHED. Only the dead columns to the RIGHT of each glyph's ink
+are removed, so every letter keeps its natural left bearing and no advance can
+exceed the old 13px. No line can get wider: the 34-column wrap stays valid and
+nothing can overflow. Measured on real dialogue, lines come out ~13% shorter.
+
+Rejected the tighter variant (shift art flush-left, ~19%): it requires
+re-authoring the glyph bitmaps or shifting pixels in the stamper, which runs on
+every setText, and removing the left bearing makes narrow runs like `Illi` touch
+unless the gap is widened again - which gives back most of the difference.
+
+### Verification
+
+The trampoline was SIMULATED over all 138 indices before writing
+(tools/sim_vwf_tramp.py) - the recorded lesson from the micro-glyph work. That
+caught nothing in the code but did catch two bugs while writing it: a filler
+word encoded as `j 0` (a jump to address zero) and a branch that skipped to the
+bold +1 instead of past it. Note MIPS branch targets are idx+1+imm.
+
+Reversible: `patch_vwf_widths.py <iso> --revert`.
+
+### Gates
+
+`verify_elf_patches` all present, `integrity` 0 problems.
+
+### Not verified
+
+Underline/link positioning is computed in columns and will drift under variable
+advances. The owner has said underlines can be dropped in favour of coloured
+text, so this build does not address them - if glossary underlines look wrong,
+that is why.
+
+## 0.8.82 (2026-08-26) - 35 dialogue rows that were cut off mid-sentence
+
+### The report
+
+A backlog screenshot showed Zushi's line as `Zushi / "As you` and stopped. The
+stored row was exactly that - 13 bytes.
+
+### Why
+
+The japanese `頭翅
+「御意…」` fits a 16-byte slot; `Zushi
+「As you wish...」` is 24
+and does not. Whoever fitted it swapped the 2-byte kagi for a 1-byte ASCII quote
+to buy a byte, then cut the sentence. 32 rows are damaged the same way -
+`Kappei "Kazuki.`, `Keiko "Kappei..`, `Kouji "A sin...`, `Gengoro "Rumors`, plus
+longer lines from Sandman and Umee.
+
+No existing scanner could see it. Each row is a single line, under 34 columns,
+with no literal escape and no japanese left, so every check passed. What is
+wrong is the QUOTING - tools/scan_broken_quotes.py now checks exactly that.
+
+The budget was not real. STAGE rows are addressed by absolute pointers
+(BASE 0x7566F0) exactly like the COMPDATA pool in 0.8.81, so a row that outgrows
+its slot is appended to the record and repointed. 10 rows fit in place, 22 were
+relocated. Two rows in rec185 are left unclosed on purpose: the JAPANESE has no
+closing bracket there either, so mirroring the source is correct.
+
+### Three more, and a worse bug behind them
+
+scan_broken_quotes also found rows with a DUPLICATED TAIL, where a longer
+replacement was written over a shorter string without clearing the leftovers:
+
+    「...Moonlight Butterfly?!」ly?!」
+    「...the Moon's Dianna!」nna!」
+
+All three are ギンガナム lines shipped as "Dianna". rec106 had Ghingnham calling
+himself head of "House Dianna" where the japanese says ギンガナム家, and rec119's
+english was not a truncation but an unrelated line about the Moonlight
+Butterfly - neither survives contact with the source, so both were retranslated.
+
+That is not three rows. tools/scan_speaker_mismatch.py groups every row by its
+japanese speaker and reports 356 disagreements, splitting in two:
+
+  * wrong character - ギンガナム as Dianna (22), サンドマン as Leele/Eiji/Raven/
+    Kazami (24), エウレカ/アポロ/レコア/サラ as Fudo (33), シロッコ as Agrippa.
+    The label is the first name mentioned in the BODY, so a pass took the
+    speaker from the sentence instead of the speaker field.
+  * romanisation - Kiel/Kihel, Olba/Orba, Elche/Elchi, Schlan/Shran and ~40 more
+
+Only the first half is mechanical. The second needs the akurasu baseline per
+name; picking the group majority would be exactly the majority-voting the owner
+has ruled out. Both are left for a later build.
+
+### Process
+
+Two runs were cut off with nothing written before the cause was found: the job
+outlives a background command, so compression is now CACHED per record
+(analysis/_lzcache, keyed by the plain record's sha1) and each run resumes.
+One earlier run also died to SIGPIPE from piping a long build through `tail` -
+the same mistake already recorded against piping chdman through `head`.
+
+### Gates
+
+`verify_pointers --min 85` OK (worst 85.1%), `integrity` 0 problems, all ELF
+patches present. scan_broken_quotes: ascii_quote 250 -> 218, unbalanced 5 -> 2
+(both remaining are the deliberate rec185 mirrors).
+
+## 0.8.81 (2026-08-26) - the weapon-name byte budget is gone
+
+### What the budget actually was
+
+Weapon names had been fitted into the exact byte length of the Japanese string
+they replaced, which is why the list showed `MusouSw`, `HeatRad`, `SubGun`. The
+2026-08-26 shift experiment proved the slots could not simply be grown: making
+`MusouSw` into `Musou Sword` left the next entry rendering as `ord` - bytes 8..10
+of the new string.
+
+Every static search for the reference had failed: not an index, not a
+record-relative offset, not offset/8, and God Sigma's six-weapon index sequence
+appeared nowhere in the 3.7 GB image at any stride. The conclusion recorded at
+the time - "computed at runtime, needs live instrumentation" - was wrong.
+
+### Where it was
+
+Found by dumping EE RAM instead of searching the disc. The string pool loads at a
+hardcoded `0x006D6800`, so a name is referenced by an ABSOLUTE PS2 ADDRESS like
+`0x0073D628` - which is why every relative encoding searched for came up empty.
+File bytes and RAM bytes at the pointer tables are byte-for-byte identical, so
+nothing is relocated at load; the table ships inside COMPDATA.
+
+    0x00904 .. 0x61658   pointer tables (9,483 pointer words)
+    0x61680 .. 0x7FF00   string pool    (3,433 entries, 8-byte aligned)
+
+The two regions never overlap, every pool string is referenced by at least one
+pointer, and nothing outside COMPDATA holds a pointer into the pool - checked
+against the ELF on disc and a 32 MB RAM dump. The apparent external hits are all
+u16 pairs whose high half is 0x0074 (`00 a2 74 00`), not pointers.
+
+### The change
+
+tools/pool.py repacks the pool and rewrites every pointer with it, so a name may
+now be any length. Repacking also reclaims slack: the pool ends at 0x7A8F0,
+leaving 22,032 free bytes.
+
+48 names are restored to their full form - `Musou Sword`, `Heat Radiation`,
+`Secondary Gun`, `Moonlight Butterfly`, `Charged Particle Cannon`. A name is
+changed ONLY where it is provably a budget casualty (recomputing
+`fit(jp, translate(jp), budget)` reproduces exactly what shipped). 34 names that
+were hand-edited after generation are left alone - without that guard the pass
+would have reverted `Vascud Crisis` to the tokenizer's `Basukudokuraishisu`.
+
+16 names stay abbreviated for now: they exceed a 24-column display cap, which is
+the width proven by the shipped `Sigma Breast Musou Sword`. The cap is
+conservative - `M1 07 Baraena Kai 2 Twin Beam Gun` (33 cols) already ships - and
+can be raised once a build confirms the real limit visually.
+
+Text is written with the MENU encoding, not cp932: the 0x13A290 reader treats
+0x2E-0x3D as control codes, so `75mm Autocannon` has to carry fullwidth digits.
+
+### Gates
+
+`verify_pointers --min 85` OK (worst record 85.1%), `integrity` 0 problems, all
+ELF patches present, pool re-read after write: 3,433 entries, 0 unreferenced.
+
 ## 0.8.79 (2026-08-26) - glossary decisions finally reach the script
 
 ### The gap

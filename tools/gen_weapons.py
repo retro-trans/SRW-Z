@@ -13,6 +13,15 @@ import sys
 
 sys.path.insert(0, ".")
 from weapon_words import CANON, WORDS
+
+# U+3000 separates a model number from what follows ("ＧＡＵ２５Ａ　２０ミリ").
+# weapon_words maps it to a plain space, which the run-joiner below cannot tell
+# from a space it inserted itself - so it merged across it and produced
+# "MMI-GAU25A20mm". Map it to a sentinel that is not alphanumeric, so the joiner
+# treats it as a hard boundary, and restore it at the end of translate().
+WORDS = dict(WORDS)
+HARDSEP = ""
+WORDS[u"　"] = HARDSEP
 from kata_romaji import romanize
 from patch import encode
 
@@ -134,14 +143,23 @@ def translate(name):
             out += " "
         out += p
     out = " ".join(out.split())
-    # join model numbers: single alnum tokens run together
-    for _ in range(8):
-        out2 = re.sub(r"\b([A-Za-z0-9]) ([A-Za-z0-9])\b", r"\1\2", out)
-        if out2 == out:
-            break
-        out = out2
+    # Join model numbers. The tokenizer emits every fullwidth letter and digit
+    # as its own token, so "ＭＭＩ－ＧＡＵ２５Ａ" arrives as "M M I - G A U 2 5 A".
+    #
+    # This used to pair them up with re.sub(r"\b(x) (x)\b"), which matches
+    # NON-OVERLAPPING pairs: (M,M)(G,A)(U,2)(5,A) -> "MM I-GA U2 5A". The next
+    # pass then cannot help, because nothing is a single character any more.
+    # It shredded 77 model numbers - MMI-GAU25A, MA-BAR72, MMI-M633, M181SE.
+    # Join whole RUNS of single tokens instead, then bind across the hyphen.
+    out = re.sub(r"(?<![A-Za-z0-9])(?:[A-Za-z0-9] )+[A-Za-z0-9](?![A-Za-z0-9])",
+                 lambda m: m.group(0).replace(" ", ""), out)
+    # "MMI - GAU25A" -> "MMI-GAU25A". Only the hyphen itself; do NOT try to also
+    # pull the following word in, or "MA-BAR72 High-Energy Beam Rifle" collapses
+    # into one run-on token.
+    out = re.sub(r"([A-Za-z0-9]) *- *([A-Za-z0-9])", r"\1-\2", out)
     out = re.sub(r"(\d) ?mm\b", r"\1mm", out)
     out = out.replace("Cannon Cannon", "Cannon").replace("Gun Gun", "Gun")
+    out = " ".join(out.replace(HARDSEP, " ").split())
     return out
 
 

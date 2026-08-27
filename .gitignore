@@ -31,3 +31,9 @@ btl_srvc_jp.json
 __pycache__/
 *.pyc
 *.bak
+
+# Archives and in-progress downloads - game data must never land here
+*.7z
+*.rar
+*.part
+*.crdownload

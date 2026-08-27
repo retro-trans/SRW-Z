@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 8 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 28 |
+| [Everything else](#everything-else) | 29 |
 
 ## The pipeline
 
@@ -522,6 +522,9 @@ Compare structural markers of the text renderer between two PS2 ELFs, to see whe
 
 **`restore_region.py`**  
 Restore one file's sectors in an ISO from the original Japanese image.
+
+**`review_status.py`**  
+Track which scenario records a human has actually read.
 
 **`srvc.py`**  
 Parse and rebuild BTL/SRVC.BIN using its companion BTL/SRVC.SEG.

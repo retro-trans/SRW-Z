@@ -1,0 +1,1865 @@
+{
+ "note": "Review status per scenario record. `status` is declared by a human; every other field is computed from the image by tools/review_status.py --init.",
+ "records": {
+  "0": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 409,
+   "status": "unreviewed",
+   "untranslated": 17
+  },
+  "1": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 311,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "10": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 625,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "100": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 507,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "101": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 629,
+   "status": "unreviewed",
+   "untranslated": 7
+  },
+  "102": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 502,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "103": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 500,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "104": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 814,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "105": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 357,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "106": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 378,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "107": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 917,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "108": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 792,
+   "status": "unreviewed",
+   "untranslated": 9
+  },
+  "109": {
+   "date": null,
+   "machine_flagged": 71,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 914,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "11": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 56,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "110": {
+   "date": null,
+   "machine_flagged": 31,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 882,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "111": {
+   "date": null,
+   "machine_flagged": 5,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 959,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "112": {
+   "date": null,
+   "machine_flagged": 55,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 784,
+   "status": "unreviewed",
+   "untranslated": 8
+  },
+  "113": {
+   "date": null,
+   "machine_flagged": 66,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 734,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "114": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 57,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "115": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 97,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "116": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 192,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "117": {
+   "date": null,
+   "machine_flagged": 31,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 750,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "118": {
+   "date": null,
+   "machine_flagged": 38,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 860,
+   "status": "unreviewed",
+   "untranslated": 9
+  },
+  "119": {
+   "date": null,
+   "machine_flagged": 70,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1069,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "12": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 236,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "120": {
+   "date": null,
+   "machine_flagged": 36,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 744,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "121": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 13,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "122": {
+   "date": null,
+   "machine_flagged": 53,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 625,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "123": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 17,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "124": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 16,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "125": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 290,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "126": {
+   "date": null,
+   "machine_flagged": 26,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 505,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "127": {
+   "date": null,
+   "machine_flagged": 59,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1206,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "128": {
+   "date": null,
+   "machine_flagged": 41,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 885,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "129": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 257,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "13": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 262,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "130": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 570,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "131": {
+   "date": null,
+   "machine_flagged": 49,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 997,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "132": {
+   "date": null,
+   "machine_flagged": 29,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 635,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "133": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 412,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "134": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 118,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "135": {
+   "date": null,
+   "machine_flagged": 72,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1124,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "136": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 723,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "137": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 179,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "138": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1299,
+   "status": "unreviewed",
+   "untranslated": 7
+  },
+  "139": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1035,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "14": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 373,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "140": {
+   "date": null,
+   "machine_flagged": 32,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 837,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "141": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 322,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "142": {
+   "date": null,
+   "machine_flagged": 19,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 651,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "143": {
+   "date": null,
+   "machine_flagged": 37,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1337,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "144": {
+   "date": null,
+   "machine_flagged": 30,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 913,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "145": {
+   "date": null,
+   "machine_flagged": 25,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 536,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "146": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 323,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "147": {
+   "date": null,
+   "machine_flagged": 33,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 660,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "148": {
+   "date": null,
+   "machine_flagged": 28,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1412,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "149": {
+   "date": null,
+   "machine_flagged": 37,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 976,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "15": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 473,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "150": {
+   "date": null,
+   "machine_flagged": 15,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 567,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "151": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 326,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "152": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 72,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "153": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 61,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "154": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 268,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "155": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 26,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "156": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 25,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "157": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 44,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "158": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "159": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 2,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "16": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 578,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "160": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 108,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "161": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 7,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "162": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 2,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "163": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 37,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "164": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 37,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "165": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "166": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 2,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "167": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "168": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "169": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 36,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "17": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 254,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "170": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 36,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "171": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "172": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "173": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "174": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "175": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 35,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "176": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 34,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "177": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "178": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 4,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "179": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 3,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "18": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 6,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "180": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 4,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "185": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 336,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "186": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 352,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "19": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 320,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "197": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "198": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "2": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 400,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "20": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 604,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "203": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 81,
+   "status": "unreviewed",
+   "untranslated": 14
+  },
+  "21": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 493,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "22": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 390,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "23": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 230,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "24": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 636,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "25": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 915,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "26": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 634,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "27": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 664,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "28": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 823,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "29": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 598,
+   "status": "unreviewed",
+   "untranslated": 7
+  },
+  "3": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 44,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "30": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 650,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "31": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 665,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "32": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 452,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "33": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 159,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "34": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 504,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "35": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 309,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "36": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 351,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "37": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 525,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "38": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 724,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "39": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 233,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "4": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 524,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "40": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 734,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "41": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 468,
+   "status": "unreviewed",
+   "untranslated": 6
+  },
+  "42": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 444,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "43": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 562,
+   "status": "unreviewed",
+   "untranslated": 8
+  },
+  "44": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 73,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "45": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 670,
+   "status": "unreviewed",
+   "untranslated": 8
+  },
+  "46": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 33,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "47": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 492,
+   "status": "unreviewed",
+   "untranslated": 9
+  },
+  "48": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 813,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "49": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 86,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "5": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 328,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "50": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 703,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "51": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 17,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "52": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 551,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "53": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 589,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "54": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 534,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "55": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 736,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "56": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 500,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "57": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 373,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "58": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 466,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "59": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 112,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "6": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 452,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "60": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 676,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "61": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 539,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "62": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 414,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "63": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 468,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "64": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 329,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "65": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 364,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "66": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 729,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "67": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 103,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "68": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 375,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "69": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 1091,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "7": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 622,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "70": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 117,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "71": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 245,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "72": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 437,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "73": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 566,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "74": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 94,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "75": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 462,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "76": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 495,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "77": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 293,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "78": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 435,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "79": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 241,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "8": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 170,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "80": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 486,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "81": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 75,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "82": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 467,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "83": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 686,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "84": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 644,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "85": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 467,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "86": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 206,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "87": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 330,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "88": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 593,
+   "status": "unreviewed",
+   "untranslated": 4
+  },
+  "89": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 86,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "9": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 371,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "90": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 582,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "91": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 495,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "92": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 321,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "93": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 124,
+   "status": "unreviewed",
+   "untranslated": 2
+  },
+  "94": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 57,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "95": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 608,
+   "status": "unreviewed",
+   "untranslated": 3
+  },
+  "96": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 88,
+   "status": "unreviewed",
+   "untranslated": 0
+  },
+  "97": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 366,
+   "status": "unreviewed",
+   "untranslated": 5
+  },
+  "98": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 953,
+   "status": "unreviewed",
+   "untranslated": 1
+  },
+  "99": {
+   "date": null,
+   "machine_flagged": 0,
+   "note": "",
+   "over_width": 0,
+   "reviewer": null,
+   "rows": 325,
+   "status": "unreviewed",
+   "untranslated": 2
+  }
+ }
+}

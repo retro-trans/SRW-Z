@@ -6,17 +6,22 @@ SLPS-25887), plus the English translation built with it.
 ## Play it
 
 Get `SRWZ-English-v0.8.96.xdelta` from the
-[latest release](../../releases/latest), then, with your own copy of the game:
+[latest release](../../releases/latest). You need your own copy of the game.
+
+**If you have a `.iso`** - one command:
+
+```sh
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+```
+
+**If you have a `.chd`** - extract it first, then the same command:
 
 ```sh
 chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
 xdelta3 -d -s game.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
-chdman createcd -i "SRWZ English.iso" -o "SRWZ English.chd"
 ```
 
-Load **`SRWZ English.chd`** in PCSX2. In a hurry? Stop after the second
-command - PCSX2 plays the `.iso` directly; the third just makes it about a
-third the size. Already have a `.iso` or `.bin`? Skip the first command.
+Either way, load **`SRWZ English.iso`** in PCSX2 and play.
 
 **A `.chd` cannot be patched directly.** It is compressed, so a patcher sees
 none of the bytes it expects - that is what *"the file is not the right one"*

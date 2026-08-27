@@ -2,30 +2,36 @@
 
 The patch contains none of the game — you apply it to your own copy.
 
-## Three commands
+## Apply it
+
+**Already have a `.iso`?** That is the whole job - a PS2 `.iso` is already the
+2048-byte/sector image the patch expects:
+
+```sh
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+```
+
+**Have a `.chd`?** Extract it first, then run exactly the same command against
+what comes out:
 
 ```sh
 chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
-
 xdelta3 -d -s game.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
-
-chdman createcd -i "SRWZ English.iso" -o "SRWZ English.chd"
 ```
 
-Load **`SRWZ English.chd`** in PCSX2 and play. You can delete `game.bin`,
-`tmp.cue` and the `.iso` afterwards.
+`tmp.cue` and `game.bin` are scratch - delete them afterwards.
 
-**In a hurry?** Stop after the second command — PCSX2 plays `SRWZ English.iso`
-directly. The third command just makes it about a third the size.
+Load **`SRWZ English.iso`** in PCSX2 and play. If you would rather have a
+smaller file, `chdman createcd -i "SRWZ English.iso" -o "SRWZ English.chd"`
+turns it into a CHD, but nothing requires it.
 
-**Already have a `.iso` or `.bin`?** Skip the first command and use your file
-in place of `game.bin`.
+You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
+from [MAME](https://www.mamedev.org/) only if your copy is a `.chd`. Neither
+ships here.
 
-You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases) and `chdman`
-from [MAME](https://www.mamedev.org/). Neither ships here.
-
-Prefer clicking to typing? **DeltaPatcher** does the middle command for you:
-original file `game.bin`, patch `SRWZ-English-v0.8.96.xdelta`, Apply.
+Prefer clicking to typing? **DeltaPatcher** does the xdelta step for you:
+original file `game.bin` (or your `.iso`), patch
+`SRWZ-English-v0.8.96.xdelta`, Apply.
 
 ## Why not just patch the .chd directly?
 
@@ -72,11 +78,13 @@ keyed to the disc's CRC, so they silently reset every time you update the patch.
 The file you gave `-s` is not the Japanese original the patch expects. Almost
 always one of:
 
+- **you pointed it at a `.chd`** — extract it first, as above. This is the most
+  common one, and in DeltaPatcher it appears as *"the file is not the right one"*
 - it is already patched — start again from your clean copy
 - it was ripped at 2352 bytes per sector, so it is not 3,758,358,528 bytes.
   Convert it: `python tools/bin2iso.py yours.bin game.bin`
 
-To check:
+To check your source (use your own filename):
 
 ```sh
 sha1sum game.bin                    # Linux / macOS / Git Bash

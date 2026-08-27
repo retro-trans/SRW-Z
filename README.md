@@ -3,6 +3,30 @@
 An open toolchain for translating **Super Robot Taisen Z** (PlayStation 2,
 SLPS-25887), plus the English translation built with it.
 
+## Play it
+
+Get `SRWZ-English-v0.8.96.xdelta` from the
+[latest release](../../releases/latest), then, with your own copy of the game:
+
+```sh
+chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
+xdelta3 -d -s game.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+chdman createcd -i "SRWZ English.iso" -o "SRWZ English.chd"
+```
+
+Load **`SRWZ English.chd`** in PCSX2. In a hurry? Stop after the second
+command - PCSX2 plays the `.iso` directly; the third just makes it about a
+third the size. Already have a `.iso` or `.bin`? Skip the first command.
+
+**A `.chd` cannot be patched directly.** It is compressed, so a patcher sees
+none of the bytes it expects - that is what *"the file is not the right one"*
+means in DeltaPatcher. Extract it first, as above.
+
+Full instructions, including what every error message means, are in
+**[INSTALL.md](INSTALL.md)**.
+
+## Translate it
+
 Fork it to fix the English, or to take the game into another language. Start
 with **[TRANSLATING.md](TRANSLATING.md)**.
 

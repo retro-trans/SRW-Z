@@ -9,10 +9,14 @@ loop and the rules the engine enforces.
    human. They are mechanically clean — names, links, punctuation and escapes
    are all correct — but nobody has checked whether the prose makes sense.
    Wrong-but-well-formed translations are what is left.
-2. **The export-pairing problem.** See `analysis/review/EXPORT_TRUST.md`. Around
-   30% of exported rows pair the wrong Japanese with the right English, which
-   blocks proofreading on 55 records. Fixing it needs the per-record string
-   referencing scheme worked out.
+2. **Reading a record against its Japanese.** `tools/build_compare.py`
+   builds a side-by-side table from your own two images and pairs every row
+   through the pointer table - 100% on all 68,628 dialogue rows. It labels
+   each row `pointer`, `same-offset` or `suspect` rather than presenting a
+   guess as fact, so you can see which rows to trust. (The older
+   `export_review.py` guesses when no pointer references an offset, and is
+   wrong on every relocated row - that is where the “30% mispaired” figure
+   in `analysis/review/EXPORT_TRUST.md` came from. Use build_compare.)
 3. **Other languages.** The toolchain is language-agnostic. cp932 is the
    constraint: the font has no accented Latin characters, so languages needing
    them also need font work.

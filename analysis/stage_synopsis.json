@@ -1,79 +1,190 @@
 {
- "note": "Stage synopsis text from DATA_HSFC.BIN matched to STAGE records by katakana overlap. ONLY confident matches are included (score >=20 and >=1.5x the runner-up). There is no stage->record table in the game data; this is inference, not ground truth.",
- "map": {
-  "1": [
-   {
-    "syn": 0,
-    "text": "月面ルテチウム基地を襲撃するエゥーゴ。それをバルゴラで迎え撃つグローリー・スターであったが、戦いの最中、空間のねじれに巻き込まれるのであった。"
-   }
-  ],
-  "43": [
-   {
-    "syn": 14,
-    "text": "ヤーパンの天井に迫るシベリア鉄道の追手。それを迎え撃つため、噂の荒くれ者集団アイアン・ギアーが呼ばれるのであった。"
-   }
-  ],
-  "25": [
-   {
-    "syn": 28,
-    "text": "ゲッコーステイトを追うザフトとエゥーゴ。その戦いはレントンによって収められ、両者は協力して、現れた新連邦軍を迎撃するのであった。"
-   }
-  ],
-  "47": [
-   {
-    "syn": 45,
-    "text": "百鬼帝国に制圧された光子力研究所。マジンガーＺに乗り込んだ甲児は、鉄也と共にダブルマジンガーの力で百鬼帝国を打ち破るのであった。"
-   },
-   {
-    "syn": 46,
-    "text": "百鬼帝国に制圧された光子力研究所。マジンガーＺに乗り込んだ甲児は、鉄也と共にダブルマジンガーの力で百鬼帝国を打ち破るのであった。"
-   }
-  ],
-  "60": [
-   {
-    "syn": 60,
-    "text": "ディアナを救うためにソレイユを追う一行。その戦いの中に現れたフリーダムは、一行に協力を申し出るのであった。"
-   }
-  ],
-  "69": [
-   {
-    "syn": 68,
-    "text": "アークエンジェルとかつての仲間と戦う一行。フリーダムの撃墜で戦いは終息し、一行は自分達が何者かに利用されていた事を知るのであった。"
-   }
-  ],
-  "90": [
-   {
-    "syn": 89,
-    "text": "マリンに協力を誓ったフリックは最初から囮であった。アフロディアの罠を破るため、マリンは友を涙ながらに討つのであった。"
-   }
-  ],
-  "108": [
-   {
-    "syn": 107,
-    "text": "謎に包まれた黒歴史の真相を知るためにアーサーとノルブの救出に向かう一行。そこでホランドは宿敵である兄デューイと対峙するのであった。"
-   }
-  ],
-  "132": [
-   {
-    "syn": 131,
-    "text": "ブッチャー、ガガーン、ガットラー、ヒューギを倒し、異星人連合を壊滅させる一行。しかし、暴走したゴーマは、真の姿を現そうとしていた。"
-   },
-   {
-    "syn": 132,
-    "text": "ゴーマを止めるために奮戦する一行とは別に、ガイゾックの神と対峙する勝平。自らの意志と勇気で勝平は戦い、ガイゾックを打ち倒すのであった。"
-   },
-   {
-    "syn": 133,
-    "text": "ゴーマを止めるために奮戦する一行とは別に、ガイゾックの神と対峙する勝平。自らの意志と勇気で勝平は戦い、ガイゾックを打ち倒すのであった。"
-   },
-   {
-    "syn": 170,
-    "text": "ゴーマを止めるために奮戦する一行とは別に、ガイゾックの神と対峙する勝平。自らの意志と勇気で勝平は戦い、ガイゾックを打ち倒すのであった。"
-   },
-   {
-    "syn": 171,
-    "text": "ゴーマを止めるために奮戦する一行とは別に、ガイゾックの神と対峙する勝平。自らの意志と勇気で勝平は戦い、ガイゾックを打ち倒すのであった。"
-   }
-  ]
+ "note": "English stage synopses, read from DATA_HSFC.BIN in a patched image by tools/export_synopses.py. No original japanese: run tools/build_compare.py against your own japanese disc if you need the source text. Keyed by scenario record, where record = synopsis index + 1 - an alignment tested by katakana overlap, not assumed.",
+ "synopses": {
+  "1": "AEUG raids Lutetium Base. Glory Star fights back, but a warp swallows them",
+  "2": "A mobile suit scramble in the drifting colony. Shin repels it in the Impulse",
+  "3": "The Minerva is dragged into the AEUG－Titans fight. The warp takes Glory Star again",
+  "4": "The Minerva is dragged into the AEUG－Titans fight. The warp takes Glory Star again",
+  "5": "Grendizer and the Vega forces clash in the new world. New invaders reach Earth",
+  "6": "Aliens strike Suruga Bay. Kappei fights them with his ancestors' Zambo Ace",
+  "7": "Sandman, who foresaw the Zeravire, forms Earth Gartz to defend the Earth",
+  "8": "Kappei, blamed unfairly, takes heart from Toshiya and fights on in Zambot ３",
+  "9": "Kappei, blamed unfairly, takes heart from Toshiya and fights on in Zambot ３",
+  "10": "All factions battle over Junius Seven's fall. The warp takes Glory Star again",
+  "11": "In the elevator battle, Katsura must fire the quake bomb. The world ends",
+  "12": "In the elevator battle, Katsura must fire the quake bomb. The world ends",
+  "13": "Beater Service joins Garrod of Ameria to drive off rogues after his Gundam",
+  "14": "The group aids Ulgusk's Exodus for Gain. Gainer sets out for",
+  "15": "Sibe Rail closes on Yapan's Ceiling. The rough Iron Gear crew is called in",
+  "16": "Yassaba of Sibe Rail attacks on his pride. Gainer meets his",
+  "17": "Dragged into Gekkostate's fight, the group is swallowed by another warp",
+  "18": "Dragged into Gekkostate's fight, the group is swallowed by another warp",
+  "19": "Warped to Ameria, the group battles the Moonrace. Loran is drawn in too",
+  "20": "As Guin talks, the Frosts move in shadow. Queen Dianna descends to Earth",
+  "21": "The Shadow Angels appear. His friend taken, Apollo boards Aquarion",
+  "22": "Toma meets Apollo. At their touch, a distant quake bomb ends the world",
+  "23": "Emaan shelters Katsura. He learns spacetime broke and a new world was born",
+  "24": "Murders strike Paradigm City. Roger sets out for the truth with Big O",
+  "25": "Renton meets the mysterious Eureka and resolves to leave his home behind",
+  "26": "The alien Elda hit Trinity City. God Sigma at last combines and wins",
+  "27": "Fort Severn faces the Moonrace. Its hired helpers, the Freeden, reunite",
+  "28": "A melee of factions at the trading point. New meetings, new battles begin",
+  "29": "Renton stills the fight over Gekkostate. All join against the New Federation",
+  "30": "Duke Fleed repels the aliens at Trinity City. Marin fights in Baldios",
+  "31": "Orb and the New Fed corner the Minerva. Shin's transcendent power saves all",
+  "32": "Assassins strike Lacus at Orb's wedding. Kira and Archangel leave Orb",
+  "33": "Assassins strike Lacus at Orb's wedding. Kira and Archangel leave Orb",
+  "34": "The Moonrace hits Gloma's market. The appearing Chiram hunt Katsura",
+  "35": "The Ekiden race. With Roger, the group repels Asuham's Saint Reagan",
+  "36": "The Ekiden race. With Roger, the group repels Asuham's Saint Reagan",
+  "37": "Kappei finds the Kozukis, runs wild, and battle reminds him of his duty",
+  "38": "At Cattse, Kihel as Dianna declares coexistence. Dianna renews her resolve",
+  "39": "At Cattse, Kihel as Dianna declares coexistence. Dianna renews her resolve",
+  "40": "Kashimaru's Overskill overwhelms － until Gainer confesses his love to Sara",
+  "41": "Glory Star takes Asakim's bait. His power kills Denzel, then Toby",
+  "42": "Beater Service rides to Asakim's rescue. He says little, and departs",
+  "43": "Sibe Rail's last stand fails. Gainer journeys on for his own",
+  "44": "Roger cuts into the battle at Saotome Lab. Schwarz leaves ominous words",
+  "45": "Roger cuts into the battle at Saotome Lab. Schwarz leaves ominous words",
+  "46": "The Photon Lab falls. Kouji and Tetsuya crush the foe as Double Mazinger",
+  "47": "The Photon Lab falls. Kouji and Tetsuya crush the foe as Double Mazinger",
+  "48": "The Hyakki Empire is swept from Japan. Japan rejoins the New Federation",
+  "49": "The Hyakki Empire is swept from Japan. Japan rejoins the New Federation",
+  "50": "Kamille and Shin meet Four and Stella － as enemies, on a battlefield",
+  "51": "Zeravire strike at Lohengrin Gate. Distrusting Touga, Eiji leaves the ship",
+  "52": "Zeravire strike at Lohengrin Gate. Distrusting Touga, Eiji leaves the ship",
+  "53": "The group shields people from Gaizock. Sandman grants the Knights new power",
+  "54": "Freedom and Archangel cut into the Phantom Pain battle. Heine",
+  "55": "The fight over Lodonia's lab. Four finds herself, and dies guarding it",
+  "56": "Tsine corners Star ３. Her comrades' cheers give her strength to win",
+  "57": "Asakim's vile trap brings tears － and wakes the Gunnery Carver's power",
+  "58": "Kamille gets the Zeta. Saved by Fa, he defeats the vengeful",
+  "59": "Phantom Pain raids Gibraltar. A coup breaks out in the Dianna Counter",
+  "60": "Phantom Pain raids Gibraltar. A coup breaks out in the Dianna Counter",
+  "61": "The group chases the Soleil for Dianna. Freedom offers its",
+  "62": "Gaizock turns the abducted into human bombs. Its power is overwhelming",
+  "63": "Duke Fleed joins the Elda battle. His ideals sound like empty dreams",
+  "64": "Sandman's past stuns all. Touga tells Leele － a truth too heavy for her",
+  "65": "Sandman's past stuns all. Touga tells Leele － a truth too heavy for her",
+  "66": "The New Fed invades Chiram. In the chaos, Four and Stella",
+  "67": "Durandal's speech sparks a coup. The group falls into an enemy trap",
+  "68": "Durandal's speech sparks a coup. The group falls into an enemy trap",
+  "69": "The group fights old comrades. Freedom falls; they learn they were used",
+  "70": "The New Fed reveals the Coralians. Wary, the group still defends the city",
+  "71": "The New Fed reveals the Coralians. Wary, the group still defends the city",
+  "72": "In the melee over the spacetime device, the quake bomb fires again",
+  "73": "A Coralian's visions strike. Tiffa falls into the Frost brothers' hands",
+  "74": "A Coralian's visions strike. Tiffa falls into the Frost brothers' hands",
+  "75": "Tiffa is taken to Zonder Epta. Garrod saves her and vows anew",
+  "76": "Tiffa is taken to Zonder Epta. Garrod saves her and vows anew",
+  "77": "Gyukenki strikes amid Fudou's training. Ryo and Apollo grow in battle",
+  "78": "Gyukenki strikes amid Fudou's training. Ryo and Apollo grow in battle",
+  "79": "Captured in Emaan by Maneesha, the group escapes － outsiders with no home",
+  "80": "Captured in Emaan by Maneesha, the group escapes － outsiders with no home",
+  "81": "Fleeing to an LFO dig, Eureka merges with the Scub. A Seven Swell erupts",
+  "82": "Fleeing to an LFO dig, Eureka merges with the Scub. A Seven Swell erupts",
+  "83": "Asakim and Tsine bare the truth. Stunned, Mel shuts her heart away",
+  "84": "Asakim strikes again. Bond regained, the two wake Gunleon's power",
+  "85": "Seeking Renton, the group meets mercenaries and fights the town's rogues",
+  "86": "Katsura meets an old friend. Before a common foe they fight as before",
+  "87": "Katsura meets an old friend. Before a common foe they fight as before",
+  "88": "Gekkostate settles it with Charles. Renton and Eureka",
+  "89": "Gekkostate settles it with Charles. Renton and Eureka",
+  "90": "Flick was a decoy all along. Marin tearfully strikes down his friend",
+  "91": "Kids Munt stakes all and loses. A giant Overman looms before the group",
+  "92": "Gainer trains past his limits and defeats the Overdevil. It is only a start",
+  "93": "Gainer trains past his limits and defeats the Overdevil. It is only a start",
+  "94": "Gainer trains past his limits and defeats the Overdevil. It is only a start",
+  "95": "The New Fed invades Chiram. The group marvels at their comrades' change",
+  "96": "Durandal's speech sparks a coup. The group falls into an enemy trap",
+  "97": "Durandal's speech sparks a coup. The group falls into an enemy trap",
+  "98": "Freedom falls, ending the fight. Olson reveals they had been used",
+  "99": "An Antibody Coralian appears. Holland reveals his aim and offers help",
+  "100": "An Antibody Coralian appears. Holland reveals his aim and offers help",
+  "101": "In the melee over the spacetime device, the quake bomb fires again",
+  "102": "Emaan and Chiram attack － then all three join hands to save the world",
+  "103": "Emaan and Chiram attack － then all three join hands to save the world",
+  "104": "Terral duels on his pride. Kappei's rage over Aki crushes",
+  "105": "Shin gains power, Athrun leaves ZAFT, Kira fights anew － each their own path",
+  "106": "Shin gains power, Athrun leaves ZAFT, Kira fights anew － each their own path",
+  "107": "Fighting Aldebaron's Earth Flood, the Knights rejoin. Sol Gravion descends",
+  "108": "The group moves to save Arthur and Norb. Holland faces his brother Dewey",
+  "109": "At Orb, Lacus and Cagalli broadcast a message denouncing Durandal",
+  "110": "Reeven strikes the Virgola. Chimera bares its true aim and declares war",
+  "111": "Reeven strikes the Gunleon. Chimera bares its true aim and declares war",
+  "112": "At the Vodarac shrine, Sirius despairs and wakes as a Shadow",
+  "113": "Warped to Paradigm City, the group crushes the Hyakki Empire's ambition",
+  "114": "A Shadow Angel bars the way, but burning hearts break the Overfreeze",
+  "115": "A Shadow Angel bars the way, but burning hearts break the Overfreeze",
+  "116": "A Shadow Angel bars the way, but burning hearts break the Overfreeze",
+  "117": "A Shadow Angel bars the way, but burning hearts break the Overfreeze",
+  "118": "Requiem's relay falls. The Minerva and Rey part ways, back to ZAFT",
+  "119": "At D.O.M.E., the group learns the Black History and the ring",
+  "120": "Kazami and King Vega fall. The aliens declare their final operation",
+  "121": "Kazami's betrayal dooms the raid. The Archangel saves and joins the group",
+  "122": "Kazami's betrayal dooms the raid. The Archangel saves and joins the group",
+  "123": "Kazami's betrayal dooms the raid. The Archangel saves and joins the group",
+  "124": "Kazami's betrayal dooms the raid. The Archangel saves and joins the group",
+  "125": "Talks with Haman break down. Quattro eyes the colony laser",
+  "126": "Talks with Haman break down. Quattro eyes the colony laser",
+  "127": "The truth at D.O.M.E. drives Sirius to wake as a Shadow",
+  "128": "Shadow Angels and Hyakki strike. Gainer is taken by the Overdevil",
+  "129": "Gainer's heart burns once more, and the Overfreeze shatters",
+  "130": "Gainer's heart burns once more, and the Overfreeze shatters",
+  "131": "Kazami, Vega and Burai fall. The aliens declare their final operation",
+  "132": "The alien alliance is destroyed. But the berserk Goma shows its true form",
+  "133": "Kappei faces Gaizock's god with will and courage － and defeats it",
+  "134": "Kappei faces Gaizock's god with will and courage － and defeats it",
+  "135": "Scirocco and Durandal fall. Then Dewey begins his final",
+  "136": "The group wins － but Eureka becomes the Coralians' command",
+  "137": "The group wins － but Eureka becomes the Coralians' command",
+  "138": "Scirocco and Durandal fall. Then Dewey begins his final",
+  "139": "The group wins － but Eureka becomes the Coralians' command",
+  "140": "In Paradigm City, Roger rejects Asakim and bargains for the world",
+  "141": "Quattro seizes the UN station to gather the world's will for",
+  "142": "Quattro seizes the UN station to gather the world's will for",
+  "143": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "144": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "145": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "146": "Quattro seizes the UN station to gather the world's will for",
+  "147": "Quattro seizes the UN station to gather the world's will for",
+  "148": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "149": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "150": "Edel sorties to stop the repair. The last battle begins above the elevator",
+  "151": "Edel sorties to stop the repair. What the battle won was a black world",
+  "152": "Edel sorties to stop the repair. What the battle won was a black world",
+  "153": "Edel sorties to stop the repair. What the battle won was a black world",
+  "154": "Taking Reeven's request, the group splits for the Pacific and Galia",
+  "155": "Taking Reeven's request, the group splits for the Pacific and Galia",
+  "156": "Taking Reeven's request, the group splits for the Pacific and Galia",
+  "157": "After meeting Edel, the group splits： Gibraltar, and the alien trail",
+  "158": "After meeting Edel, the group splits： Gibraltar, and the alien trail",
+  "159": "After meeting Edel, the group splits： Gibraltar, and the alien trail",
+  "160": "Fed up with Holland, Garrod's group leaves to find the runaway Renton",
+  "161": "Fed up with Holland, Garrod's group leaves to find the runaway Renton",
+  "162": "Fed up with Holland, Garrod's group leaves to find the runaway Renton",
+  "163": "Kashimaru's Overskill overwhelms － until Gainer confesses his love to Sara",
+  "164": "Kashimaru's Overskill overwhelms － until Gainer confesses his love to Sara",
+  "165": "The Hyakki Empire is swept from Japan. Japan rejoins the New Federation",
+  "166": "The Hyakki Empire is swept from Japan. Japan rejoins the New Federation",
+  "167": "At Orb, Lacus and Cagalli broadcast a message denouncing Durandal",
+  "168": "At Orb, Lacus and Cagalli broadcast a message denouncing Durandal",
+  "169": "Reeven strikes the Virgola. Chimera bares its true aim and declares war",
+  "170": "Reeven strikes the Gunleon. Chimera bares its true aim and declares war",
+  "171": "Kappei faces Gaizock's god with will and courage － and defeats it",
+  "172": "Kappei faces Gaizock's god with will and courage － and defeats it",
+  "173": "In Paradigm City, Roger rejects Asakim and bargains for the world",
+  "174": "In Paradigm City, Roger rejects Asakim and bargains for the world",
+  "175": "Reeven strikes the Virgola. Chimera bares its true aim and declares war",
+  "176": "Reeven strikes the Gunleon. Chimera bares its true aim and declares war",
+  "177": "Quattro seizes the UN station to gather the world's will for",
+  "178": "Quattro seizes the UN station to gather the world's will for",
+  "179": "Quattro seizes the UN station to gather the world's will for",
+  "180": "Quattro seizes the UN station to gather the world's will for",
+  "181": "This recap appears if stages were added unnoticed. Contact Shiraishi at once",
+  "182": "This recap appears if stages were added unnoticed. Contact Shiraishi at once",
+  "183": "This recap appears if stages were added unnoticed. Contact Shiraishi at once",
+  "184": "This recap appears if stages were added unnoticed. Contact Shiraishi at once",
+  "185": "This recap appears if stages were added unnoticed. Contact Shiraishi at once"
  }
 }

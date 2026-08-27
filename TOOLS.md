@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 8 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 29 |
+| [Everything else](#everything-else) | 30 |
 
 ## The pipeline
 
@@ -501,6 +501,9 @@ Small MIPS disassembler used by the RE tools.
 
 **`export_review.py`**  
 Export JP/EN pairs for proofreading, straight from the SHIPPED image.
+
+**`export_synopses.py`**  
+Export the stage synopses as ENGLISH, keyed by scenario record.
 
 **`harvest_labels.py`**  
 Compose the intermission bar labels from HARVESTED original glyphs.

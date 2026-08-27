@@ -24,6 +24,7 @@ reads those from the disc you dump yourself.
 
 | Path | Contents |
 |---|---|
+| `INSTALL.md` | **playing it** — how to apply the patch to your own dump |
 | `TRANSLATING.md` | **start here** — the edit loop and the rules the engine enforces |
 | `TOOLS.md` | every tool, what it is for, and when you need it |
 | `tools/` | 158 tools: the LZ codec, the pipeline, patchers, verifiers, gates |

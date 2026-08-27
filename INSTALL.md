@@ -32,15 +32,25 @@ original file `game.bin`, patch `SRWZ-English-v0.8.96.xdelta`, Apply.
 Because it would only work for some people, and would fail for everyone else in
 a way that looks like a corrupt download.
 
-A CHD is compressed in blocks, and two CHDs of the *same disc* contain different
-bytes if they were built by different `chdman` versions. We measured it:
-rebuilding a Japanese CHD with our own `chdman` produced a file **4 MB
-different** from the original, despite identical contents, identical CHD version,
-identical 19,584-byte hunks and identical `cdlz`/`cdzl`/`cdfl` compression.
+Two CHDs can hold the same disc **bit for bit** and still be different files.
+Rebuilding this game's Japanese CHD with our own `chdman` gave:
 
-A patch built against one of those CHDs is 7.5 MB; the same patch against the
-other passed **1.5 GB** and was still growing. So the patch targets the
-uncompressed image, where a byte is a byte, and you rebuild the CHD locally.
+    SHA1        1b082c010694f56d9a842276a733a1a9dc1f52d4   identical
+    Data SHA1   46ed63ec9d4bfd02e1dc2393a5b86ea4c3206cc6   identical
+    file size   2,532,295,277  vs  2,536,283,758           4 MB apart
+
+Same disc, same data, same CHD version, same 19,584-byte hunks, same
+`cdlz`/`cdzl`/`cdfl` — only the compressed *representation* differs. A CHD
+records no creator version, so there is no way to tell from the file which build
+made it, or to warn someone that theirs will not match.
+
+That difference is fatal to a delta, because xdelta compares stored bytes and
+almost none of them line up. A patch between two CHDs built the same way is
+7.5 MB; the same patch across the two above passed **1.5 GB** and was still
+growing.
+
+So the patch targets the uncompressed image, where a byte is a byte, and you
+rebuild the CHD locally.
 
 ## Optional — sharper UI art
 

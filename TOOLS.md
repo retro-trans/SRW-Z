@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 8 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 30 |
+| [Everything else](#everything-else) | 31 |
 
 ## The pipeline
 
@@ -513,6 +513,9 @@ Live-iterate the intermission label fonts via PINE.
 
 **`mdis.py`**  
 Word-by-word MIPS disassembler for PS2 EE code.
+
+**`name_map.py`**  
+Ship the name maps as FINGERPRINTS, and rebuild them from your own disc.
 
 **`preview_16level.py`**  
 Show 4-level vs 16-level alpha for the SAME face, at real size.

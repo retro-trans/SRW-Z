@@ -17,6 +17,9 @@ dist/
 *.exe
 *.zip
 
+# Rebuilt locally from YOUR disc - contains the japanese, never commit
+_name_map_local.json
+
 # Bulk dumps of the original japanese script
 *_jp.json
 zkn_jp.json

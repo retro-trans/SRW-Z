@@ -10,6 +10,61 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.96 (2026-08-27) - one character, eleven spellings
+
+Reported from a screenshot: "here it's still Reben". It was worse than one
+spelling - the same character shipped under ELEVEN:
+
+    Lowen  1017   <- correct         Raven     3      Raeven    2
+    Loewen   50                      Raben    20      Leben     3
+    Reeven  126                      Reben     8      Lane      1
+    Reeben   13                      Reuben    6      Reven     6
+
+He is Chimera's レーベン・ゲネラール - Loewen General. German Loewen is "lion",
+which is why he calls himself the young lion of the Chimera and pilots the
+Chaos Leo. The SRW wiki spells him Loewen with the umlaut; the font is
+half-width ASCII with no umlaut and the build already used "Lowen" 1017 times,
+so everything is normalised to Lowen.
+
+**232 corrections**: 92 dialogue rows, 140 caption fields.
+
+Every dialogue match is conditioned on the row's JAPANESE containing レーベン,
+resolved through the row's own pointer. That is not caution for its own sake -
+116 uses of "Raven" in STAGE are a DIFFERENT character ("I am called Raven. I
+hope you'll remember me."), and "Lane" and "Leben" are ordinary words. A blind
+search-and-replace would have renamed all of them.
+
+### Kaimera -> Chimera, finished this time
+
+0.8.95 renamed カイメラ in the battle captions and left **38 in STAGE**, because
+STAGE is banlz-compressed and a byte-level pass over the disc cannot see into
+it. Fixed here: 38 occurrences, 36 rows, 14 records, all in place.
+
+### Two captions the word-boundary rule could not reach
+
+Captions store a line break as the two characters BACKSLASH and 'n', not 0x0A.
+So in `"Don't mess with me,
+Raben!"` the character before the R is the LETTER
+n, `Raben` finds no word boundary, and the rename silently skipped it.
+Swapping the literal `
+` for a non-word sentinel around the regex fixed 11
+fields, including the relocated SRVC copy.
+
+Verified afterwards: 0 variants left in either caption region, 0 in STAGE.
+
+### Also
+
+`tools/rename_term.py` - renaming a term in STAGE has needed the same three
+things every time (condition on the japanese, keep it inside the box, repoint a
+row that no longer fits), so it is one parameterised tool now instead of
+another one-off per name.
+
+### Gates
+
+    integrity.py                 problems: 0
+    verify_elf_patches.py        all ELF patches present
+    verify_pointers.py --against 81,286 resolving, 0 broken
+
 ## 0.8.95 (2026-08-27) - scenario-chart recaps, Chimera/Lowen, LIBRARY menu for real
 
 Reported from a screenshot: "the scenario chart still have some bug lik missing

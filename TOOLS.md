@@ -19,7 +19,7 @@ Two warnings that are not obvious from any docstring:
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 11 |
 | [Applying text to the image](#applying-text-to-the-image) | 4 |
-| [Fixing specific defects](#fixing-specific-defects) | 13 |
+| [Fixing specific defects](#fixing-specific-defects) | 14 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 35 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 7 |
@@ -212,6 +212,9 @@ Shorten the 8 dialogue lines that cannot fit the box once $ expands.
 
 **`fix_literal_nl_global.py`**  
 Unescape LITERAL backslash-n across ALL 205 STAGE records.
+
+**`fix_lowen_captions.py`**  
+Normalise every spelling of レーベン to Lowen in the battle captions.
 
 **`fix_placeholder_wrap.py`**  
 Re-wrap dialogue whose $ placeholders overflow the box once expanded.

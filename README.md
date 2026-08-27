@@ -25,10 +25,55 @@ Either way, load **`SRWZ English.iso`** in PCSX2 and play.
 
 **A `.chd` cannot be patched directly.** It is compressed, so a patcher sees
 none of the bytes it expects - that is what *"the file is not the right one"*
-means in DeltaPatcher. Extract it first, as above.
+means in DeltaPatcher. Extract it first, as above. Two CHDs can hold the same disc
+**bit for bit** and still be different files - rebuilding this game's Japanese
+CHD gave an identical `Data SHA1` in a file 4 MB different in size, because a
+CHD records only the compressed *representation*. A patch built against one
+such CHD is 7.5 MB; against the other it passed 1.5 GB and was still growing.
 
-Full instructions, including what every error message means, are in
-**[INSTALL.md](INSTALL.md)**.
+You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
+from [MAME](https://www.mamedev.org/) only if your copy is a `.chd`. Neither
+ships here. Prefer clicking? **DeltaPatcher** does the xdelta step for you.
+
+### If it does not work
+
+`target window checksum mismatch: XD3_INVALID_INPUT` means the file you gave
+`-s` is not the Japanese original. Almost always one of:
+
+- **you pointed it at a `.chd`** - extract it first. In DeltaPatcher this shows
+  as *"the file is not the right one"*
+- it is already patched - start again from a clean copy
+- it was ripped at 2352 bytes per sector, so it is not 3,758,358,528 bytes.
+  Convert it with `python tools/bin2iso.py yours.bin game.bin`
+
+`using default source filename:` means you left out `-s`. The source name is
+stored inside the patch, so xdelta guesses at one and then cannot find it.
+
+To check a file (use your own filename):
+
+```sh
+sha1sum game.bin                    # Linux / macOS / Git Bash
+certutil -hashfile game.bin SHA1    # Windows
+```
+
+```
+before   3,758,358,528 bytes   sha1 e8dbe37e88afe8f82d48889b0775274ccde3cf99
+after    3,758,358,528 bytes   sha1 d1d91523d32d646fbcf97251e39bd5b8f1d2397f
+```
+
+If it plays but something looks wrong, please [open an issue](../../issues)
+with a screenshot - most real bugs here were found that way, not by any
+automated check.
+
+### Sharper UI art (optional)
+
+`SRWZ-texture-pack.zip` upscales art the game draws as textures. Copy its
+`textures` folder into your PCSX2 user directory, giving
+`textures/SLPS-25887/replacements/*.png`, then tick **Settings -> Graphics ->
+Texture Replacement -> Load Textures** and restart - PCSX2 only scans that
+folder at boot. Set the upscale multiplier **globally**, not per-game:
+per-game settings are keyed to the disc CRC and silently reset on every patch
+update.
 
 ## Translate it
 
@@ -53,7 +98,6 @@ reads those from the disc you dump yourself.
 
 | Path | Contents |
 |---|---|
-| `INSTALL.md` | **playing it** — how to apply the patch to your own dump |
 | `TRANSLATING.md` | **start here** — the edit loop and the rules the engine enforces |
 | `TOOLS.md` | every tool, what it is for, and when you need it |
 | `tools/` | 158 tools: the LZ codec, the pipeline, patchers, verifiers, gates |

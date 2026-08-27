@@ -230,6 +230,47 @@ def main():
     print("re-parse OK: %d blocks, %d with text"
           % (len(chk), sum(1 for x in chk if x.has_text)))
 
+    # RECORD GATE. The two asserts above compare our output against our own
+    # input, so they cannot see this: records are found HEURISTICALLY (seeds
+    # plus a stride walk), and a rebuilt file can resolve FEWER of them than
+    # the source did. A record that stops resolving takes its voice clip AND
+    # its subtitle with it, because both live in the same 8-byte cell
+    # [u16 clip_id][u16 section_tag][u16 f2][00 00] - so the symptom is an
+    # attack that plays silently with no caption, which is exactly how this
+    # was reported.
+    #
+    # 171 records were lost this way before this check existed, including 71
+    # of one block's 144 and two blocks entirely (122 and 313).
+    # This REPORTS, it does not refuse, and the difference matters.
+    #
+    # Every record found in the source is repointed, and f2 is computed as
+    # offs_new[target] - offs_new[anchor] - a difference of two string starts,
+    # so it lands on a string boundary by construction. The written data is
+    # therefore sound whether or not the detector can find it again.
+    #
+    # Re-resolving the REBUILT bytes finds fewer, but that is the detector
+    # being blind on a changed layout, not data loss: the rebuild deliberately
+    # restores 108 head-truncated quotes, which is why 228 of 353 blocks come
+    # back with a different string count. Gating on this number would refuse
+    # every build for a cosmetic reason.
+    #
+    # It is still worth printing. A SUDDEN jump is worth investigating, and the
+    # per-block figures are the starting point when a voice line is reported
+    # with no sound and no subtitle - clip id and caption share one 8-byte cell
+    # [u16 clip_id][u16 section_tag][u16 f2][00 00], so they fail together.
+    chk_recs, _chk_unres = resolve(chk)
+    have = sum(len(v) for v in seq_records.values())
+    got = sum(len(v) for v in chk_recs.values())
+    print("records: %d repointed, %d re-resolve from the rebuilt bytes (%+d)"
+          % (have, got, got - have))
+    if got < have:
+        worst = sorted(((len(seq_records[bi]) - len(chk_recs.get(bi, [])), bi)
+                        for bi in seq_records
+                        if len(chk_recs.get(bi, [])) < len(seq_records[bi])),
+                       reverse=True)[:8]
+        print("   detector blind spots by block: %s"
+              % ", ".join("%d(-%d)" % (bi, n) for n, bi in worst))
+
     need = (len(nb) + SECTOR - 1) // SECTOR
     if dry:
         print("dry run; would need %d sectors (have %d)" % (need, ORIG_SECTORS))

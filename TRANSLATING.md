@@ -66,28 +66,6 @@ On this translation it reports **100% `pointer`** across all 68,628 dialogue
 rows. If a fork sees `same-offset` or `suspect` rows, those are the ones not to
 trust.
 
-## Checking it with only a japanese disc
-
-Judge it for yourself - one command, and only your own japanese disc:
-
-```sh
-python tools/compare_translation.py "Super Robot Taisen Z (Japan).chd"
-python tools/compare_translation.py game.iso --rec 127   # one scenario
-python tools/compare_translation.py game.iso --only untranslated
-```
-
-Writes an HTML page with the Japanese beside our English, filterable by record
-and searchable in either language. Accepts `.chd`, `.iso`, `.bin` or `.cue`.
-
-No patched image is needed: the pairing was done once and stored in
-`analysis/translation_pairs.json`, keyed by Japanese offset. That file holds no
-Japanese text - only offsets into the disc you already own.
-
-Rows come in three kinds, kept apart on purpose. **not translated** means we
-have no English for that line; **no confident match** means we cannot prove
-which English goes with it - those lines are almost certainly translated, and
-counting them as missing work would be wrong.
-
 ## Changing one line
 
 Most bugs arrive as a screenshot of a single wrong line. Find it, then fix it

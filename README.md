@@ -60,11 +60,23 @@ Judge it for yourself - one command, and only your own japanese disc:
 
 ```sh
 python tools/compare_translation.py "Super Robot Taisen Z (Japan).chd"
+python tools/compare_translation.py game.iso --rec 127   # one scenario
+python tools/compare_translation.py game.iso --only untranslated
 ```
 
-Writes an HTML page with the Japanese beside our English, filterable by
-record and searchable in either language. No patched image needed.
-Details, and how to change a line, are in
+Writes an HTML page with the Japanese beside our English, filterable by record
+and searchable in either language. Accepts `.chd`, `.iso`, `.bin` or `.cue`.
+
+No patched image is needed: the pairing was done once and stored in
+`analysis/translation_pairs.json`, keyed by Japanese offset. That file holds no
+Japanese text - only offsets into the disc you already own.
+
+Rows come in three kinds, kept apart on purpose. **not translated** means we
+have no English for that line; **no confident match** means we cannot prove
+which English goes with it - those lines are almost certainly translated, and
+counting them as missing work would be wrong.
+
+Changing a line you disagree with is in
 **[TRANSLATING.md](TRANSLATING.md)**.
 
 ## What is here

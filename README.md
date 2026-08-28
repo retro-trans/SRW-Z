@@ -54,6 +54,28 @@ You need your own copy of the game. This repository contains no disc image, no
 game data and no dump of the original Japanese script — `extract_script.py`
 reads those from the disc you dump yourself.
 
+## Check the translation
+
+Judge it for yourself - one command, and only your own japanese disc:
+
+```sh
+python tools/compare_translation.py "Super Robot Taisen Z (Japan).chd"
+python tools/compare_translation.py game.iso --rec 127   # one scenario
+python tools/compare_translation.py game.iso --only untranslated
+```
+
+Writes an HTML page with the Japanese beside our English, filterable by record
+and searchable in either language. Accepts `.chd`, `.iso`, `.bin` or `.cue`.
+
+No patched image is needed: the pairing was done once and stored in
+`analysis/translation_pairs.json`, keyed by Japanese offset. That file holds no
+Japanese text - only offsets into the disc you already own.
+
+Rows come in three kinds, kept apart on purpose. **not translated** means we
+have no English for that line; **no confident match** means we cannot prove
+which English goes with it - those lines are almost certainly translated, and
+counting them as missing work would be wrong.
+
 ## What is here
 
 | Path | Contents |
@@ -62,6 +84,7 @@ reads those from the disc you dump yourself.
 | `TOOLS.md` | every tool, what it is for, and when you need it |
 | `tools/` | 158 tools: the LZ codec, the pipeline, patchers, verifiers, gates |
 | `analysis/english_script.json` | the English translation — 167,613 strings |
+| `analysis/translation_pairs.json` | our English keyed by Japanese offset, for the check above |
 | `analysis/glossary.json` | 1000 terms, with provenance in `glossary_sources.json` |
 | `docs/TECHNICAL.md` | how the data, the engine and the pipeline actually work |
 | `docs/BASE_RULES.md` | portable rules for running a project like this |

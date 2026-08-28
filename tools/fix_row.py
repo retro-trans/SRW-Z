@@ -66,7 +66,14 @@ def check(text):
 def main():
     iso = sys.argv[1]
     write = "--write" in sys.argv
+    if not os.path.exists(FIXES):
+        raise SystemExit("no %s - create it as a JSON list; the format is in "
+                         "this file's docstring" % FIXES)
     fixes = json.load(io.open(FIXES, encoding="utf-8"))
+    if not fixes:
+        print("analysis/row_fixes.json is empty - nothing to do.")
+        print("Add an entry per row you want to change; see the docstring.")
+        return 0
 
     f = open(iso, "r+b" if write else "rb")
     f.seek(LBA * SECTOR)

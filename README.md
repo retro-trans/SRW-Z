@@ -54,6 +54,39 @@ You need your own copy of the game. This repository contains no disc image, no
 game data and no dump of the original Japanese script — `extract_script.py`
 reads those from the disc you dump yourself.
 
+### Changing one line
+
+Most bugs arrive as a screenshot of a single wrong line. Find it, then fix it
+in place - no need to touch the rest of the script:
+
+```sh
+# 1. find it. the check page above is searchable in both languages,
+#    or pull the script out and grep it
+python tools/extract_script.py mygame.bin script.json
+
+# 2. describe the fix in analysis/row_fixes.json, then
+python tools/fix_row.py mygame.bin            # dry run, checks everything
+python tools/fix_row.py mygame.bin --write
+```
+
+Each entry names the record, the offset, the row as it is now (`was`) and the
+replacement. The `was` field is the safety catch: if the row on disc does not
+match, the fix is refused rather than overwriting someone else's work.
+
+```json
+[{"rec": 132, "off": "0x015620",
+  "was": "Kazuki
+people of Io, ...",
+  "text": "Kazuki
+「I'm counting on you, ...",
+  "why": "lost its first line and named the wrong target"}]
+```
+
+It refuses anything the engine would reject - more than 3 body lines, a line
+over 34 columns, text that will not encode as cp932, or a replacement too long
+for its slot. The first line of a row is the speaker and is structural; do not
+turn it into a sentence.
+
 ## Check the translation
 
 Judge it for yourself - one command, and only your own japanese disc:

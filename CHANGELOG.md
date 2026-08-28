@@ -10,6 +10,67 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.100 (2026-08-28) - every line Rand speaks, read against the japanese
+
+The user's read of the last screenshots was that Rand's captions were broadly
+wrong, not wrong in one place. That turned out to be right: 39 of his 317 lines
+needed changing, and the worst of them were not awkward, they were inverted.
+
+### Finding a character's lines at all
+
+Captions carry no speaker field - the name in the box comes from whoever plays
+the clip. But the sequence record's first u16 IS the clip id, and voice clips
+are banked per character. Rand's bank is 32076-32405, ending exactly where
+Mel's begins at 32406. That is 317 distinct lines, and a check for feminine
+sentence-enders found one, so the bank is his.
+
+This generalises. Any character can now be pulled the same way.
+
+### Meaning inverted
+
+    女をいじめるのが趣味の男じゃ、この程度が関の山だな！
+      was "To bully women is my pleasure... this is all!"
+
+Said OF the enemy, about the enemy. The english made Rand the woman-beater. It
+is fluent, correctly punctuated and fits the box - the same shape of defect as
+"Darling, so happy...!", and no detector will ever flag either.
+
+    タマの取り合い    was "fighting over the same ball" / "fighting for the prize"
+
+タマ is 命. It is a fight to the DEATH, in both lines that use it.
+
+    …釣りは要らないぜ、お客さん   was "...No bait needed, pal."
+
+釣り is 釣り銭 - change. Rand is a repairman collecting a bill, and the very
+next line in his own bank, お釣りを忘れてるぜ, was already "You forgot your
+change!". The two readings sat four lines apart.
+
+    メール！お前の命、俺が預かる！！  was "Mel! Your life, I'm taking it now!"
+
+預かる is to hold in TRUST. He is promising to keep her safe, and the english
+read as a threat to kill her.
+
+Also: 笑わせんな is "don't make me LAUGH", not "don't laugh"; いけねえな is
+disapproval, not alarm; こんな使い方もある is "this use too", not "more uses
+than this" (the same phrase four lines away was translated correctly).
+
+### One term, four names
+
+ビーター殺法 was "Beater move", "Beater Kill", "Beater style" and "Beater kill".
+姐さん was "big sis", "sis", "ma'am" and "boss" - and "boss" is what 親方
+already is, so two different people shared a name. 准将 was Brigadier
+everywhere but once. 鬼 was "demons" in one line and "ogres" in the next, which
+is the Setsubun bean joke landing on neither.
+
+### Width
+
+"Alright! A contest of strength? Bring it on!" - written in 0.8.99 - was 44
+characters on one line, the third longest caption in the entire game. 99.9% are
+38 or under. It is now split on the break the japanese already had. Every line
+written today was checked against that ceiling.
+
+Two typos: a capital I and a capital A mid-sentence. One misspelling: Clasher.
+
 ## 0.8.99 (2026-08-28) - 0.8.98 shipped a regression; here is the gate
 
 A screenshot of Rand asking "Are you a traitor?!" turned out to be two faults,

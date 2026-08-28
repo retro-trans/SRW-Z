@@ -2,13 +2,30 @@
 """Build a side-by-side Japanese/English comparison table as a single HTML file.
 
 Run it on YOUR OWN copies. Nothing here ships the original script: you point it
-at the Japanese image you dumped and at a translated image (or at
-analysis/english_script.json), and the comparison is generated locally.
+at the Japanese image you dumped and at a translated one, and the comparison is
+generated locally.
 
     python tools/build_compare.py japanese.chd translated.chd compare.html
 
 Accepts .chd, .bin, .iso or .cue. A .chd is extracted with chdman, which must be
 on PATH or in tools/.
+
+YES, IT NEEDS TWO IMAGES. An earlier version of this text offered
+analysis/english_script.json as the english side. It never worked and could not
+easily: that file is keyed by (record, byte offset) in OUR PATCHED layout, and
+apply_english_script.py says plainly that applying it to a virgin japanese image
+does not fully work, because rows that outgrew their slot were relocated and
+their pointers do not exist on a clean disc. Pairing needs the english record's
+real bytes, so it needs a real english image.
+
+That is one command away, not a second download - apply the release patch to a
+copy of your japanese dump and point this at both:
+
+    xdelta3 -d -s japanese.iso SRWZ-English-vX.Y.Z.xdelta english.iso
+    python tools/build_compare.py japanese.iso english.iso compare.html --rec 127
+
+Use --rec for real work. The whole script is 68,628 rows and about 14 MB of
+HTML; one record is a scenario, which is the unit anyone actually proofreads.
 
 HOW ROWS ARE PAIRED, and why the tool tells you which
 

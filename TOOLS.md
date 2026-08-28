@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 9 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 34 |
+| [Everything else](#everything-else) | 35 |
 
 ## The pipeline
 
@@ -495,6 +495,9 @@ Cut the exported review files into agent-sized slices.
 
 **`battle_quotes_en_b.py`**  
 Battle quotes, second half. Merged with battle_quotes_en.BATTLE_QUOTES.
+
+**`caption_review.py`**  
+Print paired captions for a human to read, one detector class at a time.
 
 **`check_alignment.py`**  
 Find rows where our English does not correspond to its Japanese source.

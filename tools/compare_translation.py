@@ -28,8 +28,30 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import re
+
 import banlz
 from build_compare import as_image, s_at, JP_RE
+
+KANA = re.compile(u"[ぁ-ゟァ-ヿ]")
+KAGI = u"「"
+
+
+def looks_like_a_line(s):
+    """Is this a line of script, or bytes that happened to decode?
+
+    A record's pointer table and padding are valid cp932 too, so "contains a
+    japanese character" lets through things like コ$減d-( and 、察@< - all from
+    the low offsets of rec0, which is exactly where the pointer table lives.
+    Real dialogue has kana in it, or an opening quote bracket.
+
+    Applied ONLY to rows we could not pair. Anything in the pairs file is
+    known to be a real row and is always shown, so this can never hide a
+    translation."""
+    s = s.strip()
+    if len(s) < 4 and KAGI not in s:
+        return False
+    return KAGI in s or len(KANA.findall(s)) >= 3
 from rewrap_dialogue import LBA, SECTOR, SIZE
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -115,6 +137,9 @@ def main():
                         cell = u'<span class="todo">not translated yet</span>'
                         todo += 1
                     else:
+                        if not looks_like_a_line(jt):
+                            k = z + 1
+                            continue
                         cell = u'<span class="miss">no confident match</span>'
                         miss += 1
                     body.append(u"<tr><td class=n>%d:%d</td>"

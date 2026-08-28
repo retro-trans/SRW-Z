@@ -191,6 +191,15 @@ def main():
             j += 8 + size
 
         blob = banlz.compress_record(bytes(dat))
+        if len(blob) > spans[ri]:
+            # The fast compressor is not the last word. rec1 - the opening
+            # prologue - missed its span by NINE bytes and so shipped in
+            # Japanese, which is what a screenshot of the Rand prologue showed.
+            # Every other tool here falls back to the optimal encoder on
+            # overflow; this one did not.
+            opt = banlz.compress_record_optimal(bytes(dat))
+            if len(opt) < len(blob):
+                blob = opt
         rt, _ = banlz.decompress_record(blob, 0)
         assert rt == bytes(dat)
         if len(blob) <= spans[ri]:

@@ -22,10 +22,10 @@ Two warnings that are not obvious from any docstring:
 | [Fixing specific defects](#fixing-specific-defects) | 15 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 35 |
 | [Generators](#generators) | 4 |
-| [Scanning and auditing](#scanning-and-auditing) | 7 |
+| [Scanning and auditing](#scanning-and-auditing) | 8 |
 | [Searching](#searching) | 2 |
 | [Font and texture work](#font-and-texture-work) | 8 |
-| [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 8 |
+| [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 9 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
 | [Everything else](#everything-else) | 34 |
@@ -368,6 +368,9 @@ Generate TOOLS.md - one line per tool, grouped by what it is for.
 **`audit_names.py`**  
 Audit every name in analysis/db_en.json against the corpus.
 
+**`caption_audit.py`**  
+Rank battle captions by how likely the english is WRONG, not just short.
+
 **`ftable_audit.py`**  
 Audit the game's own filename->LBA table for overlapping extents.
 
@@ -440,6 +443,9 @@ Fit a battle-caption translation into its ORIGINAL byte budget.
 
 **`srvc_line_fixes.py`**  
 Targeted battle-caption line corrections (post-review).
+
+**`srvc_pairs.py`**  
+Pair every battle caption to its japanese, through the sequence records.
 
 **`srvc_records.py`**  
 Resolve the voice/sequence records inside SRVC blocks.

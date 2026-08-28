@@ -52,7 +52,7 @@ TEXTS = [
      "world."),
     ("　地球という星からかつての文明と自然環境が",
      "　An age in which the old civilization and\n"
-     "nature itself had been lost to the Earth, and\n"
+     "nature itself were lost to the Earth, and\n"
      "each region formed its own society and culture.\n"
      "　Through history mankind lost many things -\n"
      "and built new ones in their place.\n"
@@ -62,11 +62,11 @@ TEXTS = [
      "ended by the Civilians, the new humanity\n"
      "they had made.\n"
      "　The Central Government of the other lands,\n"
-     "nearly broken by the 7th Space War 15 years\n"
+     "broken by the 7th Space War 15 years\n"
      "ago, was regaining control.\n"
      "　So too was its old enemy, the Space\n"
      "Revolutionary Army.\n"
-     "　And the Moonrace, who had stayed apart from\n"
+     "　And the Moonrace, who stayed apart from\n"
      "them all, were about to act on their dearest\n"
      "wish.\n"
      "　\n"

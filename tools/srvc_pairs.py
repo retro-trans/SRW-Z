@@ -31,7 +31,13 @@ import srvc_records
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECTOR = 2048
-SEG_LBA, SRVC_LBA, SRVC_LEN = 1309609, 1313214, 2913887
+SEG_LBA, SRVC_LBA = 1309609, 1313214
+# Read the whole ALLOCATED extent, not the file's current length. SRVC grows
+# a little on every rebuild, and a hardcoded byte count goes stale: this tool
+# died on 'unpack requires a buffer of 4 bytes' once the file passed the
+# constant it was written with. The extent does not move, so reading all of
+# it is safe however much the file has grown inside it.
+SRVC_SECTORS = 1618
 OUT = os.path.join(ROOT, "analysis", "caption_pairs.json")
 
 
@@ -43,7 +49,7 @@ def main():
                                            "BTL_SRVC.SEG"), "rb").read())
     f = open(iso, "rb")
     f.seek(SRVC_LBA * SECTOR)
-    cur = f.read(SRVC_LEN)
+    cur = f.read(SRVC_SECTORS * SECTOR)
     f.seek(SEG_LBA * SECTOR)
     nseg = srvc.read_seg(f.read(len(oseg) * 4))
     f.close()

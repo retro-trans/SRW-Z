@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 9 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 35 |
+| [Everything else](#everything-else) | 36 |
 
 ## The pipeline
 
@@ -501,6 +501,9 @@ Print paired captions for a human to read, one detector class at a time.
 
 **`check_alignment.py`**  
 Find rows where our English does not correspond to its Japanese source.
+
+**`compare_captions.py`**  
+Check the BATTLE VOICE LINES against the japanese, from your own disc.
 
 **`compare_translation.py`**  
 Check this translation against the original, using only your own disc.

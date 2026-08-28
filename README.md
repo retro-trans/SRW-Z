@@ -54,69 +54,18 @@ You need your own copy of the game. This repository contains no disc image, no
 game data and no dump of the original Japanese script — `extract_script.py`
 reads those from the disc you dump yourself.
 
-### Changing one line
-
-Most bugs arrive as a screenshot of a single wrong line. Find it, then fix it
-in place - no need to touch the rest of the script.
-
-**Work on a patched image, not your virgin dump.** These offsets describe the
-English layout, so `fix_row.py` refuses a clean Japanese disc - it finds
-Japanese where it expected the line you are correcting, and says so rather
-than writing anything. Apply the release patch first (see **Play it**).
-
-Starting a translation from scratch is the opposite: point
-`extract_script.py` at your virgin dump and there is nothing to patch.
-
-
-```sh
-# 1. find it. the check page above is searchable in both languages,
-#    or pull the script out and grep it
-python tools/extract_script.py mygame.bin script.json
-
-# 2. describe the fix in analysis/row_fixes.json, then
-python tools/fix_row.py mygame.bin            # dry run, checks everything
-python tools/fix_row.py mygame.bin --write
-```
-
-Each entry names the record, the offset, the row as it is now (`was`) and the
-replacement. The `was` field is the safety catch: if the row on disc does not
-match, the fix is refused rather than overwriting someone else's work.
-
-```json
-[{"rec": 132, "off": "0x015620",
-  "was": "Kazuki
-people of Io, ...",
-  "text": "Kazuki
-「I'm counting on you, ...",
-  "why": "lost its first line and named the wrong target"}]
-```
-
-It refuses anything the engine would reject - more than 3 body lines, a line
-over 34 columns, text that will not encode as cp932, or a replacement too long
-for its slot. The first line of a row is the speaker and is structural; do not
-turn it into a sentence.
-
 ## Check the translation
 
 Judge it for yourself - one command, and only your own japanese disc:
 
 ```sh
 python tools/compare_translation.py "Super Robot Taisen Z (Japan).chd"
-python tools/compare_translation.py game.iso --rec 127   # one scenario
-python tools/compare_translation.py game.iso --only untranslated
 ```
 
-Writes an HTML page with the Japanese beside our English, filterable by record
-and searchable in either language. Accepts `.chd`, `.iso`, `.bin` or `.cue`.
-
-No patched image is needed: the pairing was done once and stored in
-`analysis/translation_pairs.json`, keyed by Japanese offset. That file holds no
-Japanese text - only offsets into the disc you already own.
-
-Rows come in three kinds, kept apart on purpose. **not translated** means we
-have no English for that line; **no confident match** means we cannot prove
-which English goes with it - those lines are almost certainly translated, and
-counting them as missing work would be wrong.
+Writes an HTML page with the Japanese beside our English, filterable by
+record and searchable in either language. No patched image needed.
+Details, and how to change a line, are in
+**[TRANSLATING.md](TRANSLATING.md)**.
 
 ## What is here
 

@@ -10,6 +10,71 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.98 (2026-08-28) - the prologue, and 110 caption corrections
+
+### Rand's prologue was translated all along
+
+A screenshot showed the opening narration still in japanese. The english was in
+tools/mtvpros_en.py the whole time - it had simply never reached a build.
+patch_mtvpros.py used only the FAST compressor, and rec1 (the prologue) missed
+its span by NINE bytes, so the patcher kept the japanese and said so in a line
+nobody had read. Every other tool here falls back to the optimal encoder on
+overflow; this one did not. Added, which got it to 902 against a 896 span, then
+trimmed three phrases without touching meaning or line count.
+
+### Caption pairing solved
+
+Battle captions could never be reviewed systematically because nothing could say
+which japanese line went with which english. Three shortcuts were tried and all
+three were wrong: same file offset (SRVC was rebuilt), same index within a block
+(block 267 holds 3,005 japanese strings against 3,016 english), and
+nearest-neighbour by eye.
+
+srvc_pairs.py uses the game's own data instead. Each record cell is
+[u16 clip_id][u16 section][u16 f2][00 00]; f2 resolves to a string INDEX and the
+cells do not move, because srvc_apply rewrites f2 in place. 19,213 pairs,
+verified against lines worked out by hand first.
+
+### 110 corrections
+
+The script and the captions were translated by different passes and disagreed on
+names, with ZERO overlap:
+
+    オルソン      script Orson 500     captions Olson 38
+    アフロディア   script Aphrodia 376  captions Afrodia 37
+
+Both caption spellings were wrong against the glossary and against 876 uses in
+the script. Also ケルビム Cherudim -> Cherubim in 63 places, where the MAJORITY
+spelling was the wrong one - Cherudim is a unit from a different series.
+
+Proper nouns that had been cut down to something else:
+
+    Ｇファルコンの力を見せてやんな  "Show 'em Fa's power!"
+    アルデバロンの兵に後退はない    "Baron soldiers never retreat!"
+    シベリア鉄道警備隊に逆らうな    "Don't mess with the guard!"
+
+And three that were WRONG rather than clumsy:
+
+    ダーリン、嬉しそう…！   "Darling, so happy...!"  - 嬉しそう is "you LOOK
+                          happy", said about Rand; the english made Mel happy
+    面白そうな相手が来たな   "Fun ally came to us!"   - 相手 is the OPPONENT
+    そう簡単に！            "So easily!"             - a refusal, said inverted
+
+plus the causative ものか inversions ("I won't LET you withdraw" as "No
+retreat!") and dropped evidentials.
+
+### Also
+
+The advert 宇宙戦闘の必需品、スラスターモジュール was untranslated in 9 places.
+New tools: srvc_pairs, caption_audit, caption_review, compare_captions,
+fix_row, rename_term, export_pairs, compare_translation, release.
+
+### Gates
+
+    integrity.py                 problems: 0
+    verify_elf_patches.py        all ELF patches present
+    verify_pointers.py --against 81,286 resolving, 0 broken
+
 ## 0.8.97 (2026-08-27) - a line that named the wrong enemy
 
 From a screenshot: a caption overflowing its box and ending `down Teral!"!"`.

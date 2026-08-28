@@ -105,10 +105,12 @@ HEAD = u"""<!doctype html>
   <label><input type=checkbox data-k=translated checked> translated (%d)</label>
   <label><input type=checkbox data-k=untranslated checked> not translated (%d)</label>
   <label><input type=checkbox data-k=unmatched checked> no confident match (%d)</label>
+  <select id=r><option value="">every record (%d)</option>%s</select>
   <input type=search id=q placeholder="search japanese or english...">
   <span id=count></span>
  </div>
 </header>
+<style id=rf></style>
 <table id=t>
 """
 
@@ -131,6 +133,10 @@ function run(){
   count.textContent=s?(n+' matching'):'';
 }
 q.oninput=function(){clearTimeout(timer);timer=setTimeout(run,180);};
+var r=document.getElementById('r'), rf=document.getElementById('rf');
+r.onchange=function(){
+  rf.textContent=r.value?('#t tr:not([data-r="'+r.value+'"]){display:none}'):'';
+};
 </script>
 """
 
@@ -167,6 +173,7 @@ def main():
     f.close()
 
     n = {k: 0 for k in KINDS}
+    per = {}
     body = []
     for i in range(len(recs)):
         if only_rec is not None and i != only_rec:
@@ -200,18 +207,22 @@ def main():
                         k = z + 1
                         continue
                     n[kind] += 1
+                    per[i] = per.get(i, 0) + 1
                     if only is None or kind == only:
                         body.append(
-                            u"<tr class=%s><td class=n>%d:%d</td>"
+                            u"<tr class=%s data-r=%d><td class=n>%d:%d</td>"
                             u"<td class=jp>%s</td><td class=en>%s</td></tr>"
-                            % (kind, i, k, esc(jt), cell))
+                            % (kind, i, i, k, esc(jt), cell))
             k = z + 1
 
     sub = u"%s &middot; %s" % (
         esc(os.path.basename(src)),
         (u"showing only: %s" % only) if only else u"%d rows" % sum(n.values()))
+    opts = u"".join(u'<option value="%d">record %d (%d)</option>' % (i, i, c)
+                    for i, c in sorted(per.items()))
     io.open(out, "w", encoding="utf-8", newline="\n").write(
-        (HEAD % (sub, n["translated"], n["untranslated"], n["unmatched"]))
+        (HEAD % (sub, n["translated"], n["untranslated"], n["unmatched"],
+                 sum(n.values()), opts))
         + u"\n".join(body) + u"\n" + TAIL)
     print("translated %d, not translated yet %d, unmatched %d"
           % (n["translated"], n["untranslated"], n["unmatched"]))

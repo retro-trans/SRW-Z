@@ -57,7 +57,16 @@ reads those from the disc you dump yourself.
 ### Changing one line
 
 Most bugs arrive as a screenshot of a single wrong line. Find it, then fix it
-in place - no need to touch the rest of the script:
+in place - no need to touch the rest of the script.
+
+**Work on a patched image, not your virgin dump.** These offsets describe the
+English layout, so `fix_row.py` refuses a clean Japanese disc - it finds
+Japanese where it expected the line you are correcting, and says so rather
+than writing anything. Apply the release patch first (see **Play it**).
+
+Starting a translation from scratch is the opposite: point
+`extract_script.py` at your virgin dump and there is nothing to patch.
+
 
 ```sh
 # 1. find it. the check page above is searchable in both languages,

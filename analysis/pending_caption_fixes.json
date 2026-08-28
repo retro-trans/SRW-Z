@@ -1,0 +1,17 @@
+{
+ "note": "queued caption edits for the NEXT build - apply to analysis/srvc_en.json, then export_captions.py, then srvc_apply --free. 'was' must match exactly.",
+ "fixes": [
+  {
+   "i": "22771",
+   "was": "A Lowen General wouldn't fall to this!",
+   "text": "Lowen General won't fall to this!",
+   "why": "レーベン・ゲネラール is a proper name (German Loewen General), not a rank - it takes no article"
+  },
+  {
+   "i": "22774",
+   "was": "I am Lowen General! I\\nfight to the very end!",
+   "text": "I, Lowen General, will\\nfight to the very end!",
+   "why": "このレーベン・ゲネラール is the speaker naming himself in apposition, not a predicate"
+  }
+ ]
+}

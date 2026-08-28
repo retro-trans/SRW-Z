@@ -10,6 +10,92 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.99 (2026-08-28) - 0.8.98 shipped a regression; here is the gate
+
+A screenshot of Rand asking "Are you a traitor?!" turned out to be two faults,
+and the second one was mine.
+
+### The line
+
+    お前は敵の回し者か！？  ->  "Are you a traitor?!"
+
+回し者 is an agent PLANTED BY the enemy - a spy. A traitor is 裏切り者, which
+appears in thirty other captions and is correctly "traitor" in every one. This
+line conflated the two. Now "Are you working for the enemy?!"
+
+### The regression - 148 captions
+
+Checking that line showed "Teraru" back in the image, a spelling fixed in
+0.8.97. So were Kaimera, Reeven, Raben and the rest of the レーベン variants:
+
+    IMAGE       Teraru 65   Kaimera 4   Reeven 63   Raben 9
+    srvc_en     Teraru 29   Kaimera 4   Reeven 39   Raben 5
+
+The cause, stated plainly because it will happen again otherwise: a caption fix
+applied as a BYTE EDIT to the image does not survive. srvc_apply --free rebuilds
+every caption from analysis/srvc_en.json, so the next rebuild restores the old
+text. Those three fixes were byte-edited, verified in the image at the time, and
+silently undone by a later rebuild. The verification was real - it just measured
+something that was about to be overwritten.
+
+All restored, in srvc_en.json this time: Teral x29, Lowen x50, Chimera x4.
+
+Two of the Lowen lines needed the literal-
+ trick again - captions store a
+line break as backslash+n, so in "...,
+Raben!" the character before the R is
+the LETTER n and Raben never matches. That trap is documented in
+fix_lowen_captions.py and I still failed to carry it over.
+
+### New gate: verify_terms.py
+
+Scans the finished image for spellings that should no longer exist anywhere and
+fails the build if one returns. Sixteen terms, every one of them fixed in a
+shipped build. Positive-controlled: it fires on each regressed form and stays
+quiet on clean text.
+
+Run it with the others, before every chdman.
+
+    integrity.py                 problems: 0
+    verify_elf_patches.py        all ELF patches present
+    verify_terms.py              16 corrected spellings, none returned
+    verify_pointers.py --against 80,986 resolving, 9 not - see below
+
+### About that pointer count
+
+--min 85 FAILS this build on rec48 at 84.9%, and it is not a defect. The tool's
+own docstring records this exact record: the denominator counts every 4-aligned
+word whose value lands inside the record, so it inflates when a record grows,
+and relocating a row grows it legitimately. rec48's numerator has not moved from
+1087. Lowering the threshold to pass would be the wrong fix.
+
+--against is the gate that means something, and it reports 9 words that resolve
+in the japanese and do not resolve here. Those 9 are not new: the identical set
+is present in srwz_dlg.bin from 22 Aug, and in every build shipped since. They
+predate this session's work.
+
+I first wrote "81,286 resolving, 0 broken" in this entry from memory of an
+earlier run rather than from a measurement. The real numbers are above. Quoting
+a gate result that was not just run is the same class of error as the caption
+regression below - a verification that was true once, reported as if current.
+
+### Four more captions, from screenshots
+
+    パワー勝負なら望む所だぜ！  "If it's power, I'm all in!"
+                            -> "A contest of strength? Bring it on!"
+      望む所 is "bring it on"; "all in" is a poker idiom that is not in the line.
+
+    メール！全力でいくぜ！      "Mel! Full power now!"
+                            -> "Mel! We're going all out!"
+      Rand is declaring what HE is about to do, not giving Mel an order.
+
+    あんたぁ！運がなかったな！  "You! Out of luck!"
+                            -> "You there! Tough luck for you!"
+      A taunt, not a two-word fragment.
+
+    わかってるって！そいじゃ、いくぜ！  "I know, I know! Then let's go!"
+      Checked and left alone - this one is right.
+
 ## 0.8.98 (2026-08-28) - the prologue, and 110 caption corrections
 
 ### Rand's prologue was translated all along

@@ -10,6 +10,82 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.104 (2026-08-29) - one column too wide: the crash that has been in every build since v1.55
+
+A hard emulator crash at the end of stage 1, reproducing on every build back
+to v1.55. Found by bisection, down to a single row.
+
+### The bug
+
+    v1.54   ???  "But get in our way, and we'll    1 + 29 = 30 columns
+    v1.55  ???  「But get in our way, and we'll    2 + 29 = 31 columns
+
+v1.55 converted every ASCII " to 「」 and KEPT v1.54's line breaks. But " is
+one column and 「 is two, so every line sitting exactly ON the limit went one
+past it. A row already using all three body lines then spills to a fourth and
+overflows the box.
+
+That is why it took so long to find. Nothing is malformed: the bytes are
+valid, the quotes balance, the pointers resolve, the row is SHORTER than rows
+that render fine. One line, one column too wide - and only fatal on rows that
+were both at the limit AND already using all three lines. Rows with one or two
+body lines just grow to two or three and nobody notices, which is why the two
+rows either side of it were innocent.
+
+Proven, not deduced: reflowing that row to 25/25/23 with EVERY BYTE UNCHANGED
+cleared the crash, and so did reverting its quotes. Two independent fixes, one
+cause.
+
+### Scope
+
+1,405 rows game-wide were in this state - each one a crash waiting for a
+player to reach it. 1,137 are re-wrapped to fit; the remaining 268 cannot fit
+three lines at 30 columns by moving breaks alone, so they fall back to ASCII
+quotes, which is the other proven fix. Cosmetically inconsistent on 268 rows
+out of 68,120, and a straight quote beats a crash.
+
+Both passes are byte-neutral or shrinking, so nothing moves and no pointer is
+repointed.
+
+### What was ruled out first, and what that cost
+
+Seven hypotheses died before the right one:
+
+  * the glossary links in that record  - unwrapped them, still crashed
+  * row alignment (21 rows off 16-byte) - re-aligned them, still crashed
+  * column width on its own            - 39,984 rows exceed 30 columns and
+                                         the game renders them fine
+  * line count                         - v1.54 has a 4-line row and works
+  * row byte length                    - the crashing row is SHORTER (79 B)
+                                         than working ones (121 B)
+  * CONVCOPY expansion                 - converted length is identical either
+                                         way: " -> 2 bytes, 「 -> 2 bytes
+  * unbalanced quotes                  - the apparent ones are binary strings
+                                         containing a 0x22 byte, in both builds
+
+Two of those cost a build and a playthrough each. The lesson is that the
+version bisect the user ran (fine at v1.54, crash at v1.55) was worth more
+than all of my content analysis, and I should have asked for it before
+building anything.
+
+### New gate: verify_boxes.py
+
+Four gates passed a build carrying 1,405 latent crashes. integrity,
+verify_pointers, verify_elf_patches and verify_terms all check STRUCTURE;
+this defect is LAYOUT. The new gate flags exactly the regression signature -
+three or more body lines, over the limit with 「」, under it with ASCII quotes
+- and not rows that are wide on their own merit, which would be 12,954 false
+alarms.
+
+Run it with the others, before every chdman.
+
+### Also added
+
+bisect_stage.py and bisect_quotes.py, which turned an unbounded search into
+eight rounds by reverting records (and then rows) from the last good build
+into the crashing one. v1.54's records are smaller, so a reverted record
+always fits its slot and nothing else moves.
+
 ## 0.8.103 (2026-08-28) - 0.8.101 made glossary entries TALLER than the game has ever rendered
 
 Reported as an emulator crash at the end of stage 1, on the results screen.

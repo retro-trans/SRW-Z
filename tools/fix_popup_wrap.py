@@ -52,7 +52,7 @@ import banlz
 from rewrap_dialogue import LBA, SECTOR, SIZE
 
 LIMIT = 40          # only touch rows wider than this
-MINW, MAXW = 34, 48
+MINW, MAXW = 34, 44        # 44 is the widest that still fits the popup box
 DEFAULT = 38                # the 48-column JP box, at 13px per English glyph
 WORK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JP_STAGE = os.path.join(WORK, "extracted", "DATA_STAGE.BIN")
@@ -122,18 +122,37 @@ def fix_record(dec, jdec):
         except UnicodeDecodeError:
             continue
         was = max(cols(l) for l in d.split("\n"))
-        if was <= LIMIT:
+        # The japanese counterpart is the authority on BOTH bounds.
+        jl = None
+        js = jmap.get(off)
+        if js is not None:
+            try:
+                jl = js.decode("cp932").count("\n") + 1
+            except UnicodeDecodeError:
+                jl = None
+        lines_now = d.count("\n") + 1
+        # Act if the entry is too WIDE for the box, or has more LINES than
+        # the japanese ever produced. The second test is not optional: after
+        # a pass at 38 columns nothing is too wide any more, so a width-only
+        # gate reports "0 strings" and leaves the line overrun sitting there.
+        if was <= LIMIT and (jl is None or lines_now <= jl):
             continue
-        # The Japanese box is 48 COLUMNS (24 fullwidth chars), but our English
-        # glyphs advance 13px against fullwidth 21px, so 48 columns of ASCII
-        # would be far wider than the same box. Every correctly translated
-        # entry in the data sits at 37-38 = 504px / 13, so that - not the
-        # Japanese column count - is the English target.
+        # 38 columns is where the entries that render correctly sit and it
+        # clears the box (which clips near 45). But narrower means MORE
+        # lines, and 0.8.101 shipped entries of 25 when the japanese maximum
+        # anywhere is 22 - a shape this renderer has never been handed, and
+        # it is the renderer that already smashed its caller's locals on an
+        # over-long row. So: the narrowest width that still stays inside the
+        # japanese line count.
         width = DEFAULT
+        for w in range(DEFAULT, MAXW + 1):
+            width = w
+            if jl is None or rewrap(d, w).count("\n") + 1 <= jl:
+                break
         nd = rewrap(d, width)
         now = max(cols(l) for l in nd.split("\n"))
-        if now > width:
-            continue          # no spaces to break on (Japanese) - leave alone
+        if now > width or nd == d:
+            continue          # unbreakable (japanese), or already correct
         nb = nd.encode("cp932")
         assert len(nb) == len(s), "not byte-neutral"
         b[off:off + len(nb)] = nb

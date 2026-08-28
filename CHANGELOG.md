@@ -10,6 +10,55 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.103 (2026-08-28) - 0.8.101 made glossary entries TALLER than the game has ever rendered
+
+Reported as an emulator crash at the end of stage 1, on the results screen.
+
+### What 0.8.102 was not
+
+First thing checked, because it was the newest build and therefore the obvious
+suspect. Both images were reconstructed from their patches and their ELFs
+diffed: 0.8.101 -> 0.8.102 changes 205 bytes, every one of them inside the
+terrain art at 0x78BCDD..0x78BE70. No code, no jump table, no BHOOK
+trampoline. Re-running patch_micro_glyphs was idempotent, and 420 bytes of
+glyph pixels cannot fault. The fault came in with 0.8.101.
+
+### Fitting the box made the entries too tall
+
+0.8.101 re-wrapped every glossary description to 38 columns to stop them
+running off the right edge. Narrower wrapping means MORE LINES, and nothing
+was watching that number:
+
+    entries with more lines than their own japanese : 34 of 65
+    tallest english entry                           : 25 lines
+    tallest japanese entry ANYWHERE in this data    : 22 lines
+
+25 is a shape this renderer has never once been handed. It is also the
+renderer the 0.8.29 notes describe copying a row into a ~520-byte stack buffer
+and smashing its caller's locals when handed something outside its range. The
+results screen is where newly unlocked Key Word entries are registered.
+
+The japanese counterpart is the authority on BOTH bounds, not just width. The
+wrap now starts at 38 and WIDENS - to 44, still inside the box, which clips
+near 45 - rather than adding a line. Every english entry is now 22 lines or
+fewer, matching the japanese maximum exactly, and none exceeds 44 columns.
+18 are still one line over their own japanese, but none is over the ceiling.
+
+### A second defect in the same tool, found while fixing the first
+
+fix_popup_wrap selected only on WIDTH. After 0.8.101 nothing was wide any
+more, so re-running it printed "0 strings re-wrapped" and would have left the
+line overrun sitting there - a tool reporting success while the defect it
+exists to catch was in front of it. It now gates on line count as well.
+
+That makes three selection bugs in this one tool across two builds: width
+caught 146 recaps that belong at 56 columns (fixed in 0.8.101 by keying on the
+quoted source), width missed the entries it had itself already narrowed, and
+width was never the constraint that mattered - height was.
+
+Unproven, and worth saying plainly: this is the defect the data shows, not a
+reproduction. Nobody has watched 0.8.103 clear that screen.
+
 ## 0.8.102 (2026-08-28) - terrain micro-glyphs sat flush against their cell edge
 
 Reported as "every terrain UI looks ok except this, the text shift a bit to

@@ -51,6 +51,7 @@ FONT = r"C:\Windows\Fonts\arialbd.ttf"
 WORDS = [("\u7a7a", "AIR"), ("\u9678", "GND"), ("\u6d77", "SEA"),
          ("\u5b87", "SPC"), ("\u6c34", "WTR")]
 SIZE = 13
+INKW = 20        # max ink width, leaving ~2px of margin each side of the 24px cell
 
 
 def cell_index(ch):
@@ -67,12 +68,18 @@ def render_cell(word, px_h=SIZE):
     while pt > 4:
         font = ImageFont.truetype(FONT, pt)
         bb = dr.textbbox((0, 0), word, font=font)
-        if bb[2] - bb[0] <= 22 * K:
+        if bb[2] - bb[0] <= INKW * K:
             break
         pt -= 2
     bb = dr.textbbox((0, 0), word, font=font)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    dr.text(((23 * K) - tw - bb[0], (21 * K) - th - bb[1]), word,
+    # CENTRED, and narrow enough to keep a margin. This used to right-align
+    # the word at x=23 - the last column of the cell - so every micro-word sat
+    # flush against the cell boundary and crowded the character after it. On
+    # the unit panel that is a rank letter in the very next cell, and the row
+    # read as if the labels had been nudged right. A kanji never touches its
+    # own cell edge, so neither should the word standing in for one.
+    dr.text(((24 * K - tw) // 2 - bb[0], (21 * K) - th - bb[1]), word,
             font=font, fill=255)
     small = img.resize((24, 24), Image.LANCZOS)
     p = small.load()

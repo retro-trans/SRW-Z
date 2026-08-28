@@ -10,6 +10,46 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.102 (2026-08-28) - terrain micro-glyphs sat flush against their cell edge
+
+Reported as "every terrain UI looks ok except this, the text shift a bit to
+the right", on the unit panel's 空Ｂ陸Ａ海Ｂ宇Ａ row.
+
+It was not the layout. render_cell placed the word with
+
+    dr.text(((23 * K) - tw - bb[0], ...))
+
+which right-aligns it at x=23 - the LAST column of a 24px cell. Every
+micro-word therefore ended hard against the cell boundary with 1px on the
+left and 0-1px on the right, and on this row the very next cell is the rank
+letter. AIR's R, GND's D, SEA's A and SPC's C each touched the divider and
+crowded the rank beside them, which is exactly the nudge that was visible.
+
+A kanji never touches its own cell edge. Neither should the word standing in
+for one. Now centred, with the ink capped at 20px so there are 2px of margin
+on both sides:
+
+    AIR  ink x 2..21   GND  2..21   SEA  2..21   SPC  2..20   WTR  2..21
+
+### What was ruled out first
+
+Worth recording, because the obvious suspects were all innocent and the art
+pipeline is easy to accuse:
+
+  * the art is correct - all five words render with every letter, no clipping
+  * the blit is correct - the two 12px column halves land at byte 0 and byte 6
+    of each 12-byte row, as intended
+  * the art in the shipped build is byte-for-byte render_cell's output, so
+    nothing had drifted between the tool and the disc
+
+The check that actually found it was drawing the row at its true 24px pitch
+with the cell boundaries marked. Measuring "ink spans x1..22 of 24" reads as
+balanced; seeing the R sitting on the divider does not.
+
+Note for anyone reading patch_terrain_glyphs.py: it is superseded by
+patch_micro_glyphs.py, which is what builds this. Only render_cell is still
+imported from it - which is why the fix lives there.
+
 ## 0.8.101 (2026-08-28) - glossary entries fit their box; profile labels are English
 
 Two screenshots: a glossary popup running off the right edge, and the pilot

@@ -50,7 +50,7 @@ def main():
         if jb is None or eb is None:
             continue
         got = {}
-        for jo, _jt, _eo, et, method in pair_record(bytes(jb), bytes(eb)):
+        for jo, _jt, eo, et, method in pair_record(bytes(jb), bytes(eb)):
             if method != "pointer":
                 # Only pointer-paired rows are recorded. A same-offset guess is
                 # right for rows that never moved and wrong for every relocated
@@ -66,10 +66,15 @@ def main():
                 # gate caught exactly that. Record it as an EMPTY string so
                 # the reader is told "not translated yet" rather than being
                 # shown nothing, without carrying the japanese across.
-                got[str(jo)] = ""
+                got[str(jo)] = [eo, ""]
                 untr += 1
                 continue
-            got[str(jo)] = et
+            # store the ENGLISH offset alongside the text. The reader has
+            # japanese offsets; fix_row.py needs the ENGLISH one, and for 7,890
+            # of 75,704 rows they differ because the row was relocated when its
+            # translation outgrew its slot. Showing only the japanese offset
+            # would hand out a number that quietly does not work on 1 row in 10.
+            got[str(jo)] = [eo, et]
             rows += 1
         if got:
             pairs[str(i)] = got
@@ -77,7 +82,7 @@ def main():
         json.dumps({"note": "Our English keyed by JAPANESE string offset, so a "
                             "reader needs only their own japanese disc. No "
                             "japanese text is stored - a row still awaiting translation is "
-                            "recorded as an empty string. Pointer-paired rows only.",
+                            "recorded as an empty string. Each value is [english_offset, text]. Pointer-paired rows only.",
                     "pairs": pairs}, ensure_ascii=False, indent=0))
     print("records %d, english rows %d, marked untranslated %d, "
           "dropped %d unreliable pairings" % (len(pairs), rows, untr, weak))

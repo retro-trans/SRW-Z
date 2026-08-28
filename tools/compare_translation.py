@@ -100,7 +100,7 @@ HEAD = u"""<!doctype html>
 </style>
 <header>
  <h1>Super Robot Taisen Z &mdash; translation check</h1>
- <div class="sub">%s</div>
+ <div class="sub">%s &middot; the left column is <code>record:offset</code> for <code>analysis/row_fixes.json</code></div>
  <div class="bar">
   <label><input type=checkbox data-k=translated checked> translated (%d)</label>
   <label><input type=checkbox data-k=untranslated checked> not translated (%d)</label>
@@ -193,7 +193,9 @@ def main():
             if z - k > 2:
                 jt = s_at(b, k)
                 if jt and JP_RE.search(jt):
-                    en = got.get(str(k))
+                    v = got.get(str(k))
+                    eo, en = (v if isinstance(v, list) else (None, v))                         if v is not None else (None, None)
+                    ident = u"%d:%d" % (i, eo if eo is not None else k)
                     if en:
                         kind = "translated"
                         cell = esc(en)
@@ -210,9 +212,9 @@ def main():
                     per[i] = per.get(i, 0) + 1
                     if only is None or kind == only:
                         body.append(
-                            u"<tr class=%s data-r=%d><td class=n>%d:%d</td>"
+                            u"<tr class=%s data-r=%d><td class=n>%s</td>"
                             u"<td class=jp>%s</td><td class=en>%s</td></tr>"
-                            % (kind, i, i, k, esc(jt), cell))
+                            % (kind, i, ident, esc(jt), cell))
             k = z + 1
 
     sub = u"%s &middot; %s" % (

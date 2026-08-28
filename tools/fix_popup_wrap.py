@@ -21,10 +21,18 @@ WHAT BROKE
     hook reverted the same rows still broke the renderer (VIF FIFO assertion on
     Trapar), so the unbroken line is the defect and the hook only amplified it.
 
+WHAT IT SELECTS
+    ONLY glossary descriptions, identified by the quoted source work that
+    precedes them ([title]["Combat Mecha Xabungle"][description]). Width alone
+    is not enough: scenario recaps are long strings too and they belong in a
+    wider box at 56 columns. Selecting on width caught 146 recaps beside the
+    64 real entries, and narrowing those would have wrecked every mission
+    summary in the game.
+
 HOW IT WRAPS
-    Each string is wrapped to the width its OWN Japanese counterpart used
-    (clamped to 34..48 columns), so the intended box is preserved - popup
-    entries land near 38, stage summaries near their original width.
+    To 38 columns. The Japanese box is 24 fullwidth glyphs; against our
+    narrower English advance that is about 38 columns, and it is where the
+    entries that render correctly already sit.
 
     The wrap is BYTE-NEUTRAL: only ' ' and '\n' are exchanged, so no string
     changes length, nothing moves, and no pointer needs repointing. Japanese
@@ -82,12 +90,32 @@ def sstrings(b):
     return out
 
 
+def is_source(s):
+    """A glossary entry is stored as [title]["source work"][description].
+
+    That quoted source is the only reliable mark of a glossary description,
+    and telling them apart MATTERS: scenario recaps are also long strings and
+    they legitimately sit at 56 columns, in a wider box. Selecting on width
+    alone caught 146 recaps along with the 64 entries, and re-wrapping those
+    to 38 would have narrowed every mission summary in the game.
+    """
+    try:
+        d = s.decode("cp932").strip()
+    except UnicodeDecodeError:
+        return False
+    return len(d) > 2 and d[0] == '"' and d[-1] == '"'
+
+
 def fix_record(dec, jdec):
     b = bytearray(dec)
     jmap = dict(sstrings(bytes(jdec))) if jdec is not None else {}
     hits = []
-    for off, s in sstrings(bytes(dec)):
+    ss = sstrings(bytes(dec))
+    for j, (off, s) in enumerate(ss):
         if len(s) < 100:
+            continue
+        # only a glossary description; never a recap
+        if not any(is_source(ss[j - k][1]) for k in (1, 2) if j - k >= 0):
             continue
         try:
             d = s.decode("cp932")

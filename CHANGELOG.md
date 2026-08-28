@@ -10,6 +10,62 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.101 (2026-08-28) - glossary entries fit their box; profile labels are English
+
+Two screenshots: a glossary popup running off the right edge, and the pilot
+profile screen still in japanese.
+
+### The glossary was 56 columns in a 38-column box
+
+Every english keyword entry sat at 54-56 columns. The box clips at about 45,
+so a fifth of every line was off-screen - "dome citie", "and bu", "Earth's
+cat". The japanese wraps at 24 fullwidth glyphs; our narrower english advance
+puts the same box near 38, which is where the entries that render correctly
+already sat. fix_popup_wrap.py has targeted 38 all along. It had simply not
+been re-run since v2.00 rewrote these entries.
+
+The wrap only exchanges ' ' and '
+', so it is byte-neutral: no string changes
+length, nothing moves, no pointer is repointed.
+
+### The trap in that tool, which would have wrecked 146 recaps
+
+fix_popup_wrap selected on WIDTH - anything over 40 columns. That is not a
+glossary test. Scenario recaps are long strings too and they belong in a WIDER
+box at 56 columns, and selecting on width caught 146 of them beside the 64
+real entries. Re-wrapping those to 38 would have narrowed every mission
+summary in the game, and nothing downstream would have complained.
+
+The real mark is structural: an entry is stored as
+
+    [title]["source work"][description]
+
+so the quoted source is what identifies a description. Selecting on that gives
+56 strings in 34 records, no recaps. Verified after: the recaps at 0x004420
+and 0x0045e0 are still 56 columns, untouched.
+
+### 姓名 / 愛称 / 決定 / 誕生日 / 血液型 / 名称変更
+
+Not strings. They are not in the ELF, STAGE, COMPDATA or any other extracted
+file, because they are glyphs on the same 4bpp TIM2 word sheet as the bazaar
+buttons - KVMDATA.BIN + 0x28B40. Now NAME, ALIAS, OK, BORN, BLOOD and RENAME.
+
+The words are short because the width is not ours to choose. Each label is
+right-aligned at x=254 with a checkerboard sprite immediately to its left, so
+the game cannot be blitting anything wider than the glyphs - the checkerboard
+would show through. That is 36px for a two-kanji label. BIRTHDAY in 54px would
+be six pixels a letter; BORN is thirteen.
+
+Measuring those boxes needed care. "Scan left until N blank columns" walks
+straight through the checkerboard, which is 6px squares with 2px gaps, and
+returns the whole row - it reported the 姓名 box as 255 wide. Run LENGTH
+separates them: label runs are 15+ columns, checkerboard runs are exactly 6.
+The result is cross-checked against the 18px glyph pitch and refuses if the
+two disagree by more than 5px.
+
+Both changes are in-ISO art and text, not texture replacements, so they work
+on any machine.
+
 ## 0.8.100 (2026-08-28) - every line Rand speaks, read against the japanese
 
 The user's read of the last screenshots was that Rand's captions were broadly

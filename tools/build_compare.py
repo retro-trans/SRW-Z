@@ -79,12 +79,29 @@ def ecols(s):
 
 
 def find_chdman():
+    """Locate chdman.
+
+    Do NOT probe with check_output: chdman exits 1 for --help, for help and for
+    no arguments at all, so anything that treats a non-zero exit as "missing"
+    reports chdman.exe as absent while it is sitting in tools/. That silently
+    broke .chd input here.
+
+    Run it and look at what it SAYS instead - it prints its own banner
+    regardless of exit code."""
+    import shutil
     here = os.path.dirname(os.path.abspath(__file__))
-    for c in (os.path.join(here, "chdman.exe"), os.path.join(here, "chdman"),
-              "chdman.exe", "chdman"):
+    cands = [os.path.join(here, "chdman.exe"), os.path.join(here, "chdman")]
+    for name in ("chdman.exe", "chdman"):
+        found = shutil.which(name)
+        if found:
+            cands.append(found)
+    for c in cands:
+        if not os.path.exists(c):
+            continue
         try:
-            subprocess.check_output([c, "--help"], stderr=subprocess.STDOUT)
-            return c
+            r = subprocess.run([c], capture_output=True, text=True, timeout=30)
+            if "chdman" in (r.stdout + r.stderr).lower():
+                return c
         except Exception:
             continue
     return None

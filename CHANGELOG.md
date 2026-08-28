@@ -2087,9 +2087,9 @@ Also this build:
   - rec012 dialogue, 2 lines rewritten (both were also padded with
     FULLWIDTH periods - 2 columns each - which is what pushed them past
     the box edge):
-      「…僕はまた罪を重ねる。僕が生きるために」
+      [JP source line, 41 columns]
         -> "...I'll add to my sins again. / All so that I can live."
-      「これは発端…悲劇の始まり。そして、果てなき暗獄へ堕ちる」
+      [JP source line, 57 columns]
         -> "This is where it begins... the / start of a tragedy. And
             then, a / fall into endless darkness."
 
@@ -2155,7 +2155,7 @@ Applied through tools/patch_elf_labels.py, and the SOURCE tables were
 updated too (elf_ui_en.py for two, ui_batch2.py for the other two) so a
 future re-apply of either cannot silently restore the long names.
 
-CAPTION 12243: 桂ならいざ知らず、俺を後ろから攻めても無駄だぜ was
+CAPTION 12243: [JP source line, 46 columns] was
 "Katsura maybe, but...
 from behind? No good." - terse to the point of
 being cryptic (a leftover of the byte-budget era; captions have had no
@@ -2188,7 +2188,7 @@ re-wrapped, 9 left alone because they would need a 4th line. The other
 NOTE for that pass: measure in COLUMNS (fullwidth = 2), not characters -
 this is the same class of mistake as 0.8.14 wrapping at 37-40.
 
-WORDING: 「頭上にはユニウスセブンが迫っているというのに、自国の利益
+WORDING: [JP source line, 58 columns]
 ばかりを追うとは…！」 was "Junius Seven bears down overhead, yet they
 chase only their own nation's profit...!" - stilted. Now:
   「Junius Seven is falling on us,
@@ -2635,7 +2635,7 @@ offsets drift but field ORDER matches):
 mine!" (over-clipped) ->
   "Sorry…
 I'll take it!" (both occurrences)
-- エマーンのデバイスなど、いくら来ようと！ -> "Emaan's devices, no matter
+- [JP source line, 40 columns] -> "Emaan's devices, no matter
   how many!" verified FAITHFUL (JP dangles identically) - kept.
 Speaker 桂 in captions comes from the COMPDATA pilot table - already
 "Katsura" since 0.8.24 (user was on an older build).

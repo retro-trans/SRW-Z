@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 8 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 32 |
+| [Everything else](#everything-else) | 34 |
 
 ## The pipeline
 
@@ -493,6 +493,9 @@ Battle quotes, second half. Merged with battle_quotes_en.BATTLE_QUOTES.
 **`check_alignment.py`**  
 Find rows where our English does not correspond to its Japanese source.
 
+**`compare_translation.py`**  
+Check this translation against the original, using only your own disc.
+
 **`compdata_ui_en_b.py`**  
 Episode/scenario titles (the "Ep. N <title>" line and the scenario chart), route-select labels, and the character-select taglines/bio. Offset-keyed in COMPDATA record 0; menu-encoded, so digits and . / : ; < = cost 2 bytes each.
 
@@ -501,6 +504,9 @@ Production pass for the corridor scene (rec001 rows 142-211).
 
 **`disasm.py`**  
 Small MIPS disassembler used by the RE tools.
+
+**`export_pairs.py`**  
+Export our English keyed by JAPANESE offset, so one disc is enough to compare.
 
 **`export_review.py`**  
 Export JP/EN pairs for proofreading, straight from the SHIPPED image.

@@ -10,6 +10,92 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.106 (2026-08-29) - one character, four spellings, three files
+
+Two screenshots: a character whose name was wrong, and a "Dr. Z" that looked
+like it should be a J.
+
+### Teteth Halleh
+
+Wrong in four places at once, and only the encyclopedia was visible:
+
+    encyclopedia full name  Tetes Hale    -> Teteth Halleh
+    encyclopedia nickname   Teteth        (already right)
+    encyclopedia body       Teteth Halle  -> Teteth Halleh
+    script                  Tetes x44, Tetesu x23 -> Teteth
+
+67 script rows. Two had to be relocated and repointed, since Tetes -> Teteth
+grows a byte and the row no longer fit its slot.
+
+### Dr. Z was never a Z
+
+    Edel's entry ends with ジエー博士 - 'Dr. Jie' - and a verb about
+    stopping his rampages.
+
+ジエー博士 is a person - the same ジエー as ジエー・ベイベル. The script already
+knew this and says "Dr. Jee" in Ryouma's line; only the encyclopedia said
+"Dr. Z".
+
+Checking it turned up the real problem: the name was spelt FOUR ways across
+THREE files.
+
+    ジエー        script "Jee" x6 | encyclopedia "Jay Babel", "Jee", "Dr. Z"
+    ジ・エーデル  script "The Edel" x637 | captions "Ze Edel" x44
+
+Per the project rule these went to the SRW wiki rather than a majority vote:
+"Jie Babel" and "The Edel Bernal" (which also confirms Chimera for カイメラ).
+Everything is now Jie and The Edel.
+
+### The gate never looked at the encyclopedia
+
+verify_terms scanned STAGE and SRVC. The encyclopedia is a THIRD surface -
+three banlz archives under XOR 0x5E, reached through zkn.py - and it was
+carrying 97 occurrences of spellings corrected builds ago:
+
+    Cherudim 38, Olson 37, Kaimera 10, Bry 6, Teraru 2, Afrodia 1, Raben 1
+
+Every gate run had passed. It now scans all three surfaces and knows 20 terms.
+
+### Two mistakes the new gate caught before they shipped
+
+Worth recording because both are recurring shapes:
+
+  * I wrote "Dr. Jay" first, taking the spelling from the record's own CHFN
+    field instead of going to the wiki. The rule exists precisely because the
+    data disagrees with itself.
+  * I did the script rename with a byte-level  regex, which silently skipped
+    every name that OPENS a line of speech: 「 is 0x81 0x75, and 0x75 is ASCII
+    'u', a word character, so there is no boundary before the name. That trap
+    is already in the notes and I walked into it anyway. The gate now matches
+    on decoded text, never raw bytes, so it cannot recur unnoticed.
+
+### Which json is real
+
+analysis/zkn_en.json is STALE - it matches the shipped archive on 46% of
+fields. The live source is analysis/zkn_en_round3.json, which matches 100% of
+1,644. Rebuilding from the wrong one would have silently reverted the
+fullwidth-period pass across the whole encyclopedia. Checked before editing,
+after the caption regression taught that lesson the expensive way.
+
+## 0.8.105 (2026-08-29) - the glossary selector never covered half the entries
+
+An entry is [title]["source work"][description], but the source is MISSING on
+many of them - fix_popup_wrap's own docstring says so, and 0.8.101 keyed the
+selector on it anyway. Every source-less entry was therefore skipped, which is
+how "Siberian Railway" was still 55 columns wide in a box that clips near 44.
+It had never been wrapped, in any build.
+
+The selector now keys on title OR source: 26 entries the old filter missed,
+and still no recaps (they are preceded by 1-byte junk, not a title).
+
+The wrap is also pinned back to 38 columns. 0.8.103 had widened it to 44 to
+keep entries within their japanese line count, on the theory that a tall entry
+was crashing the game. The bisect disproved that - the crash was dialogue
+quote WIDTH - and the widening had pushed entries back toward the edge of the
+box. Height was never the problem; width always was.
+
+    Siberian Railway: 55 cols, 7 lines  ->  37 cols, 11 lines
+
 ## 0.8.104 (2026-08-29) - one column too wide: the crash that has been in every build since v1.55
 
 A hard emulator crash at the end of stage 1, reproducing on every build back

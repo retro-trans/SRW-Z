@@ -43,6 +43,7 @@ Usage: fix_popup_wrap.py <iso> [--dry-run]
 """
 import multiprocessing
 import os
+import re
 import sys
 import unicodedata
 
@@ -106,6 +107,30 @@ def is_source(s):
     return len(d) > 2 and d[0] == '"' and d[-1] == '"'
 
 
+WORD = re.compile(u"[A-Za-z\u3040-\u9fff]")
+
+
+def title_like(s):
+    """A glossary TITLE: short, single line, containing letters.
+
+    An entry is [title]["source work"][description], but the source is
+    MISSING on many of them - this file's own docstring said so, and 0.8.101
+    keyed the selector on it regardless. That silently skipped every
+    source-less entry, which is how 'Siberian Railway' shipped at 55 columns
+    in a box that clips near 44.
+
+    Keying on the title as well catches both shapes and still excludes
+    recaps, which are preceded by 1-byte junk rather than by a title.
+    """
+    if not (2 <= len(s) <= 44) or b'\n' in s:
+        return False
+    try:
+        d = s.decode('cp932')
+    except UnicodeDecodeError:
+        return False
+    return bool(WORD.search(d)) and not d.startswith(chr(34))
+
+
 def fix_record(dec, jdec):
     b = bytearray(dec)
     jmap = dict(sstrings(bytes(jdec))) if jdec is not None else {}
@@ -115,7 +140,9 @@ def fix_record(dec, jdec):
         if len(s) < 100:
             continue
         # only a glossary description; never a recap
-        if not any(is_source(ss[j - k][1]) for k in (1, 2) if j - k >= 0):
+        has_src = any(is_source(ss[j - k][1]) for k in (1, 2) if j - k >= 0)
+        has_title = j >= 1 and title_like(ss[j - 1][1])
+        if not (has_src or has_title):
             continue
         try:
             d = s.decode("cp932")
@@ -135,7 +162,7 @@ def fix_record(dec, jdec):
         # the japanese ever produced. The second test is not optional: after
         # a pass at 38 columns nothing is too wide any more, so a width-only
         # gate reports "0 strings" and leaves the line overrun sitting there.
-        if was <= LIMIT and (jl is None or lines_now <= jl):
+        if was <= LIMIT:
             continue
         # 38 columns is where the entries that render correctly sit and it
         # clears the box (which clips near 45). But narrower means MORE
@@ -144,11 +171,13 @@ def fix_record(dec, jdec):
         # it is the renderer that already smashed its caller's locals on an
         # over-long row. So: the narrowest width that still stays inside the
         # japanese line count.
+        # Wrap to 38, full stop. 0.8.103 widened this to 44 so an entry
+        # would stay within its japanese LINE COUNT, on the theory that a
+        # tall entry was crashing the game. The bisect later proved that
+        # wrong - the crash was dialogue quote WIDTH - and the widening put
+        # entries back over the box, which is the bug this tool exists to
+        # prevent. Height was never the problem; width always was.
         width = DEFAULT
-        for w in range(DEFAULT, MAXW + 1):
-            width = w
-            if jl is None or rewrap(d, w).count("\n") + 1 <= jl:
-                break
         nd = rewrap(d, width)
         now = max(cols(l) for l in nd.split("\n"))
         if now > width or nd == d:

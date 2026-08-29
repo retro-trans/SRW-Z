@@ -51,7 +51,15 @@ FONT = r"C:\Windows\Fonts\arialbd.ttf"
 WORDS = [("\u7a7a", "AIR"), ("\u9678", "GND"), ("\u6d77", "SEA"),
          ("\u5b87", "SPC"), ("\u6c34", "WTR")]
 SIZE = 13
-INKW = 20        # max ink width, leaving ~2px of margin each side of the 24px cell
+INKW = 19        # ink must END at x20: a full-width glyph advances 21px
+VISW = 21        # a full-width glyph ADVANCES 21px, not 24: the master cell
+                 # is 24px of storage but the pen only moves 21, so real
+                 # kanji overlap their neighbour by 3px harmlessly. Centring
+                 # our word in 24 puts it right-heavy in the 21 that are
+                 # actually visible, and its last column lands on the rank
+                 # letter drawn next - which reads as the rank being pushed
+                 # right. Measured live over PINE: 0x70000030 advances
+                 # EN 13, space 13, JP 21.
 
 
 def cell_index(ch):
@@ -79,7 +87,16 @@ def render_cell(word, px_h=SIZE):
     # the unit panel that is a rank letter in the very next cell, and the row
     # read as if the labels had been nudged right. A kanji never touches its
     # own cell edge, so neither should the word standing in for one.
-    dr.text(((24 * K - tw) // 2 - bb[0], (21 * K) - th - bb[1]), word,
+    # The ink must end at x20 and no further. A full-width glyph ADVANCES
+    # 21px (measured over PINE: 0x70000030 moves EN 13, space 13, JP 21),
+    # while the master cell is 24px of storage. Ink past x20 therefore
+    # spills into the NEXT character - which on these panels is the rank
+    # letter, so it reads as the rank being crowded.
+    #
+    # Both ends of this were shipped and both were reported: x23 collided
+    # with the rank on the Mech panel, x18 left a visible gap on the Unit
+    # panel. x20 is the boundary itself.
+    dr.text(((20 * K) - tw - bb[0] + K - 1, (21 * K) - th - bb[1]), word,
             font=font, fill=255)
     small = img.resize((24, 24), Image.LANCZOS)
     p = small.load()

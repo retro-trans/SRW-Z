@@ -10,6 +10,98 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.8.111 (2026-08-29) - the terrain row, settled against live memory
+
+Four builds went at this by eye. This one was measured.
+
+The row is [label][rank][label][rank] - 空Ｂ陸Ａ海Ｂ宇Ａ - and a full-width
+glyph ADVANCES 21px while its master cell is 24px of storage. Real kanji keep
+their ink well inside, so the 3px overlap never shows. Three-letter art did
+not.
+
+    x23  ink spills into the next cell, which is the rank. "B too near SPC"
+    x18  ink stops short, so the rank looks pushed right
+    x20  the last column inside the advance
+
+Measured over PINE off the master font in RAM: rank Ａ ink x3..20, rank Ｂ ink
+x5..20, pen advance EN 13 / space 13 / JP 21.
+
+### The spacing string, and why only two of eleven copies
+
+The Unit panel builds its row from 空　陸　海　宇, and patch_hwfont advances
+0x8140 by 13px because in english prose that space IS the word space. Each one
+pulled the following kanji 8px left of where the ranks are painted - 8, 16,
+then 24 across the row, worst at the right end. The blank full-width cell
+0x85DB restores 21px, byte-neutral.
+
+0.8.107 patched ONE copy (the parts screen) and called it done; there are
+ELEVEN. 0.8.109 patched all eleven and broke Mech and Weapon, which lay the
+row out differently and want the narrow space. Each copy was then identified
+by the strings it sits among:
+
+    0x3452E8  Sight, SKILL/ABIL/PARTS, PP         Unit    - patched
+    0x340F00  SKL EVD RNG DEF ACC, Skill, Spirit  Unit    - patched
+    0x340088  Parts, Abilities, Equipped          Mech    - reverted
+    0x345658  Class, Type, Power, Range           Weapon  - reverted
+    0x33D9E0  Sold Out, Remove part               bazaar  - reverted
+    + five more                                           - reverted
+
+### What one master cell cannot do
+
+The art is ONE cell per kanji, shared by every screen, and the screens space
+their rows differently. x20 is right on Unit and Mech and merely acceptable on
+Weapon; x19 gives Weapon clearance but makes its labels group with the
+PRECEDING rank, which is worse. Tested, not assumed. Decoupling would mean
+private codes per screen, as patch_micro_glyphs already does for spirits.
+
+### Method
+
+Hot-patching art and strings into RAM over PINE and screenshotting turned a
+five-minute build per attempt into seconds, and reading the master font in RAM
+gave the 21px advance that four builds of eyeballing never found. Reach for
+the live lab first.
+
+## 0.8.110 (2026-08-29) - 97 lines that were never translated, and 193 wrong speakers
+
+A screenshot of a backlog full of 「...」 turned out to be two bugs.
+
+### The dialogue that was replaced by an ellipsis
+
+97 lines in stg_099a.bin were never translated, and something filled them with
+"..." rather than leaving the japanese - so they read as silence and nothing
+looked broken. The evidence was in the repo the whole time:
+analysis/rec136_work.json is a 688-line worklist with japanese and byte
+budgets and NO english column. The record was queued and never finished.
+
+Of 996 dots-only rows game-wide, 899 are genuine - the japanese is 「………」
+too - and 97 were lost content, all in one record. All now translated: 83
+written in place, 14 relocated and repointed where they outgrew their slot,
+every one inside the 3-line 30-column box.
+
+My first answer on this was that nothing was broken. I had sampled twelve
+dots-only rows, seen 「………」 behind all twelve, and generalised. Counting
+instead of sampling would have found the 97 immediately.
+
+### 193 rows with the wrong speaker
+
+Found by pairing every row against the japanese at the same offset and
+grouping by the JAPANESE speaker: a japanese name mapping to several english
+names is either two characters sharing a name, or an error, and the shape
+says which.
+
+    $n   -> "Fudo" x4, "Sandman" x3, "Apollo" x3, "Rand" x3
+         $n is the PLAYER-NAME MACRO. The player's chosen name showed as
+         somebody else entirely.
+    頭翅 -> "Head-Wing" x9,  音翅 -> "Sound-Wing"
+         people's names translated as words
+    one row had a line of DIALOGUE in the speaker field
+
+fix_speakers.py normalises a minority spelling onto the majority the project
+already uses, but only when the two are clearly one name spelled two ways, a
+macro, or a literal translation. 夜翅 as "Johannes" vs "Yashi" and 音翅 as
+"Otoha" vs "Onshi" are DIFFERENT names, not spellings - those are a wiki
+question and the tool prints them rather than guessing.
+
 ## 0.8.106 (2026-08-29) - one character, four spellings, three files
 
 Two screenshots: a character whose name was wrong, and a "Dr. Z" that looked

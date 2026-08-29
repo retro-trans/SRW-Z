@@ -121,6 +121,16 @@ python tools/fix_terms_global.py <iso> --write      # apply
 Windows note: anything using `multiprocessing` must be a real file on disk, never
 a heredoc — spawned workers re-import the module and cannot import `<stdin>`.
 
+## Do not sell this
+
+This patch is free. Do not sell it, and do not sell anything made with it -
+no pre-patched discs or images, no loaded memory cards or consoles, no
+paywalled or ad-gated downloads.
+
+It is an unofficial fan translation of a game Banpresto owns. Selling it takes
+money for work that was given away, and it is the surest way to get a project
+like this shut down.
+
 ## Credits
 
 | Role | |

@@ -124,6 +124,19 @@ python tools/fix_terms_global.py <iso> --write      # apply
 Windows note: anything using `multiprocessing` must be a real file on disk, never
 a heredoc — spawned workers re-import the module and cannot import `<stdin>`.
 
+## Credits
+
+| Role | |
+|---|---|
+| Project lead | pow |
+| Playtesting | KagamineRin, Melfice, Melfice's friend |
+
+Translation passes, tooling and reverse engineering were done with Claude
+(Anthropic), directed by pow. The translation is machine-produced and then
+edited - see the release notes for what that means in practice.
+
+Names and terminology follow the Super Robot Wars community wiki.
+
 ## Status
 
 The translation is in progress. `CHANGELOG.md` is the honest record, including

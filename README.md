@@ -44,29 +44,7 @@ no texture pack.
 These eight are static art on the disc, so the pack keeps working across patch
 versions. Copy its `textures` folder into your PCSX2 user directory, giving
 `textures/SLPS-25887/replacements/*.png`, then tick **Settings -> Graphics ->
-Texture Replacement -> Load Textures** and restart - PCSX2 only scans that
-folder at boot. Set the upscale multiplier **globally**, not per-game:
-per-game settings are keyed to the disc CRC and silently reset on every patch
-update.
-
-## Translate it
-
-Fork it to fix the English, or to take the game into another language. Start
-with **[TRANSLATING.md](TRANSLATING.md)**.
-
-```sh
-python tools/extract_script.py mygame.bin script.json   # pull the text out
-#   ... edit the "text" fields ...
-python tools/apply_script.py mygame.bin script.json --write
-python tools/verify_pointers.py mygame.bin --min 85     # never skip this
-```
-
-Round-trip is exact by construction: extract, change nothing, apply, and the
-image is byte-identical.
-
-You need your own copy of the game. This repository contains no disc image, no
-game data and no dump of the original Japanese script — `extract_script.py`
-reads those from the disc you dump yourself.
+Texture Replacement -> Load Textures**.
 
 ## Check the translation
 
@@ -92,6 +70,25 @@ counting them as missing work would be wrong.
 
 Changing a line you disagree with is in
 **[TRANSLATING.md](TRANSLATING.md)**.
+
+## Translate it
+
+Fork it to fix the English, or to take the game into another language. Start
+with **[TRANSLATING.md](TRANSLATING.md)**.
+
+```sh
+python tools/extract_script.py mygame.bin script.json   # pull the text out
+#   ... edit the "text" fields ...
+python tools/apply_script.py mygame.bin script.json --write
+python tools/verify_pointers.py mygame.bin --min 85     # never skip this
+```
+
+Round-trip is exact by construction: extract, change nothing, apply, and the
+image is byte-identical.
+
+You need your own copy of the game. This repository contains no disc image, no
+game data and no dump of the original Japanese script — `extract_script.py`
+reads those from the disc you dump yourself.
 
 ## What is here
 
@@ -129,7 +126,7 @@ a heredoc — spawned workers re-import the module and cannot import `<stdin>`.
 | Role | |
 |---|---|
 | Project lead | pow |
-| Playtesting | KagamineRin, Melfice, Melfice's friend |
+| Playtesting | pow, KagamineRin, Melfice, Melfice's friend |
 
 Translation passes, tooling and reverse engineering were done with Claude
 (Anthropic), directed by pow. The translation is machine-produced and then

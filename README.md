@@ -5,20 +5,20 @@ SLPS-25887), plus the English translation built with it.
 
 ## Play it
 
-Get `SRWZ-English-v0.8.96.xdelta` from the
+Get `SRWZ-English-v0.9.0.xdelta` from the
 [latest release](../../releases/latest). You need your own copy of the game.
 
 **If you have a `.iso`** - one command:
 
 ```sh
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.0.xdelta "SRWZ English.iso"
 ```
 
 **If you have a `.chd`** - extract it first, then the same command:
 
 ```sh
 chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
-xdelta3 -d -s game.bin SRWZ-English-v0.8.96.xdelta "SRWZ English.iso"
+xdelta3 -d -s game.bin SRWZ-English-v0.9.0.xdelta "SRWZ English.iso"
 ```
 
 You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
@@ -27,8 +27,22 @@ ships here. Prefer clicking? **DeltaPatcher** does the xdelta step for you.
 
 ### Sharper UI art (optional)
 
-`SRWZ-texture-pack.zip` upscales art the game draws as textures. Copy its
-`textures` folder into your PCSX2 user directory, giving
+`SRWZ-texture-pack.zip` is optional and PCSX2-only. It is not needed to play
+in English - it swaps in crisp 4x versions of the eight pieces of
+**intermission** art the game draws as textures rather than as text:
+
+| | | | |
+|---|---|---|---|
+| INTERMISSION | Data | Next Map | Bazaar |
+| Units | Pilots | Squads | Options |
+
+That is all of it. Everything else you see in English - the intermission
+status bar (SR Points, Funds, EP, BS), the bazaar Buy/Sell buttons, and every
+menu, dialogue and data screen - is translated **inside the patch** and needs
+no texture pack.
+
+These eight are static art on the disc, so the pack keeps working across patch
+versions. Copy its `textures` folder into your PCSX2 user directory, giving
 `textures/SLPS-25887/replacements/*.png`, then tick **Settings -> Graphics ->
 Texture Replacement -> Load Textures** and restart - PCSX2 only scans that
 folder at boot. Set the upscale multiplier **globally**, not per-game:

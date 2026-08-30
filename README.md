@@ -3,6 +3,14 @@
 An open toolchain for translating **Super Robot Taisen Z** (PlayStation 2,
 SLPS-25887), plus the English translation built with it.
 
+## Report a bug, or help test
+
+A line that reads wrong, a menu that overflows, a crash - all of it is worth
+reporting, and a screenshot plus roughly where it happens is enough to act on.
+Playtesters for the next translation are welcome too.
+
+**[discord.gg/MssepShjmB](https://discord.gg/MssepShjmB)**
+
 ## Play it
 
 Get `SRWZ-English-v0.9.0.xdelta` from the

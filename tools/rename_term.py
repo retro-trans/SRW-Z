@@ -24,6 +24,7 @@ and left 38 in STAGE, because the raw bytes are simply not there to find.
 Usage: rename_term.py <iso> --jp <japanese> --to <english> --from a,b,c [--write]
 """
 import hashlib
+import io
 import os
 import re
 import struct
@@ -49,20 +50,37 @@ def arg(name, default=None):
 def main():
     iso = sys.argv[1]
     write = "--write" in sys.argv
-    jp_term = arg("--jp")
-    good = arg("--to")
-    variants = [v for v in (arg("--from") or "").split(",") if v]
-    if not (jp_term and good and variants):
-        raise SystemExit(__doc__)
-    # longest first, so a short variant cannot half-match a longer one
-    variants.sort(key=len, reverse=True)
+    # Either one rule via --jp/--to/--from, or many at once via --rules <json>
+    # holding [{"jp":..., "to":..., "from":[...]}, ...].
+    #
+    # ONE PASS matters. Renaming the nine Aquarion names as nine separate runs
+    # recompressed the same records nine times, and a record whose fast-packed
+    # blob overruns its slot falls back to compress_record_optimal at ~85s. The
+    # records overlap heavily, so a single pass is several times less work for
+    # byte-identical output.
+    rules_path = arg("--rules")
+    if rules_path:
+        import json
+        spec = json.load(io.open(rules_path, encoding="utf-8"))
+        RULES = [(r["jp"], r["to"],
+                  sorted([v for v in r["from"] if v], key=len, reverse=True))
+                 for r in spec]
+    else:
+        jp_term = arg("--jp")
+        good = arg("--to")
+        variants = [v for v in (arg("--from") or "").split(",") if v]
+        if not (jp_term and good and variants):
+            raise SystemExit(__doc__)
+        # longest first, so a short variant cannot half-match a longer one
+        variants.sort(key=len, reverse=True)
+        RULES = [(jp_term, good, variants)]
+    RULES = [(t, g, v, t.encode("cp932")) for t, g, v in RULES]
 
     f = open(iso, "r+b" if write else "rb")
     f.seek(LBA * SECTOR)
     raw = bytearray(f.read(SIZE))
     items = banlz.decompress_all(bytes(raw))
     jp = banlz.decompress_all(open("extracted/DATA_STAGE.BIN", "rb").read())
-    jpb = jp_term.encode("cp932")
 
     edited, inplace, reloc, bad, tally = {}, 0, 0, [], {}
     for idx in range(len(items)):
@@ -71,7 +89,8 @@ def main():
             continue
         eb = bytearray(e)
         jb = bytes(j)
-        if jpb not in jb:
+        live = [r for r in RULES if r[3] in jb]
+        if not live:
             continue
         ptr = {}
         for p in range(0, min(len(eb), len(jb)) - 4, 4):
@@ -83,7 +102,11 @@ def main():
         for off in sorted(ptr, reverse=True):
             jo = ptr[off]
             zj = jb.find(b"\x00", jo)
-            if zj <= jo or jpb not in jb[jo:zj]:
+            if zj <= jo:
+                continue
+            # only the rules whose japanese term is in THIS row may touch it
+            here = [r for r in live if r[3] in jb[jo:zj]]
+            if not here:
                 continue
             z = bytes(eb).find(b"\x00", off)
             if z <= off:
@@ -93,11 +116,12 @@ def main():
             except Exception:
                 continue
             new = s
-            for v in variants:
-                n = len(re.findall(r"\b%s\b" % re.escape(v), new))
-                if n:
-                    new = re.sub(r"\b%s\b" % re.escape(v), good, new)
-                    tally[v] = tally.get(v, 0) + n
+            for _t, good_i, variants_i, _b in here:
+                for v in variants_i:
+                    n = len(re.findall(r"\b%s\b" % re.escape(v), new))
+                    if n:
+                        new = re.sub(r"\b%s\b" % re.escape(v), good_i, new)
+                        tally[v] = tally.get(v, 0) + n
             if new == s:
                 continue
             nb_lines, ob_lines = new.split("\n")[1:], s.split("\n")[1:]
@@ -107,10 +131,11 @@ def main():
             if worse and (len(nb_lines) > MAXLINES or
                           any(cols(b) > WIDTH for b in nb_lines)):
                 bad.append((idx, off, "would not fit: %r" % new[:36]))
-                for v in variants:
-                    n = len(re.findall(r"\b%s\b" % re.escape(v), s))
-                    if n:
-                        tally[v] -= n
+                for _t, _g, variants_i, _b in here:
+                    for v in variants_i:
+                        n = len(re.findall(r"\b%s\b" % re.escape(v), s))
+                        if n:
+                            tally[v] = tally.get(v, 0) - n
                 continue
             nb = new.encode("cp932")
             k = z
@@ -146,10 +171,9 @@ def main():
         if touched:
             edited[idx] = bytes(eb)
 
-    print("%s -> %s (japanese %s)" % (",".join(variants), good, jp_term))
-    for v in variants:
-        if tally.get(v):
-            print("   %-10s %d" % (v, tally[v]))
+    for t, g, vs, _b in RULES:
+        hits = sum(tally.get(v, 0) for v in vs)
+        print("   %-6s %-10s -> %-10s %4d" % (t, ",".join(vs), g, hits))
     print("rows: %d in place, %d relocated | rejected %d" % (inplace, reloc, len(bad)))
     for b in bad[:6]:
         print("   REJECT rec%-4d %#08x %s" % b)

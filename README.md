@@ -3,11 +3,12 @@
 An open toolchain for translating **Super Robot Taisen Z** (PlayStation 2,
 SLPS-25887), plus the English translation built with it.
 
-## Report a bug, or help test
+## Contribute
 
-A line that reads wrong, a menu that overflows, a crash - all of it is worth
-reporting, and a screenshot plus roughly where it happens is enough to act on.
-Playtesters for the next translation are welcome too.
+The project is mostly done but we haven't tested every route yet. No
+proofreader either. If you want to contribute to this project or the next in
+any way — be it bug reports, proofreading or playtesting — please join my
+Discord:
 
 **[discord.gg/MssepShjmB](https://discord.gg/MssepShjmB)**
 

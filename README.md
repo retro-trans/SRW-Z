@@ -22,7 +22,10 @@ xdelta3 -d -s game.bin SRWZ-English-v0.9.0.xdelta "SRWZ English.iso"
 ```
 
 You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
-from [MAME](https://www.mamedev.org/) only if your copy is a `.chd`. Neither
+only if your copy is a `.chd`. chdman has no download of its own - it is one of
+the command-line tools inside the MAME package, so take the Windows build from
+[mamedev.org/release.html](https://www.mamedev.org/release.html) and pull
+`chdman.exe` out of it; you do not need to install or run MAME. Neither tool
 ships here. Prefer clicking? **DeltaPatcher** does the xdelta step for you.
 
 ### Sharper UI art (optional)

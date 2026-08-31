@@ -7,8 +7,17 @@ That budget is tight, so several entries use the short form the fan community
 uses rather than the full official title (e.g. "Zambot 3", not the full
 "Invincible Super Man Zambot 3", which does not fit in 20 bytes).
 
-Skill names follow the terminology established by the official Super Robot
-Wars OG English releases where one exists.
+Skill and spirit names follow the terminology established by the official
+Super Robot Wars English releases (OG, V, X, T) where one exists, as recorded
+on akurasu. SRW Z was never localised, so there is no official english for its
+own terms - every one is borrowed from a different game's localisation, and
+those do not always agree with each other. 根性 is Vigor in OG1 but was
+rendered Grit in V.
+
+Match on the JAPANESE, never on the english. Five spirit names were wrong
+because a rename had been reasoned about in english: 気迫 (+30 Will) is not
+気合 (+10 Will), and 絆 is not 信頼. Lining english names up against the wrong
+japanese produced a correction table that was itself wrong.
 """
 
 ELF_UI = {
@@ -337,7 +346,8 @@ ELF_UI.update({
     0x0033F878: 'Type',   # 属性
     0x00345680: 'Type',   # 属性
     0x0033F830: 'Funds',   # 資金
-    0x003435A0: 'Funds',   # 資金
+    0x003435A0: 'Fnd',   # 資金 - 3 chars: the value is RIGHT-aligned, so
+                             # 'Funds' had 119,969 drawn over its 's'
     0x00343B80: 'Funds',   # 資金
     0x00344C98: 'Funds',   # 資金
     0x00347810: 'Funds',   # 資金

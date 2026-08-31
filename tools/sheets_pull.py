@@ -54,7 +54,12 @@ LINK_OPEN, LINK_CLOSE = chr(0x300A), chr(0x300B)
 MAXLINES, WIDTH = 3, 34
 MACRO = re.compile(r"\$n|<-?\d+>")
 LINK = re.compile(LINK_OPEN + "([^" + LINK_CLOSE + "]*)" + LINK_CLOSE)
-C_KEY, C_EN, C_PROP = 0, 3, 4
+C_KEY, C_EN, C_PROP, C_STATUS, C_NOTE, C_BY = 0, 3, 4, 5, 6, 7
+# There is more than one proofreader, so who wrote a line cannot be inferred
+# from the fact that a cell is filled, and the Sheets API cannot read per-cell
+# edit history. The 'by' column is a dropdown for exactly this reason: a
+# proposal with no name attached is accepted but reported, never guessed at.
+KNOWN = ("Valz", "Hakhan")
 
 
 def cols(s):
@@ -157,7 +162,8 @@ def main():
     key_file, iso = sys.argv[1], sys.argv[2]
     out = (sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv
            else os.path.join(ROOT, "analysis", "row_fixes.json"))
-    who = sys.argv[sys.argv.index("--by") + 1] if "--by" in sys.argv else "Valz"
+    # only used when the 'by' dropdown was left blank
+    who = sys.argv[sys.argv.index("--by") + 1] if "--by" in sys.argv else "unattributed"
 
     print("indexing the image...")
     idx = index_image(iso)
@@ -166,7 +172,7 @@ def main():
 
     gc = gspread.authorize(
         Credentials.from_service_account_file(key_file, scopes=SCOPES))
-    fixes, bad, seen = [], [], 0
+    fixes, bad, unnamed, seen = [], [], [], 0
     for f in sorted(gc.list_spreadsheet_files(), key=lambda x: x["name"]):
         if "proofread" not in f["name"]:
             continue
@@ -176,7 +182,7 @@ def main():
         # 60-reads-per-minute cap is an instant 429. Columns A..E only - key and
         # proposal are all that matter, and the japanese is bulky.
         got = retry(sh.values_batch_get,
-                    ["%s!A2:E" % t for t in titles],
+                    ["%s!A2:H" % t for t in titles],
                     params={"majorDimension": "ROWS"})
         for title, rng in zip(titles, got.get("valueRanges", [])):
             for row in rng.get("values", []):
@@ -192,9 +198,14 @@ def main():
                     bad.append((where, row[C_KEY], why, prop))
                 else:
                     ri, off, _slot, cur = idx[row[C_KEY]]
+                    by = (row[C_BY].strip() if len(row) > C_BY else "") or who
+                    if by not in KNOWN:
+                        unnamed.append((where, row[C_KEY], by))
+                    note = row[C_NOTE].strip() if len(row) > C_NOTE else ""
                     fixes.append({"rec": ri, "off": "0x%06X" % off, "was": cur,
-                                  "text": prop, "by": who,
-                                  "why": "proofread by " + who})
+                                  "text": prop, "by": by,
+                                  "why": "proofread by %s%s"
+                                         % (by, "; " + note if note else "")})
     print()
     print("proposals found : %d" % seen)
     print("accepted        : %d" % len(fixes))
@@ -202,6 +213,17 @@ def main():
     for where, k, why, prop in bad[:40]:
         print("   %-24s %-22s %s" % (where, k, why))
         print("      %r" % prop.replace(NL, " | ")[:70])
+    if unnamed:
+        print()
+        print("accepted but with no proofreader named (%d):" % len(unnamed))
+        for where, k, by in unnamed[:10]:
+            print("   %-24s %-22s %r" % (where, k, by))
+        print("   ask them to set the 'by' dropdown; credit is guesswork otherwise")
+    import collections
+    tally = collections.Counter(f["by"] for f in fixes)
+    if tally:
+        print()
+        print("by proofreader: %s" % ", ".join("%s %d" % kv for kv in tally.most_common()))
     io.open(out, "w", encoding="utf-8", newline=NL).write(
         json.dumps(fixes, ensure_ascii=False, indent=1))
     print()

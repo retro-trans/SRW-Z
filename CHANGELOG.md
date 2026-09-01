@@ -10,6 +10,48 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.18 (2026-09-01) - 102 more UI terms, and the lines they unlock
+
+43 more fields, all of them cross-reference lines, and none translated by
+hand: extending nisv_terms.py by 102 entries unlocked them, which is the point
+of generating those lines rather than writing them. 91 of the 158 now render,
+against 49 last build.
+
+The 102 are the spirit commands (Luck, Effort, Trust, Cheer, Bless, Guts,
+Mercy, Analyze, Scout), the pilot skills (Cutting, Prevail, Skill, Over
+Skill), the unit abilities (Afterimage, Transform, Combine, Separate, Subspace
+Dive, Jamming, Lifter, Barrier Field, I-Field, All Canceller, Mazin Power,
+Ignore Size), the consumable parts (Cartridge, Propellant Tank, Repair Kit,
+Nanomachine Unit) and the menu labels (LIBRARY, Robot Encyclopedia, Character
+Encyclopedia, Glossary, Sound Select, Scenario Chart, Strategy Q&A, Quick
+Start, Soft Reset, Mid-Battle Save, CONTINUE).
+
+対精神攻撃 is written **Anti-Mind Attack**, the wording issue #2 settled on,
+rather than the Anti-Psychic it had been called.
+
+TWO CORRECTIONS TO THE TOOLING, both found by running it twice:
+
+* **The xref file was shrinking.** Once a line is applied it is no longer
+  japanese in the image, so the next run could not see it and dropped it - the
+  record of what had been translated got smaller every pass. It accumulates
+  now, and the 49 from 0.9.17 were restored from the commit.
+
+* **A single-space fallback.** Several lines missed their field by one or two
+  bytes, purely because an english term is longer in characters than the kanji
+  it replaces. The renderer now retries with one space between terms before
+  giving up, which costs nothing in meaning and rescued three lines. One term
+  could not fit its field at any spacing - 敵との距離 in a 15-byte field - and is
+  shortened to "Range".
+
+Eight lines are still too long for their fields and stay japanese rather than
+going out abbreviated past recognition; they need shorter english for Repair
+Module, Resupply Module, Terrain Effect and Unit type, which would then
+disagree with the menus. Left for a decision rather than done quietly.
+
+Running total: 386 NISVDATA fields in english, 2,834 still japanese.
+
+Gates: integrity 0 problems, pointers 94.50%, terms 40 OK.
+
 ## 0.9.17 (2026-09-01) - the Q&A chapter blurbs and the cross-reference lines
 
 68 more NISVDATA fields, and the interesting half is that most of them were

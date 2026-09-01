@@ -48,7 +48,7 @@ EOPEN, ECLOSE, ESEP = u"[", u"]", u"  "
 TERM = re.compile(OPEN + u"([^" + CLOSE + u"]+)" + CLOSE)
 
 
-def render(line):
+def render(line, sep=ESEP):
     """One display line of terms -> english, or None if a term is unknown."""
     found = TERM.findall(line)
     if not found:
@@ -61,7 +61,7 @@ def render(line):
         if t not in TERMS:
             return None
         out.append(EOPEN + TERMS[t] + ECLOSE)
-    return ESEP.join(out)
+    return sep.join(out)
 
 
 def main():
@@ -85,15 +85,31 @@ def main():
             continue
         new = NL.join(outl)
         if len(new.encode("cp932")) >= room:
+            # Fall back to a single space between terms before giving up.
+            # Costs nothing in meaning and rescues lines that miss by one
+            # or two bytes - which several do, because an english term is
+            # longer in characters than the kanji it replaces.
+            tight = NL.join(render(l, u" ") for l in lines)
+            if len(tight.encode("cp932")) < room:
+                new = tight
+        if len(new.encode("cp932")) >= room:
             blocked["(too long) %s" % new[:24]] = 1
             continue
         rows.append([hashlib.sha1(t.encode("cp932", "ignore")).hexdigest()[:16],
                      new])
         done += 1
+    # ACCUMULATE. Once a line is applied it is no longer japanese in the
+    # image, so a later run cannot see it and would drop it from this file
+    # - the record of what was translated would shrink every pass.
     seen = {}
+    if os.path.exists(OUT):
+        for k, v in json.load(io.open(OUT, encoding="utf-8")):
+            seen[k] = v
+    before = len(seen)
     for k, v in rows:
         seen[k] = v
-    rows = [[k, v] for k, v in seen.items()]
+    rows = [[k, v] for k, v in sorted(seen.items())]
+    print("%d line(s) already on file, %d new" % (before, len(rows) - before))
     print("cross-reference lines rendered: %d" % len(rows))
     print("lines left japanese for want of a term: %d distinct term(s)"
           % len(blocked))

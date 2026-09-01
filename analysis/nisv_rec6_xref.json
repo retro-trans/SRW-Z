@@ -1,15 +1,219 @@
 [
  [
+  "02f12532c01bd0da",
+  "[Unit Upgrade]  [Accuracy]  [Parts]\n[VR Helmet]  [Psycho Helmet]  [Size]"
+ ],
+ [
+  "053d877c56c7240b",
+  "[Unit Upgrade]  [Mobility]  [Parts]\n[Magnet Coating]  [Inertia Control]  [Size]"
+ ],
+ [
+  "06971843cbf6ef61",
+  "[Barrier]  [Reduction]  [Nullify]  [I-Field]\n[Barrier Field]  [Afterimage]  [Mach Special]\n[Subspace Dive]  [Over Skill]"
+ ],
+ [
+  "0afa604b831d7dcb",
+  "[Spirits]  [Mercy]  [Luck]  [Scout]\n[Analyze]"
+ ],
+ [
+  "0c926f2339eb8cbb",
+  "[Hit]  [Sense]  [Pilot Training]  [Spirits]\n[Strike]  [Focus]"
+ ],
+ [
+  "0d83f636dd9b2081",
+  "[Spirits]  [Valor]  [Soul]  [Direct Hit]"
+ ],
+ [
+  "14f0bc64946d4a0b",
+  "[Tri Charge]  [Focused Atk]  [Direct Hit]"
+ ],
+ [
+  "19d1815895d39147",
+  "[Pilot Training]  [PP]  [Stat Up]  [Learn Skill]"
+ ],
+ [
+  "1a0b7ffdd13bcf50",
+  "[Auto Build]\n[Basic Order]  [Balance Order]"
+ ],
+ [
+  "1bd93407cdbd5650",
+  "[Sword]  [Blocking]  [Cutting]\n[Shield]  [Shield Defend]"
+ ],
+ [
+  "1f5f4df66d1cd5b3",
+  "[Abilities]"
+ ],
+ [
   "1f6634b43c859195",
   "[Formation]  [Squad]  [Tri Formation]\n[Center Formation]  [Wide Formation]"
+ ],
+ [
+  "22c34fd9ab0c6301",
+  "[Pilot Training]  [Stat Growth]  [Skill Learning]\n[Combo Atk]  [Assist Atk]  [Focused Atk]"
+ ],
+ [
+  "2a2f3f89d2d56fc4",
+  "[Spirit]  [Vigor]  [Cheer]"
+ ],
+ [
+  "2bce3b14589fdb9f",
+  "[Squad Move]  [Squad Move Type]"
+ ],
+ [
+  "361632e0c56cdbfa",
+  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Target Size]  [Terrain]\n[Range to Target]  [Attack Type]  [Final Hit Rate]"
+ ],
+ [
+  "36bf1a41c191950d",
+  "[Support Atk]  [Combo Atk]  [Assist Atk]  [Focused Atk]\n[Ignore Size]  [Size]"
+ ],
+ [
+  "38c94a599a8693eb",
+  "[Mazin Power]  [Element System]"
+ ],
+ [
+  "3a32bb77db462418",
+  "[Move]  [Squad Move]\n[Move Type]  [Squad Move Type]  [Move Cost]"
+ ],
+ [
+  "3b162c4b2ab33418",
+  "[Center Formation]  [Squad Atk]"
+ ],
+ [
+  "3be1f889a9a70cf0",
+  "[Terrain]  [Pilot Training]"
+ ],
+ [
+  "42833fe880740797",
+  "[Parts]  [Booster]  [Mega Booster]"
+ ],
+ [
+  "491723a39de2177b",
+  "[Stats]  [Melee]  [Ranged]  [Defend]\n[Skill]  [Evade]  [Hit]"
+ ],
+ [
+  "4b04f04fb31ce583",
+  "[TRI weapon]  [All Atk]  [Pilot Combination]"
+ ],
+ [
+  "4d088e4b6248dea5",
+  "[Spirits]  [Guts]  [Trust]  [Resupply]\n[Consumable Parts]  [Repair Kit]  [Propellant Tank]\n[Cartridge]  [Nanomachine Unit]"
+ ],
+ [
+  "4dc679419e0bb9dc",
+  "[Parts]  [BS]  [Sale Price]  [Prices]"
+ ],
+ [
+  "4e66bca74464887c",
+  "[Normal Atk]  [All Atk]  [MAP weapon]"
+ ],
+ [
+  "527ccca3d4f6555d",
+  "[TRI weapon]  [Tri Charge]"
+ ],
+ [
+  "527dd1b4f089dc71",
+  "[Evade]  [Sense]  [Pilot Training]  [Spirits]\n[Focus]  [Alert]"
+ ],
+ [
+  "56c87fd4061f5e4d",
+  "[SR Points]  [Bonus PP]  [Difficulty Change]"
+ ],
+ [
+  "5a03549f04b0d43d",
+  "[Prevail]  [Sense]"
+ ],
+ [
+  "5eedf76f456d7e94",
+  "[Attack]  [Normal Atk]"
+ ],
+ [
+  "620845e9918b81d2",
+  "[Items]  [Bazaar]  [Sub Event]"
+ ],
+ [
+  "63a3bc09979f9864",
+  "[Skills]  [Abilities]  [Support Def]  [Shield]"
+ ],
+ [
+  "650e2d529e8cad9e",
+  "[HP]  [Shot Down]  [Defeat Conditions]  [Game Over]"
+ ],
+ [
+  "67b29959e28b9a60",
+  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Terrain Effect]  [Terrain]\n[Range to Target]  [Evade Method]  [Final Evade Rate]"
+ ],
+ [
+  "6a96a077864b7752",
+  "[Will]  [Spirits]  [Guts]  [Wall]  [Spirit]"
+ ],
+ [
+  "6b9038bd126da0da",
+  "[Unit & Weapon Upgrade]  [HP]  [EN]  [Armor]\n[Mobility]  [Accuracy]"
+ ],
+ [
+  "6cda9e4dfa8dced2",
+  "[Spirits]  [Pilot Training]  [Weapon Upgrade]\n[Weapon Choice]  [Will]  [Attack Type]"
+ ],
+ [
+  "6e230266e2ab5567",
+  "[Counter]  [Repeat Target Bonus]"
+ ],
+ [
+  "6e649eda19fba09b",
+  "[Move Type]  [Squad Move Type]\n[Air]  [Land]  [Water]  [Minovsky Craft]\n[Dust Filter]  [Screw Module]"
+ ],
+ [
+  "6e92ffcd26ce13ae",
+  "[Accel]  [Rush]  [Direct Hit]  [Cheer]  [Awaken]"
+ ],
+ [
+  "71e2813bf073de84",
+  "[Tri Charge]  [Combination]"
+ ],
+ [
+  "72091a58434b9c94",
+  "[New Play Mode]  [Clear Data]"
+ ],
+ [
+  "7374e986fde59731",
+  "[Skills]  [Guard]  [Sense]  [Combo Atk]\n[Repair Skill]"
  ],
  [
   "74d112f9cc2eb690",
   "[Tri Charge]  [Support Def]"
  ],
  [
-  "b6bd73a0c7b86e8f",
-  "[Squad Atk]  [Support Def]  [Squad Barrier]"
+  "754183d289b5ee63",
+  "[Swapping]  [Strengths]  [Combination]\n[Unit Stats]  [Pilot Stats]  [Squad Stats]"
+ ],
+ [
+  "76d06c81dbdad0a1",
+  "[Refit Parts]"
+ ],
+ [
+  "79a1a61163e2260e",
+  "[Squad Atk]  [PLA weapon]"
+ ],
+ [
+  "855b2dd41182d8c1",
+  "[Repair Module] [Repair Skill] [Leader Bonus] [HP Regen]"
+ ],
+ [
+  "8b253f5e7a1841e0",
+  "[SP]  [SP Cost]  [SP Up]"
+ ],
+ [
+  "8f32ca9d1e8dfd3f",
+  "[Parts]  [Part Slots]  [Bazaar]"
+ ],
+ [
+  "8f85616e8389a167",
+  "[Fighting Spirit]  [Morale Boost]  [Will+ (Evade)]\n[Will+ (Hit)]  [Will+ (Damage)]  [Will+ (Kill)]\n[Will Limit Break]  [Ace Pilot]  [Top Ace]"
+ ],
+ [
+  "9d21e30816f9d5cb",
+  "[Spirits]  [Accel]  [Rush]"
  ],
  [
   "a2d7068b1be079d1",
@@ -20,179 +224,143 @@
   "[Formation Matchups]"
  ],
  [
-  "3a32bb77db462418",
-  "[Move]  [Squad Move]\n[Move Type]  [Squad Move Type]  [Move Cost]"
+  "a553138398be1189",
+  "[Will]  [Fighting Spirit]  [Morale Boost]  [Will+ (Evade)]\n[Will+ (Hit)]  [Will+ (Damage)]  [Will+ (Kill)]\n[Will Limit Break]  [Ace Pilot]  [Top Ace]"
  ],
  [
-  "9d21e30816f9d5cb",
-  "[Spirits]  [Accel]  [Rush]"
- ],
- [
-  "42833fe880740797",
-  "[Parts]  [Booster]  [Mega Booster]"
- ],
- [
-  "6e649eda19fba09b",
-  "[Move Type]  [Squad Move Type]\n[Air]  [Land]  [Water]  [Minovsky Craft]\n[Dust Filter]  [Screw Module]"
- ],
- [
-  "6cda9e4dfa8dced2",
-  "[Spirits]  [Pilot Training]  [Weapon Upgrade]\n[Weapon Choice]  [Will]  [Attack Type]"
- ],
- [
-  "0d83f636dd9b2081",
-  "[Spirits]  [Valor]  [Soul]  [Direct Hit]"
- ],
- [
-  "22c34fd9ab0c6301",
-  "[Pilot Training]  [Stat Growth]  [Skill Learning]\n[Combo Atk]  [Assist Atk]  [Focused Atk]"
- ],
- [
-  "f3d204eb35af288f",
-  "[Will]  [Attack]  [Defence]"
- ],
- [
-  "fca84a8465adcad9",
-  "[Attack Type]  [Squad Atk]  [Support Atk]\n[Special Effect]  [Placement Bonus]  [Armor Down]"
- ],
- [
-  "5eedf76f456d7e94",
-  "[Attack]  [Normal Atk]"
- ],
- [
-  "527ccca3d4f6555d",
-  "[TRI weapon]  [Tri Charge]"
- ],
- [
-  "79a1a61163e2260e",
-  "[Squad Atk]  [PLA weapon]"
- ],
- [
-  "a97c02a8aef4ec0b",
-  "[Squad Atk]"
- ],
- [
-  "cf5c0b95ae649c1b",
-  "[Support Atk]"
- ],
- [
-  "6e230266e2ab5567",
-  "[Counter]  [Repeat Target Bonus]"
- ],
- [
-  "4e66bca74464887c",
-  "[Normal Atk]  [All Atk]  [MAP weapon]"
- ],
- [
-  "ce383829e935e425",
-  "[Squad Atk]  [Support Atk]"
- ],
- [
-  "14f0bc64946d4a0b",
-  "[Tri Charge]  [Focused Atk]  [Direct Hit]"
- ],
- [
-  "c08c54e55e9a9156",
-  "[IFF]  [No Counter]"
- ],
- [
-  "e7d74e2daf3ea6d2",
-  "[Attribute]  [Armor Down]  [Mobility Down]\n[Accuracy Down]  [Special Effect]  [Barrier Pierce]\n[Armor]  [Ignore Size]"
- ],
- [
-  "650e2d529e8cad9e",
-  "[HP]  [Shot Down]  [Defeat Conditions]  [Game Over]"
- ],
- [
-  "6a96a077864b7752",
-  "[Will]  [Spirits]  [Guts]  [Wall]  [Spirit]"
- ],
- [
-  "b11e3ad9857698be",
-  "[Defend]  [Skills]  [Guard]  [Blocking]\n[Shield Defend]  [Pilot Training]"
- ],
- [
-  "d257dc15399fead8",
-  "[Unit Upgrade]  [Armor]  [HP]  [Chobham Armor]\n[Hybrid Armor]  [Nanoskin Armor]"
- ],
- [
-  "dc389ac627b42847",
-  "[Terrain]"
- ],
- [
-  "63a3bc09979f9864",
-  "[Skills]  [Abilities]  [Support Def]  [Shield]"
- ],
- [
-  "361632e0c56cdbfa",
-  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Target Size]  [Terrain]\n[Range to Target]  [Attack Type]  [Final Hit Rate]"
- ],
- [
-  "0c926f2339eb8cbb",
-  "[Hit]  [Sense]  [Pilot Training]  [Spirits]\n[Strike]  [Focus]"
- ],
- [
-  "02f12532c01bd0da",
-  "[Unit Upgrade]  [Accuracy]  [Parts]\n[VR Helmet]  [Psycho Helmet]  [Size]"
- ],
- [
-  "3be1f889a9a70cf0",
-  "[Terrain]  [Pilot Training]"
- ],
- [
-  "3b162c4b2ab33418",
-  "[Center Formation]  [Squad Atk]"
- ],
- [
-  "67b29959e28b9a60",
-  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Terrain Effect]  [Terrain]\n[Range to Target]  [Evade Method]  [Final Evade Rate]"
- ],
- [
-  "527dd1b4f089dc71",
-  "[Evade]  [Sense]  [Pilot Training]  [Spirits]\n[Focus]  [Alert]"
- ],
- [
-  "053d877c56c7240b",
-  "[Unit Upgrade]  [Mobility]  [Parts]\n[Magnet Coating]  [Inertia Control]  [Size]"
+  "a6dc06af907bc7d1",
+  "[Squad]  [Formation]  [Leader]  [Member]"
  ],
  [
   "a81730c1ee7fcd59",
   "[Tri Formation]  [Evade]"
  ],
  [
-  "ededa84fc4f06fe7",
-  "[Will]  [Skills]  [Abilities]"
+  "a94be6de409dfa88",
+  "[Unit & Weapon Upgrade]  [Luck]  [Bless]  [Ace Pilot]"
  ],
  [
-  "2a2f3f89d2d56fc4",
-  "[Spirit]  [Vigor]  [Cheer]"
+  "a97c02a8aef4ec0b",
+  "[Squad Atk]"
  ],
  [
-  "1f5f4df66d1cd5b3",
-  "[Abilities]"
+  "ad7f39a4de62b8c3",
+  "[Squad Bonus]  [Squad Barrier]  [Repair Module]\n[Resupply Module]  [Lifter]  [Jamming]"
+ ],
+ [
+  "b11e3ad9857698be",
+  "[Defend]  [Skills]  [Guard]  [Blocking]\n[Shield Defend]  [Pilot Training]"
+ ],
+ [
+  "b304b1d94e2b0022",
+  "[Unit Upgrade] [Funds] [Melee] [Ranged]\n[Terrain] [Attribute] [Special Effect]"
+ ],
+ [
+  "b6bd73a0c7b86e8f",
+  "[Squad Atk]  [Support Def]  [Squad Barrier]"
  ],
  [
   "c07148ec635bc57b",
   "[Skills]"
  ],
  [
+  "c08c54e55e9a9156",
+  "[IFF]  [No Counter]"
+ ],
+ [
   "c5abe5dd4cabd25d",
   "[Leader]  [Support Atk]"
  ],
  [
-  "2bce3b14589fdb9f",
-  "[Squad Move]  [Squad Move Type]"
+  "c5b00eda7e74ae92",
+  "[Breaker]  [Vulture]"
  ],
  [
-  "6e92ffcd26ce13ae",
-  "[Accel]  [Rush]  [Direct Hit]  [Cheer]  [Awaken]"
+  "cb71b1d3eae42be6",
+  "[Bazaar]  [Parts]  [Unit]"
+ ],
+ [
+  "cbd8ffc9630fa346",
+  "[Swapping]"
+ ],
+ [
+  "ce383829e935e425",
+  "[Squad Atk]  [Support Atk]"
+ ],
+ [
+  "ce5b5a082055dfc3",
+  "[LIBRARY]  [Robot Encyclopedia]  [Character Encyclopedia]\n[Glossary]  [Sound Select]  [Scenario Chart]\n[Strategy Q&A]  [Options]"
+ ],
+ [
+  "cef56c754736a89f",
+  "[Special Effect] [Anti-Mind Attack] [P type]\n[All Canceller]"
+ ],
+ [
+  "cf5c0b95ae649c1b",
+  "[Support Atk]"
+ ],
+ [
+  "d257dc15399fead8",
+  "[Unit Upgrade]  [Armor]  [HP]  [Chobham Armor]\n[Hybrid Armor]  [Nanoskin Armor]"
+ ],
+ [
+  "d289118a438c51a3",
+  "[Blocking]  [Sword]  [Shield]\n[Cutting]  [Shield Defend]  [Support Def]"
+ ],
+ [
+  "dc389ac627b42847",
+  "[Terrain]"
+ ],
+ [
+  "de553caea569fc65",
+  "[SR Points]  [Difficulty]  [Replay]"
+ ],
+ [
+  "e5133b4439ebcf60",
+  "[Bazaar]  [BS]"
+ ],
+ [
+  "e61d6f756efbfc46",
+  "[Settings]  [Intermission]  [Battle Map]  [Battle BGM]\n[Rename Force]"
+ ],
+ [
+  "e7d74e2daf3ea6d2",
+  "[Attribute]  [Armor Down]  [Mobility Down]\n[Accuracy Down]  [Special Effect]  [Barrier Pierce]\n[Armor]  [Ignore Size]"
+ ],
+ [
+  "ed1b5cebd4f3b1ac",
+  "[Pilot Training]  [Main Pilot]"
+ ],
+ [
+  "ed1d3156c27c2266",
+  "[Squad Atk]  [Tri Charge]  [Squad Bonus]\n[Support Def]  [EXP]  [PP]"
+ ],
+ [
+  "ededa84fc4f06fe7",
+  "[Will]  [Skills]  [Abilities]"
  ],
  [
   "f38b5e2a82365f29",
   "[Skills]  [Leader]  [Support Atk]  [Support Def]"
  ],
  [
-  "7374e986fde59731",
-  "[Skills]  [Guard]  [Sense]  [Combo Atk]\n[Repair Skill]"
+  "f3d204eb35af288f",
+  "[Will]  [Attack]  [Defence]"
+ ],
+ [
+  "f736151e5b7a4c65",
+  "[EXP]  [Pilot Level]  [Effort]  [Cheer]\n[Repair]  [Resupply]"
+ ],
+ [
+  "f9bfbec6bf70fc3d",
+  "[Range]"
+ ],
+ [
+  "fb1349a77c3ecffd",
+  "[Mid-Battle Save]  [CONTINUE]  [Soft Reset]\n[Quick Start]"
+ ],
+ [
+  "fca84a8465adcad9",
+  "[Attack Type]  [Squad Atk]  [Support Atk]\n[Special Effect]  [Placement Bonus]  [Armor Down]"
  ]
 ]

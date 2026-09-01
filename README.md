@@ -5,29 +5,29 @@ SLPS-25887), plus the English translation built with it.
 
 ## Contribute
 
-The project is mostly done but we haven't tested every route yet. No
-proofreader either. If you want to contribute to this project or the next in
-any way — be it bug reports, proofreading or playtesting — please join my
-Discord:
+The project is mostly done but we haven't tested every route yet, and human
+proofreading has covered 286 lines so far out of 87,000. If you want to
+contribute to this project or the next in any way — be it bug reports,
+proofreading or playtesting — please join my Discord:
 
 **[discord.gg/MssepShjmB](https://discord.gg/MssepShjmB)**
 
 ## Play it
 
-Get `SRWZ-English-v0.9.0.xdelta` from the
+Get `SRWZ-English-v0.9.6.xdelta` from the
 [latest release](../../releases/latest). You need your own copy of the game.
 
 **If you have a `.iso`** - one command:
 
 ```sh
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.0.xdelta "SRWZ English.iso"
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.6.xdelta "SRWZ English.iso"
 ```
 
 **If you have a `.chd`** - extract it first, then the same command:
 
 ```sh
 chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
-xdelta3 -d -s game.bin SRWZ-English-v0.9.0.xdelta "SRWZ English.iso"
+xdelta3 -d -s game.bin SRWZ-English-v0.9.6.xdelta "SRWZ English.iso"
 ```
 
 You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
@@ -108,7 +108,7 @@ reads those from the disc you dump yourself.
 |---|---|
 | `TRANSLATING.md` | **start here** — the edit loop and the rules the engine enforces |
 | `TOOLS.md` | every tool, what it is for, and when you need it |
-| `tools/` | 158 tools: the LZ codec, the pipeline, patchers, verifiers, gates |
+| `tools/` | 197 tools: the LZ codec, the pipeline, patchers, verifiers, gates |
 | `analysis/english_script.json` | the English translation — 167,613 strings |
 | `analysis/translation_pairs.json` | our English keyed by Japanese offset, for the check above |
 | `analysis/glossary.json` | 1000 terms, with provenance in `glossary_sources.json` |
@@ -149,6 +149,7 @@ project like this shut down.
 |---|---|
 | Project lead | pow |
 | Proofreading | Valz, Hakhan Dakharan |
+| | *286 lines read against the Japanese so far - see [Human proofreading](#human-proofreading)* |
 | Playtesting | pow, KagamineRin, Melfice, Melfice's friend |
 
 Translation passes, tooling and reverse engineering were done with Claude
@@ -171,8 +172,7 @@ several times and are a different kind of assurance.
 | Proofreader | Dialogue lines | Battle lines | Rewritten |
 |---|---|---|---|
 | Valz | 275 | 0 | 45 |
-| Hakhan Dakharan | 4 | 6 | 10 |
-| unattributed | 0 | 1 | 1 |
+| Hakhan Dakharan | 4 | 7 | 11 |
 | **Total** | **279** | **7** | **56** |
 
 **279 of 68,114 dialogue lines (0.41%) and 7 of 19,213 battle lines (0.04%).**

@@ -38,6 +38,11 @@ ZKN_FILES = ("MTVZKNPT.BIN", "MTVZKNRT.BIN", "MTVZKNKW.BIN")
 # spelling -> what it should be. Every one was fixed in a shipped build; if it
 # reappears, something rebuilt from a stale source.
 BANNED = {
+    # left as romaji in 3 speaker lines while COMPDATA and the rest of the
+    # script already said Hyakki Hundred
+    "Hyakuninshu": "Hyakki Hundred",
+    # a form of address, not a description; 20 of 21 lines already had it
+    "the Stormy": "The Storm", "Stormy": "The Storm",
     # The Aquarion wing generals are kanji READ as names. COMPDATA glossed
     # them literally, so the same character was "Moroha" in a cutscene and
     # "Bothwing" in the battle caption that followed.

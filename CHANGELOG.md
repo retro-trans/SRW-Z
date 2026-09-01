@@ -10,6 +10,54 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.15 (2026-09-01) - a name split across a line break hides from every rename
+
+Two screenshots, two terms the script already knew and used elsewhere.
+
+**百人衆 was left as romaji "Hyakuninshu"** in 3 speaker lines while the rest of
+the game already said **Hyakki Hundred** - 3 other speaker lines, one prose
+line, and all 10 COMPDATA fields. So the same enemy announced itself one way in
+a cutscene and another in the battle. Renamed; 2 of the 3 rows no longer fit
+their slot and were relocated and repointed by rename_term.py.
+
+**ザ・ストーム was "the Stormy" twice** against **The Storm** in the other 20
+lines. It is a form of address - Roger is speaking TO him - so it is
+capitalised, not a description.
+
+WHY A TERM RENAME COULD NOT DO THE SECOND ONE, which is the useful part: in
+both rows the LINE BREAK FELL INSIDE THE NAME.
+
+    「No need to worry about that, the
+    Stormy. She's an android.」
+
+The stored bytes are "the
+Stormy", so a search for "the Stormy" matches
+nothing and rename_term.py reports zero rows - it is not that the tool failed,
+it is that the string it was asked to find does not exist. Both rows had to be
+re-wrapped by hand so the name is whole:
+
+    「No need to worry about that,
+The Storm. She's an android.」
+    「The Storm, the mysterious
+tycoon with the sun - the
+famed Banjo Haran.」
+
+The second was also reordered rather than just re-broken: "The mysterious
+tycoon The Storm," is 34 columns with the corner bracket, and a 3-line row over
+30 is the v1.55 crash signature. Reordering put the name first and brought the
+widest line to 27.
+
+That failure mode is worth remembering: **any term whose rendering spans a line
+break is invisible to every byte-level rename in this toolchain**, and there is
+no gate that would have caught it - verify_terms only sees the wrong spelling
+when it is contiguous. The second occurrence here was found only because the
+term gate was given "Stormy" as a banned bare word.
+
+Both added to glossary.json and verify_terms.py (40 banned spellings now).
+
+Gates: terms 40 OK, box OK, integrity 0 problems, pointers 94.50%, ELF patches
+present.
+
 ## 0.9.14 (2026-09-01) - "who is Bothwing?", Faye Xin Lu, and Guin
 
 **The Aquarion wing generals lost their names in COMPDATA.** Their kanji are

@@ -10,6 +10,70 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.21 (2026-09-01) - the federation's name, and what rec6 actually is
+
+**新地球連邦 normalised as far as the box allows.** It was rendered "New
+Federation" in 23 rows and "New Earth Federation" in 22, for identical
+japanese. The source is not ambiguous - 新連邦 is the short name and 新地球連邦
+the full one - so the rule needed no judgement, only care.
+
+Care, because a blind rename would have BROKEN two rows that were already
+right: rows using BOTH japanese forms, where the bare "New Federation" is the
+correct rendering of 新連邦. rename_term.py gained `--not-jp` for exactly this -
+skip a row whose japanese also uses a term sharing the same english.
+
+Then the box intervened. "New Earth Federation" is six characters longer, and
+19 of 23 rows would not take it:
+
+  * **10 are single-line scene banners** - ～New Federation HQ Council～. A banner
+    is one line by construction so there is nothing to re-flow, and the long
+    form comes to 37 columns against a 34-column box. They keep the short name,
+    which is idiomatic rather than wrong: the japanese uses both names too.
+  * **3 were re-wrapped** and now carry the full name (`fix_nef_rewrap.py`).
+  * **6 cannot fit even re-wrapped**, needing a fourth body line.
+
+Result: 27 rows full, 16 short - and the 16 are short because the box will not
+hold the long form, which is a principled split rather than the arbitrary one
+it replaced.
+
+One correction to my own tooling on the way: the re-wrapper first forced every
+3-line row to 30 columns and refused 7 rows for nothing. verify_boxes only
+flags a 3-line row wider than 30 IF IT WOULD FIT AT 30 WITH ASCII QUOTES - that
+pair is the v1.55 crash signature. A row that genuinely needs more than 30 with
+the corner brackets is not the signature. Applying the real rule recovered
+three of them.
+
+**地形効果 is now "Terrain Bonus"** - better english than "Terrain Effect" and
+two bytes shorter, which is what its cross-reference line needed. 96 of the 158
+lines now render. The last 3 are genuinely blocked: two by labels the game
+really ships (Repair Module / Resupply Module, and Transform / Combine /
+Separate) and one by a 13-byte field.
+
+**AND THE BODY TEXT IS NOT WHAT THE TOOLING ASSUMED.** nisv_extract.py says
+"every field is a self-contained title or one-line sentence". That is true of
+the table of contents and the chapter blurbs - all of what has been translated
+so far - and FALSE of the answer bodies, which is where the remaining 2,829
+strings are. A paragraph is split across many fields at fixed character counts
+and the splits fall MID-WORD:
+
+    フォーメーション / とは、２機または３機で構成された小 / 隊が選択可能な、...
+
+小隊 is broken across two fields. Translating them one at a time would produce
+nonsense.
+
+Worse, they are not free strings at all. Each rendered line carries a 3-4 byte
+header - `02 0e 26 | 19 | 01` before a term, `02 | 13 | 24 | 01` before prose -
+so rec6's body is a LINE-RECORD FORMAT, and paragraph boundaries and link spans
+live in those bytes rather than in the text.
+
+`tools/nisv_paragraphs.py` reassembles what it can and documents the three field
+kinds. Finishing the body needs those header bytes worked out first; it is not
+a matter of volume, and translating 2,829 fragments without it would produce
+2,829 broken lines. **Recorded rather than attempted.**
+
+Gates: integrity 0 problems, box OK, pointers 94.50%, terms 40 OK, control
+bytes OK.
+
 ## 0.9.20 (2026-09-01) - the episode-title budget was never real
 
 Episode 34 read **"False Queen, Masked"** on the title card - an adjective with

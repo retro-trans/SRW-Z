@@ -36,6 +36,7 @@ import banlz
 from rewrap_dialogue import LBA, SECTOR, SIZE
 
 BASE = 0x7566F0
+NOT_JP = None
 WIDTH, MAXLINES = 34, 3
 
 
@@ -75,6 +76,9 @@ def main():
         variants.sort(key=len, reverse=True)
         RULES = [(jp_term, good, variants)]
     RULES = [(t, g, v, t.encode("cp932")) for t, g, v in RULES]
+    nj = arg("--not-jp")
+    global NOT_JP
+    NOT_JP = nj.encode("cp932") if nj else None
 
     f = open(iso, "r+b" if write else "rb")
     f.seek(LBA * SECTOR)
@@ -106,6 +110,15 @@ def main():
                 continue
             # only the rules whose japanese term is in THIS row may touch it
             here = [r for r in live if r[3] in jb[jo:zj]]
+            # --not-jp: skip a row whose japanese ALSO uses a different
+            # term that shares this english. 新地球連邦 and 新連邦 are two
+            # names for one body, and we translate them "New Earth
+            # Federation" and "New Federation"; in a row containing both,
+            # replacing the bare "New Federation" would promote the SHORT
+            # name too. Two synopsis rows were already correct and would
+            # have been broken by this rename without the guard.
+            if NOT_JP and NOT_JP in jb[jo:zj]:
+                continue
             if not here:
                 continue
             z = bytes(eb).find(b"\x00", off)

@@ -127,7 +127,7 @@ TERMS = {
  # "Range to Enemy" cannot fit this term's 15-byte field at any spacing
  u"敵との距離": u"Range",
  u"地形適応": u"Terrain",
- u"地形効果": u"Terrain Effect",
+ u"地形効果": u"Terrain Bonus",
  u"ＶＲメット": u"VR Helmet",
  u"感応ヘルメット": u"Psycho Helmet",
  u"マグネットコーティング": u"Magnet Coating",
@@ -166,13 +166,13 @@ TERMS = {
  u"補給装置": u"Resupply Module",
  u"修理技能": u"Repair Skill",
  u"補給技能": u"Resupply Skill",
- u"隊長ボーナス": u"Leader Bonus",
+ u"隊長ボーナス": u"Lead Bonus",
  u"ＨＰ回復": u"HP Regen",
  u"ＥＮ回復": u"EN Regen",
  u"補給": u"Resupply",
  u"搭載": u"Load",
  u"回収": u"Recover",
- u"性格": u"Personality",
+ u"性格": u"Nature",
  u"難易度": u"Difficulty",
 
 # --- second pass -------------------------------------------------------
@@ -261,11 +261,11 @@ TERMS = {
  u"ベーシックオーダー": u"Basic Order",
  # units and categories
  u"機体": u"Unit",
- u"機体系": u"Unit type",
- u"地形系": u"Terrain type",
- u"特殊系": u"Special type",
+ u"機体系": u"Unit",
+ u"地形系": u"Terrain",
+ u"特殊系": u"Special",
  u"Ｐ系": u"P type",
- u"機体・武器改造": u"Unit & Weapon Upgrade",
+ u"機体・武器改造": u"Upgrades",
  # menus and system
  u"インターミッション": u"Intermission",
  u"オプション": u"Options",

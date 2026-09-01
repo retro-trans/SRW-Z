@@ -52,6 +52,10 @@
   "[Pilot Training]  [Stat Growth]  [Skill Learning]\n[Combo Atk]  [Assist Atk]  [Focused Atk]"
  ],
  [
+  "28cd8c47474b0ae9",
+  "[Nature] [Difficulty] [Resupply] [Load] [Recover]"
+ ],
+ [
   "2a2f3f89d2d56fc4",
   "[Spirit]  [Vigor]  [Cheer]"
  ],
@@ -196,6 +200,10 @@
   "[Squad Atk]  [PLA weapon]"
  ],
  [
+  "827a71ffc4e921aa",
+  "[Terrain Bonus] [Load]"
+ ],
+ [
   "855b2dd41182d8c1",
   "[Repair Module] [Repair Skill] [Leader Bonus] [HP Regen]"
  ],
@@ -260,12 +268,20 @@
   "[Squad Atk]  [Support Def]  [Squad Barrier]"
  ],
  [
+  "c066fce6cc367fb7",
+  "[Resupply Module] [Resupply Skill] [Lead Bonus] [EN Regen]"
+ ],
+ [
   "c07148ec635bc57b",
   "[Skills]"
  ],
  [
   "c08c54e55e9a9156",
   "[IFF]  [No Counter]"
+ ],
+ [
+  "c27fb5235e0464e8",
+  "[Upgrades]  [Attack]"
  ],
  [
   "c5abe5dd4cabd25d",
@@ -294,6 +310,10 @@
  [
   "cef56c754736a89f",
   "[Special Effect] [Anti-Mind Attack] [P type]\n[All Canceller]"
+ ],
+ [
+  "cf5b701e8beb6c4b",
+  "[Unit]  [Terrain]  [Consumable]  [Special]"
  ],
  [
   "cf5c0b95ae649c1b",

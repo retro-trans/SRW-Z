@@ -19,7 +19,7 @@ Two warnings that are not obvious from any docstring:
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 13 |
 | [Applying text to the image](#applying-text-to-the-image) | 6 |
-| [Fixing specific defects](#fixing-specific-defects) | 27 |
+| [Fixing specific defects](#fixing-specific-defects) | 28 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 63 |
+| [Everything else](#everything-else) | 64 |
 
 ## The pipeline
 
@@ -245,6 +245,9 @@ Set the "name is already in display order" flag the swap pass forgot.
 
 **`fix_name_separator_fmt.py`**  
 Make the foreign-name separator a space instead of a middle dot.
+
+**`fix_nef_rewrap.py`**  
+Finish the 新地球連邦 rename on the rows that need re-wrapping.
 
 **`fix_placeholder_wrap.py`**  
 Re-wrap dialogue whose $ placeholders overflow the box once expanded.
@@ -624,6 +627,9 @@ Write translated help text back into NISVDATA.BIN.
 
 **`nisv_extract.py`**  
 Pull the in-game HELP/TUTORIAL text out of NISVDATA.BIN.
+
+**`nisv_paragraphs.py`**  
+Reassemble rec6's help text into paragraphs, ready to translate.
 
 **`nisv_rec6_blurbs_gen.py`**  
 Generate the hashed english for rec6's 17 section blurbs.

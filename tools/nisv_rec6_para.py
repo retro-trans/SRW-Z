@@ -36,10 +36,13 @@ RIGHT = 532                # right edge of the panel, measured from the japanese
 #
 # No original run contains a half-width character - every ASCII byte in rec6
 # came from our own in-place patches - so W_HALF cannot be measured the same
-# way.  13 is the project's documented half-width pitch and is the SAFE
-# direction to err: overestimating leaves a small gap after an inline span,
-# underestimating would overlap the glyphs.
-W_FULL, W_HALF = 19, 13
+# way.  It is 12 because that is what our OWN renderer hook forces: the SADV
+# hook in patch_hwfont.py pins the destination advance to a constant 12 for
+# the half-width code range and for space.  rec5, the already-shipped sibling
+# record, proves this panel goes through that path - its ASCII renders
+# half-width, and it needed the 0x2E-0x3D fullwidth workaround that is
+# specific to the same 0x13A290 reader.
+W_FULL, W_HALF = 19, 12
 
 # A line can only be a CONTINUATION of the one above it if that line actually
 # reached the right margin - the renderer never wraps early.  Measuring every
@@ -50,11 +53,30 @@ W_FULL, W_HALF = 19, 13
 # line and shunts the rest of the page down.
 WRAP_SLACK = 60
 
+# Labels we ourselves patched into rec6 in place, and the pixel width of the
+# japanese each replaced (小隊攻撃 / 援護攻撃 / 援護防御 = 4 cells, 反撃 = 2).
+# Needed only when reading a disc we have already patched; once a section is
+# retranslated its runs are re-emitted consistently and this stops mattering.
+PATCHED = {"Sq Atk": 76, "Sup Atk": 76, "Sup Def": 76, "Ctr": 38}
+
+# How far a continuation line may sit from its paragraph's first line.  Across
+# the whole book genuine wraps take exactly four values: -19 (body text, whose
+# first line is indented), 0 (a table's description column wrapping onto
+# itself), +19 (bullets) and +76 (a hanging indent aligned to an inline span) -
+# 393 cases.  The one paragraph outside that range is a short table cell at
+# x=475 that happens to end on the margin, so `filled` cannot tell that the
+# next row's label at x=57 is not its continuation.
+INDENT_LO, INDENT_HI = -38, 95
+
 _SPAN = re.compile(r"\{a=([0-9a-f]{2})\}(.*?)\{/a\}", re.S)
 
 
 def px(s):
-    return sum(W_HALF if ord(c) < 128 else W_FULL for c in s)
+    # ASCII is half-width EXCEPT 0x2E-0x3D, which the menu encoder rewrites to
+    # their fullwidth forms because they are control codes to this reader - so
+    # a digit or a full stop costs 19px in english, not 13.
+    return sum(W_HALF if ord(c) < 128 and not (0x2E <= ord(c) <= 0x3D)
+               else W_FULL for c in s)
 
 
 def strip(text):
@@ -79,6 +101,10 @@ class Para(object):
             self.attr, self.first_x, self.cont_x, self.y, self.text)
 
 
+def _ascii(run):
+    return any(ord(c) < 128 for c in run.text)
+
+
 def _mark(run, base):
     if run.attr != base:
         return "{a=%02x}%s{/a}" % (run.attr, run.text)
@@ -98,8 +124,20 @@ def group(runs):
     paras, cur, prev, cursor = [], None, None, 0
     for r in runs:
         tight = prev is not None and r.y == prev.y and r.x == cursor
+        if prev is not None and r.y == prev.y and not tight:
+            w = PATCHED.get(prev.text)
+            if w is not None:
+                # prev is one of OUR earlier in-place patches, so its measured
+                # width no longer matches the japanese that the following run's
+                # x was authored against.  Measure against the width of the
+                # japanese it replaced instead: every tight case in the book
+                # lands exactly on it, and the three that do not (95px) are
+                # real column anchors.
+                tight = r.x - prev.x == w
         filled = cursor >= RIGHT - WRAP_SLACK
-        if prev is None or r.kind == 4 or prev.kind == 4                 or (r.y > prev.y + LINE_H) or (r.y == prev.y and not tight):
+        if (prev is None or r.kind == 4 or prev.kind == 4
+                or r.y > prev.y + LINE_H
+                or (r.y == prev.y and not tight)):
             cur = Para(r.kind, r.attr, r.x, r.x, r.y, [_mark(r, r.attr)])
             paras.append(cur)
         elif tight:
@@ -109,8 +147,19 @@ def group(runs):
             # be a wrap - it is a new block (a table row, a fresh sentence)
             cur = Para(r.kind, r.attr, r.x, r.x, r.y, [_mark(r, r.attr)])
             paras.append(cur)
-        elif len(cur.lines) == 1 and r.x != cur.first_x:
-            cur.cont_x = r.x                      # second line sets the column
+        elif (len(cur.lines) == 1
+                and INDENT_LO <= r.x - cur.first_x <= INDENT_HI
+                and (r.x != cur.first_x or "{a=" not in cur.lines[0])):
+            # Second line sets the continuation column, which may be the SAME
+            # as the first line's: a definition table's description column
+            # (term at x=38, text at x=95) wraps onto itself, and splitting
+            # there would cut a sentence in half for the translator.
+            #
+            # But a row that opens with a label and an inline span - 攻撃時：
+            # followed by coloured text - hangs its continuation under the
+            # span, never back at the label.  So when the x is unchanged and
+            # the line carries a span, the next line is the following ROW.
+            cur.cont_x = r.x
             cur.lines.append(_mark(r, cur.attr))
         elif len(cur.lines) > 1 and r.x == cur.cont_x:
             cur.lines.append(_mark(r, cur.attr))

@@ -23,7 +23,12 @@ Because every section carries its own length prefix AND its size lives in the
 index, a section can be re-laid-out and even resized when we translate; we are
 bound only by the total size of the record, not by the japanese line breaks.
 """
+import os
 import struct
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from patch import encode as _menc
 
 HDR = struct.Struct("<BBHHH")
 LINE_H = 11
@@ -37,8 +42,11 @@ class Run(object):
         self.flag, self.text = flag, text
 
     def pack(self):
+        # 0x2E-0x3D (./0-9:;<=) are CONTROL CODES to this reader, so they have
+        # to go out as their fullwidth forms - the same rule the menus follow,
+        # and what the already-shipped rec5 does ("scenario．", "８０%").
         return (HDR.pack(self.kind, self.attr, self.x, self.y, self.flag)
-                + self.text.encode("cp932") + b"\x00")
+                + _menc(self.text, "menu") + b"\x00")
 
     def __repr__(self):
         return "Run(k=%d,a=%#04x,%d,%d,%r)" % (self.kind, self.attr, self.x,

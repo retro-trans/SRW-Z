@@ -43,3 +43,7 @@ __pycache__/
 # refuses it, and name_map.py already reads its sources only 'if they are still
 # present in the tree'. Keep your copy; it is not needed to build the patch.
 tools/gen_missing3_en.py
+
+# Regenerated locally from YOUR disc - both hold the japanese side
+analysis/weapons_en.json
+analysis/build_manifest.json

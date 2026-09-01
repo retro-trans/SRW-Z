@@ -24,8 +24,8 @@ Nefertem, Tristan, Sol Graviton Nova, Gagundura, Jinba and Zeraviton Sword
 are correct names that merely look like romaji, and four were real.
 
 WIDTH. These are all comfortably inside the column. The weapon-name column is
-wide - a normal unit ships 高エネルギー砲　アウフプラール・ドライツェーン at
-483px - so the per-name japanese width that verify_ui_width.py uses is the
+wide - a normal unit ships a 483px name ("High-Energy Cannon Aufprall
+Dreizehn") - so the per-name japanese width that verify_ui_width.py uses is the
 wrong budget here; it is right for a fixed-position UI fragment, not for a
 list column sized once for the whole list. Every replacement below is still
 kept at or under the width of the name it replaces.

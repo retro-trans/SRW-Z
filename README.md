@@ -165,24 +165,17 @@ the builds that shipped broken and why.
 
 ### Human proofreading
 
-Every line is machine-translated first. This table counts the lines a **human**
-has since read - not the machine passes, which have been over the whole script
-several times and are a different kind of assurance.
+Every line is machine-translated first. So far a human has read **286 lines**
+against the Japanese - 279 of 68,114 dialogue lines and 7 of 19,213 battle
+lines - and rewrote 56 of them. The rest they read and passed, which is work
+too.
 
-| Proofreader | Dialogue lines | Battle lines | Rewritten |
-|---|---|---|---|
-| Valz | 275 | 0 | 45 |
-| Hakhan Dakharan | 4 | 7 | 11 |
-| **Total** | **279** | **7** | **56** |
+That does not count the machine passes, which have been over the whole script
+several times. This number is only about human eyes, and mixing the two would
+make it look larger than it is.
 
-**279 of 68,114 dialogue lines (0.41%) and 7 of 19,213 battle lines (0.04%).**
-
-*Rewritten* is the subset a proofreader actually changed; the rest they read
-and passed. Both matter - reading 200 lines and changing 5 is 200 lines of
-work, not 5.
-
-Counted, not estimated: `python tools/proofread_status.py`. It reads the
-proofreading workbooks, so the number cannot drift from what was really done.
-Tracking this per stage was tried and abandoned - a proofreader stops mid
-record and "no change needed" looks identical to "never read", so only a line
-count can be honest.
+Counted, not estimated: `python tools/proofread_status.py` reads the
+proofreading workbooks, so the figure cannot drift from what was really done.
+Tracking it per stage was tried and abandoned - a proofreader stops mid record
+and "no change needed" looks identical to "never read", so only a line count
+can be honest.

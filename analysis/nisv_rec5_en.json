@@ -1,0 +1,362 @@
+[
+ [
+  "7ee3dd7372cf9d19",
+  "One SR Point is set for each scenario．"
+ ],
+ [
+  "20f99425b61696c2",
+  "Conditions are listed under Objectives．"
+ ],
+ [
+  "530075351aef9b51",
+  "How many SR Points you earn sets the difficulty："
+ ],
+ [
+  "06910d7710cdad61",
+  "HARD"
+ ],
+ [
+  "a175f15c82e7a198",
+  "８０% or more of all points"
+ ],
+ [
+  "496a46b18464367e",
+  "NORMAL"
+ ],
+ [
+  "5285e62ed5100963",
+  "About ３０-７９% of all points"
+ ],
+ [
+  "ac020ce019468555",
+  "EASY"
+ ],
+ [
+  "167c0217640b10ab",
+  "Under about ３０% of all points"
+ ],
+ [
+  "45622e219f59b60f",
+  "Each pilot has their own spirit commands．"
+ ],
+ [
+  "24d281bd700bcb07",
+  "They cost SP and have varied effects．"
+ ],
+ [
+  "48126a7982ff38f4",
+  "Ex： Accel"
+ ],
+ [
+  "2b9e4dacb6eb85e1",
+  "Squad Move +２, once"
+ ],
+ [
+  "e83dd0e9efc7f628",
+  "Guts"
+ ],
+ [
+  "2a8abd533f60a2bf",
+  "Restores ３０% of max HP"
+ ],
+ [
+  "494acd297dec9f83",
+  "Focus"
+ ],
+ [
+  "bf716eb8761cb020",
+  "Hit and evade +３０% for one turn"
+ ],
+ [
+  "a51e98afaed4154a",
+  "Pilots learn new spirit commands as they level,"
+ ],
+ [
+  "ba4fcd196d17acf0",
+  "and their max SP rises．"
+ ],
+ [
+  "ceb040bad2d854f2",
+  "Save mid-map with Mid-Battle Save to a Memory"
+ ],
+ [
+  "d1f7b3d700a92bd8",
+  "Card (PS２)"
+ ],
+ [
+  "c9f6f4e704693204",
+  "Return to a saved point with Continue on the"
+ ],
+ [
+  "095ff0f5f7d87c27",
+  "title．"
+ ],
+ [
+  "ac3e845c764db013",
+  "Also, pressing these together during a map"
+ ],
+ [
+  "3258172f40658c2e",
+  "returns you to your Mid-Battle Save．"
+ ],
+ [
+  "67cde8c262032afb",
+  "R１ + R２ + L１ + L２ +"
+ ],
+ [
+  "41ff77c7a444b5af",
+  "START + SELECT (hold them down)"
+ ],
+ [
+  "5e32ca824dafa236",
+  "The default formation when you deploy．"
+ ],
+ [
+  "5f818e9a054a6b11",
+  "Members fall back and the leader fights．"
+ ],
+ [
+  "f9d6f1ab181bf87a",
+  "Members cannot attack, but gain a defence bonus．"
+ ],
+ [
+  "be8124b06166e357",
+  "Traits："
+ ],
+ [
+  "5c0ab62cee9f2716",
+  "Squad Atk"
+ ],
+ [
+  "eecf024a6552d103",
+  "Unusable"
+ ],
+ [
+  "94311fb926e240eb",
+  "Sup Defend"
+ ],
+ [
+  "60b801ba9785aa25",
+  "Yes (needs the Support Defend skill)"
+ ],
+ [
+  "ffb1085f71d641f7",
+  "vs All Atk"
+ ],
+ [
+  "fc19b115fa16b6b6",
+  "Member damage -２０%"
+ ],
+ [
+  "ef7f49e05d2a972e",
+  "Notes"
+ ],
+ [
+  "7065cca5bbe590db",
+  "Member evade +２０%"
+ ],
+ [
+  "04718faa667fb8d4",
+  "Tri Charge usable"
+ ],
+ [
+  "2077627d757d2fc0",
+  "A formation centred on the leader．"
+ ],
+ [
+  "8c59083a69f2d675",
+  "Members aid the leader's atk．"
+ ],
+ [
+  "defe540537160bea",
+  "Good for focusing fire on one enemy．"
+ ],
+ [
+  "8d2a788b847abdd5",
+  "Yes (one enemy,"
+ ],
+ [
+  "494e7ea3fcf0ac6b",
+  "member atk -５０%)"
+ ],
+ [
+  "baf1d215affc49be",
+  "Leader damage -２０%"
+ ],
+ [
+  "85542842e01ed8b1",
+  "With a squad attack the leader gets"
+ ],
+ [
+  "d2011f64e451cb04",
+  "hit +２０%"
+ ],
+ [
+  "0bfbae02671fbc93",
+  "If any unit in the squad has a barrier,"
+ ],
+ [
+  "aa98554ba9c0baff",
+  "it applies to all．"
+ ],
+ [
+  "08e2314e3ffe1390",
+  "A spread formation of leader and members．"
+ ],
+ [
+  "12e467fb2dc23ee7",
+  "Each attacks a different enemy．"
+ ],
+ [
+  "5757ba0a19f225e7",
+  "Good for wiping out an enemy squad．"
+ ],
+ [
+  "bc41fa11ea894752",
+  "Yes"
+ ],
+ [
+  "cacfa62c71268e21",
+  "(each hits a target,"
+ ],
+ [
+  "21ff27c2680c103b",
+  "member atk -２０%)"
+ ],
+ [
+  "de3e781cb7eeba83",
+  "Member damage -５０%"
+ ],
+ [
+  "70e72d0a104c7e0b",
+  "Each of the three formations beats one and loses to one．"
+ ],
+ [
+  "6652224ae48668a3",
+  "The cycle is Tri -> Center -> Wide -> Tri -> and on,"
+ ],
+ [
+  "ee535a3e867abd2d",
+  "and you get a bonus against it．"
+ ],
+ [
+  "80983eba4c19358e",
+  "Tri"
+ ],
+ [
+  "746f0b711e43cc77",
+  "Tri Charge usable"
+ ],
+ [
+  "88ee38f28612494a",
+  "Sq Atk"
+ ],
+ [
+  "a4cdc5a27f993418",
+  "Sup Def"
+ ],
+ [
+  "becaaf849afabf6c",
+  "Center"
+ ],
+ [
+  "63467395ea4bf5f2",
+  "Focus fire on one"
+ ],
+ [
+  "53f095e932d6bb1d",
+  "Wide"
+ ],
+ [
+  "94228f7bb27c59f2",
+  "Hit a whole squad"
+ ],
+ [
+  "1513c21185c407a1",
+  "Battleships and lone units take no formation,"
+ ],
+ [
+  "a11abef4766059a7",
+  "so they are outside this cycle．"
+ ],
+ [
+  "2b975fa984016acf",
+  "Pressing SELECT on the status or unit list opens"
+ ],
+ [
+  "368834b2f26d4fa0",
+  "Data Help, where terms, stats and controls can"
+ ],
+ [
+  "d6bebfef9c97671b",
+  "be looked up．"
+ ],
+ [
+  "dad59de3138ee40d",
+  "With a group or unit command menu open,"
+ ],
+ [
+  "53e93878915e5eff",
+  "pressing SELECT opens Command Help, which"
+ ],
+ [
+  "4996da35bfc5cce6",
+  "explains each command．"
+ ],
+ [
+  "6393551143755b07",
+  "A game over restarts the map, but the"
+ ],
+ [
+  "25c2f33dcb3bfe87",
+  "funds, PP, EXP and kills you"
+ ],
+ [
+  "d91ab610f36c2b46",
+  "earned before it"
+ ],
+ [
+  "68033145983b5ec9",
+  "carry over．"
+ ],
+ [
+  "6cbcec0a0f14725b",
+  "However, on a carried-over retry you cannot"
+ ],
+ [
+  "cb43dcb65775796b",
+  "earn SR Points．"
+ ],
+ [
+  "7c5661f06f6d800a",
+  "Strategy Q&A"
+ ],
+ [
+  "2c909ad6705725cf",
+  "collects tips and information"
+ ],
+ [
+  "1a2ad76f5d8b68c0",
+  "useful for play．"
+ ],
+ [
+  "b6b7f3c2f04be4a3",
+  "Two ways to reach it："
+ ],
+ [
+  "7ae25a23af52305d",
+  "１． Choose LIBRARY on the title screen,"
+ ],
+ [
+  "2cb5ec4488a89b9a",
+  "then Strategy Q&A．"
+ ],
+ [
+  "33c5347cbfeca1d7",
+  "２． From Options in the intermission,"
+ ],
+ [
+  "dd8f202208e773d5",
+  "choose Library,"
+ ]
+]

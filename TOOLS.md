@@ -17,9 +17,9 @@ Two warnings that are not obvious from any docstring:
 | [Libraries - imported, not run](#libraries--imported-not-run) | 5 |
 | [ISO plumbing](#iso-plumbing) | 7 |
 | [Build and packaging](#build-and-packaging) | 5 |
-| [Translation data](#translation-data) | 11 |
+| [Translation data](#translation-data) | 12 |
 | [Applying text to the image](#applying-text-to-the-image) | 6 |
-| [Fixing specific defects](#fixing-specific-defects) | 25 |
+| [Fixing specific defects](#fixing-specific-defects) | 26 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 58 |
+| [Everything else](#everything-else) | 60 |
 
 ## The pipeline
 
@@ -168,6 +168,9 @@ Translate the 463 dialogue fields the extractor never saw (see gen_missing3).
 **`mtvpros_en.py`**  
 English prologue narration for DATA/MTV_PROS.BIN rawt chunks.
 
+**`nisv_merge_en.py`**  
+Merge the per-record NISVDATA translations into one store for nisv_apply.py.
+
 **`soundsel_names.py`**  
 Base-name romanizations + song titles for the Sound Select tables.
 
@@ -209,6 +212,9 @@ Fullwidth punctuation -> ASCII, in ENGLISH DIALOGUE only.
 
 **`fix_ghingnham.py`**  
 ゲンガナム is "Ghingnham", not "Gendarme".
+
+**`fix_glued_surnames.py`**  
+Translate the surnames left in kanji, which render glued to the given name.
 
 **`fix_hard_lines.py`**  
 Shorten the 8 dialogue lines that cannot fit the box once $ expands.
@@ -606,6 +612,12 @@ Word-by-word MIPS disassembler for PS2 EE code.
 
 **`name_map.py`**  
 Ship the name maps as FINGERPRINTS, and rebuild them from your own disc.
+
+**`nisv_apply.py`**  
+Write translated help text back into NISVDATA.BIN.
+
+**`nisv_extract.py`**  
+Pull the in-game HELP/TUTORIAL text out of NISVDATA.BIN.
 
 **`preview_16level.py`**  
 Show 4-level vs 16-level alpha for the SAME face, at real size.

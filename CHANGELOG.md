@@ -10,6 +10,61 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.16 (2026-09-01) - the glued surnames, and NISVDATA starts to speak english
+
+**The 18 glued pilot names are fixed.** These carried flag 1 - "japanese name,
+concatenate" - with the GIVEN name translated and the SURNAME left in kanji, so
+the halves ran together with nothing between them:
+
+    神Hayato   神Kappei   神Gengoro   神Ichitaro   神Ume   神Hanae
+    紅Eiji     紅Reika    Computer DollNo． ８
+
+The readings were not guessed. The game's own encyclopedia already carries the
+full names and is unanimous: Hayato Jin, Kappei Jin, Gengoro Jin, Ichitaro Jin,
+Umee Jin, Hanae Jin, Eiji Shigure, Reika Shigure. So 神 reads **Jin** and 紅
+reads **Shigure** - the second a gikun, which is exactly why it cannot be read
+off the kanji. The Getter Robo wiki confirms Hayato Jin independently.
+
+The encyclopedia also says **Umee** where the pilot record said "Ume", and
+STAGE agrees with the encyclopedia 43 speaker lines to none, so the record was
+simply wrong. Computer Doll is not a person and only ever needed the space.
+Schwarz + wald is the same shape and DELIBERATE, so it is untouched.
+`tools/fix_glued_surnames.py`. Zero glued renders remain.
+
+**NISVDATA is no longer entirely japanese.** It was on the list as "7,734
+untranslated strings", and that number was wrong in an important way: **rec3 is
+a KANJI READING DICTIONARY** (なぐさ・める, うつく・しい) - IME data for the
+japanese name-entry screen, 5,240 strings that must NOT be translated. rec0-2
+are graphics whose "japanese" is binary decoding as kanji. The real prose is
+rec5 and rec6, about 2,500 unique strings.
+
+Done this build: **rec5 complete** (the SR Point, formation and save tutorial,
+90 strings) and **rec6's entire Strategy Q&A index** (145 - four section tabs,
+25 chapter headings, ~100 question titles and the section blurbs). 275 fields
+written, 0 refused.
+
+ENCODING, decided on evidence rather than assumed. There is no translated
+english anywhere in NISVDATA to copy a convention from - the "1,028 english
+strings" a naive scan reports in rec0 are binary. But the JAPANESE here already
+uses fullwidth ＳＲ, ８０％, １, so fullwidth certainly renders on this path, and
+0x2E-0x3D are control codes to the menu reader. Fullwidth is safe under either
+reader, so '.' ':' and digits are emitted fullwidth, as help_shorten.py already
+does for DATA HELP. Two characters are avoided outright instead: '/' (0x2F), so
+HP/EN Recovery is "HP and EN Heal", and '<' (0x3C), so the blurbs use ( ).
+
+That fullwidth period costs 2 bytes, which is what pushed five otherwise-fitting
+lines over their field and forced them shorter - worth knowing before writing
+more of this text.
+
+`tools/nisv_extract.py`, `nisv_apply.py` (idempotent, refuses rather than
+truncates), `nisv_rec5_en.py`, `nisv_rec6_toc_en.py`.
+
+STILL JAPANESE: 2,910 strings of rec6 body text - the answers under those
+question titles. The pipeline is built and proven end to end; this is now a
+matter of volume.
+
+Gates: integrity 0 problems, pointers 94.50%, ELF patches present.
+
 ## 0.9.15 (2026-09-01) - a name split across a line break hides from every rename
 
 Two screenshots, two terms the script already knew and used elsewhere.

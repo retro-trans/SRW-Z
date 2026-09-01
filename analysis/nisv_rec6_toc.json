@@ -1,0 +1,582 @@
+[
+ [
+  "7c9bc6a7333e807a",
+  "Battle"
+ ],
+ [
+  "6eb2232781024ae6",
+  "Squads"
+ ],
+ [
+  "7c69238889dc3251",
+  "Growth"
+ ],
+ [
+  "847c35b534b40193",
+  "Other"
+ ],
+ [
+  "6305aaa1035bd91d",
+  "About Formations"
+ ],
+ [
+  "7957065efa04bf8f",
+  "About Move"
+ ],
+ [
+  "6760935b878dced7",
+  "About Atk"
+ ],
+ [
+  "de6253f50df45eb7",
+  "Attack Types"
+ ],
+ [
+  "9a57107cfb2dea4d",
+  "Weapon Choice"
+ ],
+ [
+  "02dffeea39cbdce7",
+  "About Def"
+ ],
+ [
+  "57bc73d66a4acde9",
+  "About Hit"
+ ],
+ [
+  "2d05e3879a77260d",
+  "About Evade"
+ ],
+ [
+  "feb0999f669f65c3",
+  "About Will"
+ ],
+ [
+  "f6279959b7357ad7",
+  "HP and EN Heal"
+ ],
+ [
+  "2d459803018579d6",
+  "Spirit Commands"
+ ],
+ [
+  "7e4a60b01b548932",
+  "Unit Abilities"
+ ],
+ [
+  "b019d432de62d0dd",
+  "Pilot Skills"
+ ],
+ [
+  "e7716913491e7b73",
+  "Funds, EXP, PP and BS"
+ ],
+ [
+  "206746379a079bde",
+  "About Squads"
+ ],
+ [
+  "0e73fa09960206b2",
+  "Squad Building"
+ ],
+ [
+  "f9c3712b72b02cfa",
+  "Auto Build"
+ ],
+ [
+  "50655002dc9e31ea",
+  "Swapping"
+ ],
+ [
+  "413269f6dc0304fd",
+  "Pilot Training"
+ ],
+ [
+  "eb098f0af6473ed8",
+  "Unit & Weapon Upgrade"
+ ],
+ [
+  "ecf3a4eed50e1729",
+  "About Parts"
+ ],
+ [
+  "ef5662d6809a1041",
+  "Unit Refit"
+ ],
+ [
+  "c336388265fca5b7",
+  "About SR Points"
+ ],
+ [
+  "a3bd752a8326f11b",
+  "About Bazaar"
+ ],
+ [
+  "c062e546b4b924f9",
+  "About Options"
+ ],
+ [
+  "63138f19e41d3af3",
+  "Trivia"
+ ],
+ [
+  "5f2f832897eb4ee3",
+  "What is a Formation?"
+ ],
+ [
+  "d970091e88ed52fc",
+  "What is Tri Formation?"
+ ],
+ [
+  "89ff716713579c0f",
+  "What is Center Formation?"
+ ],
+ [
+  "3424addd7b102d8e",
+  "What is Wide Formation?"
+ ],
+ [
+  "639284937de62f13",
+  "Formation matchups?"
+ ],
+ [
+  "5783e1f58e01322e",
+  "What is Move"
+ ],
+ [
+  "b08b3a744683e2a3",
+  "Raising Move? (Spirit Commands)"
+ ],
+ [
+  "df4daf48fc9a79f6",
+  "Raising Move? (Parts)"
+ ],
+ [
+  "9724d88b2f8c5e77",
+  "Raising Move? (Move Type)"
+ ],
+ [
+  "a96f9be2119179c9",
+  "Attacking?"
+ ],
+ [
+  "ce311d1d3a8f9991",
+  "More damage? (Spirit Commands)"
+ ],
+ [
+  "72e9ad142a5361eb",
+  "More damage? (Pilot Training)"
+ ],
+ [
+  "a78456041b6dd6b6",
+  "More damage? (Weapons)"
+ ],
+ [
+  "22834577e0180723",
+  "More damage? (Will)"
+ ],
+ [
+  "a2bcd019b88c8d78",
+  "More damage? (Attack Types)"
+ ],
+ [
+  "f01c8e8bb8ac5bd1",
+  "Attack Types"
+ ],
+ [
+  "d1ae4d290dbd37f9",
+  "Tri Formation attack"
+ ],
+ [
+  "e4922ae566403a57",
+  "Center Formation attack"
+ ],
+ [
+  "deb75d6350ea045b",
+  "Wide Formation attack"
+ ],
+ [
+  "f21f8b27a25fe5c6",
+  "Sup Atk"
+ ],
+ [
+  "7f1e1778328eb732",
+  "Ctr"
+ ],
+ [
+  "6a66281bd4fafa56",
+  "Weapons"
+ ],
+ [
+  "a9487d527e3b75d2",
+  "Normal atk?"
+ ],
+ [
+  "14ae74613fee35d4",
+  "All atk?"
+ ],
+ [
+  "8644fa3071d99c84",
+  "Tri Charge?"
+ ],
+ [
+  "50c6feb88e9b6f75",
+  "MAP weapons?"
+ ],
+ [
+  "3369f840c266c353",
+  "Effect weapons?"
+ ],
+ [
+  "d1079e6249d892b2",
+  "Taking enemy damage?"
+ ],
+ [
+  "72ee6a97da2af902",
+  "Less damage? (Will and Spirits)"
+ ],
+ [
+  "28a4f35e0282897b",
+  "Less damage? (Pilot)"
+ ],
+ [
+  "fae406eca1abaf7f",
+  "Less damage? (Unit)"
+ ],
+ [
+  "67a89426a22a0d83",
+  "Less damage? (Terrain)"
+ ],
+ [
+  "6ef6664736f6b42b",
+  "Less damage? (Defending)"
+ ],
+ [
+  "48523141dc512a8b",
+  "Hit rate?"
+ ],
+ [
+  "f7e84cc237ebd35a",
+  "Raising hit? (Pilot)"
+ ],
+ [
+  "883d4699864ca10f",
+  "Raising hit? (Unit)"
+ ],
+ [
+  "d09b53389f80dcda",
+  "Raising hit? (Terrain)"
+ ],
+ [
+  "90b5be687189ceb1",
+  "Raising hit? (Range)"
+ ],
+ [
+  "5539beef9f07510d",
+  "Raising hit? (Attack Type)"
+ ],
+ [
+  "a149c0d03bc4681e",
+  "Evade rate?"
+ ],
+ [
+  "032540418d237806",
+  "Raising evade? (Pilot)"
+ ],
+ [
+  "ddb6ff78f707080f",
+  "Raising evade? (Unit)"
+ ],
+ [
+  "5d921cc251e15706",
+  "Raising evade? (Terrain)"
+ ],
+ [
+  "467989332821b3c7",
+  "Raising evade? (Range)"
+ ],
+ [
+  "09636fe401303d99",
+  "Raising evade? (Evading)"
+ ],
+ [
+  "35f4158213302f88",
+  "What is Will"
+ ],
+ [
+  "bd418c0f3f563172",
+  "Raising Will? (Actions)"
+ ],
+ [
+  "bfad9f62d49131be",
+  "Raising Will? (Spirit Commands)"
+ ],
+ [
+  "b5135d2e930f5313",
+  "Raising Will? (Skills)"
+ ],
+ [
+  "ade6c0810be82555",
+  "Units good at support?"
+ ],
+ [
+  "6d3cf4892223ea7a",
+  "Repair?"
+ ],
+ [
+  "f00fd549a0e63ae8",
+  "Resupply?"
+ ],
+ [
+  "774f3ebd31c1132d",
+  "Restoring HP and EN? (１)"
+ ],
+ [
+  "598fdce4f65b75d1",
+  "Restoring HP and EN? (２)"
+ ],
+ [
+  "9b5182ae9a9d746f",
+  "Spirit commands?"
+ ],
+ [
+  "4af5937d6c7e8881",
+  "What is SP"
+ ],
+ [
+  "ebb7f2a6e86eb697",
+  "Unit abilities?"
+ ],
+ [
+  "262681a6db9218b1",
+  "Abilities for attack?"
+ ],
+ [
+  "f494c16483c07c2d",
+  "Abilities for defence? (１)"
+ ],
+ [
+  "8e0bf064bf4c9b8a",
+  "Abilities for defence? (２)"
+ ],
+ [
+  "40cdc839c326ccb4",
+  "Abilities for defence? (３)"
+ ],
+ [
+  "4f81a968426bccd3",
+  "Abilities for moving?"
+ ],
+ [
+  "63e38b355b22d2e0",
+  "Pilot skills?"
+ ],
+ [
+  "dbc8d1f2a71ded27",
+  "Skills for attack?"
+ ],
+ [
+  "437205add0cd44b4",
+  "Skills for hit and evade?"
+ ],
+ [
+  "35ac8a41bf980f57",
+  "Skills for defence?"
+ ],
+ [
+  "415dd4fc2caeac89",
+  "Skills for raising Will?"
+ ],
+ [
+  "dfd8485446479a9d",
+  "Funds?"
+ ],
+ [
+  "022fbae352447239",
+  "EXP?"
+ ],
+ [
+  "d7d6fdfa43f40c1e",
+  "PP?"
+ ],
+ [
+  "b2007dcec3714fdb",
+  "BS?"
+ ],
+ [
+  "f7878e169f33cc59",
+  "Squads?"
+ ],
+ [
+  "4255ce58c2b8b196",
+  "Leader role?"
+ ],
+ [
+  "eed0b9b1a3bb0f63",
+  "Member role?"
+ ],
+ [
+  "553fdc9dc92a578d",
+  "Squad Building"
+ ],
+ [
+  "cfa3d939e19bbcc2",
+  "Squad tips (Move)"
+ ],
+ [
+  "ced2fbd754f810ab",
+  "Squad tips (Spirit Commands)"
+ ],
+ [
+  "c05cb1412952d899",
+  "Squad tips (Pilot Stats)"
+ ],
+ [
+  "0cfabc4295ad9ec1",
+  "Squad tips (Abilities)"
+ ],
+ [
+  "5cf8530ad30ffcd8",
+  "Squad tips (Relations)"
+ ],
+ [
+  "e635f44e3f84d0d5",
+  "Easier squad building?"
+ ],
+ [
+  "c32bb4fbcaa17b16",
+  "Swapping?"
+ ],
+ [
+  "6e0d11605a88fffd",
+  "Swap tips"
+ ],
+ [
+  "694289d3cdfd3d98",
+  "Pilot training?"
+ ],
+ [
+  "3c6f29ca99ae4248",
+  "Tips (Stats)"
+ ],
+ [
+  "880cc56107babfa3",
+  "Tips (Terrain)"
+ ],
+ [
+  "01551579c7e81660",
+  "Tips (Skills)"
+ ],
+ [
+  "6d54672b3394e4ab",
+  "Unit upgrade?"
+ ],
+ [
+  "fe1ddb8d943e96c0",
+  "Weapon upgrade"
+ ],
+ [
+  "1d1bfe19a7a2ee21",
+  "Parts?"
+ ],
+ [
+  "3c3ecc25f890d4a6",
+  "Part tips"
+ ],
+ [
+  "05b07dde45033b15",
+  "Refit?"
+ ],
+ [
+  "9c666e1435ad335d",
+  "SR Points?"
+ ],
+ [
+  "1ce8ed5aba8aed42",
+  "Bazaar?"
+ ],
+ [
+  "e609bde764a20f85",
+  "Bazaar tips (Buying)"
+ ],
+ [
+  "43b9f5581b97392c",
+  "Bazaar tips (Selling)"
+ ],
+ [
+  "1761e898c7a410da",
+  "Bazaar tips (Items)"
+ ],
+ [
+  "af983085d129c323",
+  "About System"
+ ],
+ [
+  "2ff9fcca1a9227f9",
+  "About Library"
+ ],
+ [
+  "8b914e286716e901",
+  "Too hard to clear?"
+ ],
+ [
+  "2d758c65dce45f50",
+  "Shorten reboots?"
+ ],
+ [
+  "5ade565b9dc2c02a",
+  "What to do after clearing?"
+ ],
+ [
+  "b6bfcda5c805a4d9",
+  "(Tips for fighting to your advantage．)"
+ ],
+ [
+  "2467932cf200f7ab",
+  "(Tips for making the most of squads．)"
+ ],
+ [
+  "bb8da93826143471",
+  "(Tips on upgrades and pilot training．)"
+ ],
+ [
+  "e68c3ab1e990ea80",
+  "(Things not covered by other topics．)"
+ ],
+ [
+  "fd4a9205f86bdec4",
+  "Explains what each formation does．"
+ ],
+ [
+  "274327e16afec5c8",
+  "Details on movement．"
+ ],
+ [
+  "abe7efa8954fb6ce",
+  "Ways to deal more damage．"
+ ],
+ [
+  "514c1d9f5b4d1537",
+  "Explains attack types．"
+ ],
+ [
+  "3a84656a70a1494e",
+  "Explains weapon types．"
+ ],
+ [
+  "de82fba63a171c39",
+  "Ways to take less damage．"
+ ],
+ [
+  "2b099339c0542542",
+  "Ways to land attacks more often．"
+ ],
+ [
+  "288e910f4d1c53c1",
+  "Ways to dodge attacks more often．"
+ ],
+ [
+  "9c5c2a4b6ff61d9c",
+  "Explains ways to raise Will．"
+ ]
+]

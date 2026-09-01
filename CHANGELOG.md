@@ -10,6 +10,47 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.27 (2026-09-02) - 24 weapon names still in romaji
+
+Follow-up to 0.9.26, after being asked to check ALL weapon names rather than
+the four from the screenshot. 24 were still transliterated rather than
+translated, and every one is now english:
+
+    Vulcan Farankusu -> Vulcan Phalanx      Fire Fisuto      -> Fire Fist
+    Furosuto Combi.. -> Frost Combination   Busuto Slash     -> Boost Slash
+    Parusa Rifle     -> Pulsar Rifle        Parusu Beam      -> Pulse Beam
+    Mekkusu Thunder  -> Mex Thunder         Biku Cannon      -> Beak Cannon
+    Wire Do Beam R.. -> Wired Beam Rifle    Za Heat Crusher  -> The Heat Crusher
+    Nyu Hyper Bazo.. -> New Hyper Bazooka   Minchi Drill     -> Mince Drill
+    Naitomea Strike  -> Nightmare Strike    Dekka Spanner    -> Decker Spanner
+    Big O Final Su.. -> Big O Final Stage   XM４７ Tori Stun  -> XM４７ Tristan
+    Lightning Deto.. -> Lightning Detonator G Guradiusu Atk  -> G Gladius Attack
+    High Mattofuru.. -> Hi-MAT Full Burst   Sonikku Cannon   -> Sonic Cannon
+    Burakkarifuru P. -> Brackary Full Power Toraparuza       -> Trapulsar
+    MGX-２２３７ Arudoru -> MGX-２２３７ Aldore
+
+**analysis/weapons_en.json IS STALE and auditing it is a trap.** A later
+fitting pass rewrote much of the pool, so the json still says "Torenburu
+Horn", "Bandokku Cannon", "M.Ring", "A-Grav Storm", "Morph" and "MegaP．Gun"
+where the disc has long held Tremble Horn, Bandock Cannon, Moon Ring,
+Anti-Gravity Storm, Transform and Mega Particle Cannon. Auditing the json
+produces ~200 "corrections" that were fixed long ago while missing the ones
+that are real. This build was found by sweeping the POOL.
+
+**Three of the 27 candidates were already fixed** - Mitiafuru Burst, Naitomea
+Strike and Za Heat Crusher are dead bytes at their old offsets, with METEOR
+Full Burst / Nightmare Strike / The Heat Crusher living in the tail from an
+earlier pool_grow. Checking the pointer table is what tells "already fixed"
+from "still to fix"; the string being present proves nothing. The tool skips
+anything no pointer names.
+
+Every replacement fitted its existing slot, so nothing was relocated and the
+tail padding is untouched at 21,776 bytes. Strays on a stride stayed at 62.
+
+Model numbers on disc are contiguous and use FULL-WIDTH digits, which is the
+menu encoder working as intended - the split-looking forms (MA-M8 0, CI WS)
+exist only in the stale json, not on the disc.
+
 ## 0.9.26 (2026-09-02) - one weapon, three spellings
 
 From a screenshot of Virgola Glory's weapon list. ストレイターレット shipped

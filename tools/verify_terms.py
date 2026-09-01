@@ -38,6 +38,20 @@ ZKN_FILES = ("MTVZKNPT.BIN", "MTVZKNRT.BIN", "MTVZKNKW.BIN")
 # spelling -> what it should be. Every one was fixed in a shipped build; if it
 # reappears, something rebuilt from a stale source.
 BANNED = {
+    # The Aquarion wing generals are kanji READ as names. COMPDATA glossed
+    # them literally, so the same character was "Moroha" in a cutscene and
+    # "Bothwing" in the battle caption that followed.
+    "Headwing": "Touma", "Soundwing": "Otoha", "Nightwing": "Johannes",
+    "Bothwing": "Moroha", "Trainwing": "Renshi", "Sturdywing": "Goushi",
+    "Twinwing": "Futaba", "Wisewing": "Shiruha", "Poemwing": "Sirius",
+    "Gwen": "Guin",
+    # Faye Xin Lu. JP シンルー shipped as three spellings at once -
+    # "Shinrou" on the pilot screen, "Shinlu" in prose, "Xinlu" once.
+    "Shinrou": "Xin Lu", "Shinlu": "Xin Lu", "Xinlu": "Xin Lu",
+    # the Sphere inside Gunleon. Six renderings shipped at once until 0.9.12;
+    # the wiki baseline is "Sphere of the Wounded Lion".
+    "Scarred Lion": "Wounded Lion", "scarred lion": "Wounded Lion",
+    "wounded lion": "Wounded Lion", "battered lion": "Wounded Lion",
     "Teraru": "Teral",
     "Kaimera": "Chimera",
     "Loewen": "Lowen", "Reeben": "Lowen", "Reuben": "Lowen",

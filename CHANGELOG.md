@@ -10,6 +10,351 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.14 (2026-09-01) - "who is Bothwing?", Faye Xin Lu, and Guin
+
+**The Aquarion wing generals lost their names in COMPDATA.** Their kanji are
+READ as names, and the dialogue knows it - STAGE renders every one of them by
+name and does so unanimously, 229 speaker lines saying Touma, 213 Sirius, 62
+Moroha, 61 Otoha, 39 Johannes, 36 Futaba, 13 Shiruha, 12 Renshi, 5 Goushi, with
+not one exception between them. COMPDATA glossed the same kanji literally:
+
+    頭翅 Headwing   音翅 Soundwing   夜翅 Nightwing   両翅 Bothwing
+    練翅 Trainwing  剛翅 Sturdywing  双翅 Twinwing    智翅 Wisewing
+    詩翅 Poemwing
+
+COMPDATA supplies the speaker label over a BATTLE CAPTION, so the same
+character introduced herself as "Moroha" in a cutscene and "Bothwing" in the
+battle straight after. Reported from a screenshot as "who is Bothwing?".
+18 fields renamed to match the dialogue. `tools/fix_shadow_angels.py`.
+
+詩翅 -> Sirius looks like a collision, since シリウス (Sirius de Alisia) is a
+separate pilot with his own record. Checked and left alone: 夜翅 reads
+Johannes, so these kanji are name-readings and the game genuinely gives both
+characters the same name. Following the dialogue beats inventing a difference.
+
+**シンルー shipped as THREE spellings at once** - "Shinrou" on the pilot screen,
+"Shinlu" in prose, "Xinlu" once in the encyclopedia. Now **Xin Lu** everywhere,
+per the user. The game's own library entry agrees: it says her name written in
+kanji is 'Fei Xin Lu'. Fixed in STAGE (rename_term), COMPDATA, ZKN_PT rec317
+and ZKN_RT rec255.
+
+The encyclopedia hunt is worth recording: a plain search of the ZKN banks finds
+NOTHING, because the library data is XOR-0x5E obfuscated on top of banlz. That
+is why "Faye Xinlu" was invisible to every scan until the bytes were XORed -
+zkn_rename.py already knew, a hand-rolled scan did not.
+
+**Gwen -> Guin** in the dialogue (9 rows). COMPDATA already said Guin, so the
+speaker label and the line disagreed on screen.
+
+All of it is now gated: 10 more banned spellings in verify_terms.py and 13 new
+glossary entries, so none of these can come back.
+
+NOT A BUG, recorded so it is not chased again: a screenshot showed Gain saying
+"ランド and Jiron headed to the mountain". The row is "$n and Jiron headed
+..." and $n expands to the protagonist's name FROM THE SAVE. There is not one
+japanese protagonist name left in the ELF - ランド, トラビス, セツコ and
+オハラ all return zero hits - so a new game reads "Rand". The user confirmed
+the save predates the name work.
+
+Also checked and correct, no change: Moroha's line (buzama da na / 翅無し /
+"no longer any need for me to lay a hand on you") -> "Pathetic, Wingless! I no
+longer even need to lift a finger!" (翅無し is the Shadow Angels' word for humans, "Wingless"
+throughout, 98 occurrences).
+
+Gates: terms 37 OK, integrity 0 problems, box OK, control bytes OK, ELF patches
+present, pointers 94.50%.
+
+## 0.9.13 (2026-09-01) - 45 proofread battle lines, and the puller that could not see them
+
+**76 of Hakhan's rewrites had never been read back.** sheets_pull.py collects a
+workbook's sheets with
+
+    titles = [w.title for w in sh.worksheets() if w.title.startswith("rec")]
+
+and the battle workbooks name their sheets blk000, blk004, blk060 - one per
+SRVC block, which is one character's voice. So workbooks 7 and 8 were skipped
+in SILENCE: no warning, not even a zero-row line in the output. Found only by
+counting sheet entries against what the puller returned.
+
+`tools/sheets_pull_captions.py` reads them. Captions differ from dialogue in
+three ways it has to know about: the key is b<block>:<sha1(japanese)[:12]>
+minted by sheets_push_captions.py, not rec:sha1:occurrence; captions are drawn
+by the MENU reader so they encode with menuhw, where every ． and 0-9 costs TWO
+bytes; and 38 columns is a guide rather than a limit, since 3,300 shipped lines
+are already wider.
+
+83 proposals came back, **0 rejected** - every key resolved and every line
+encoded.
+
+**Applied in place, NOT through srvc_apply.** The designed path rebuilds SRVC
+from analysis/srvc_en.json, and that file does not contain the corrections made
+straight to the image since the last rebuild. Checked rather than assumed: of
+the srvc_line_fixes replacements, ZERO appear in srvc_en.json, so a rebuild
+would have silently reverted srvc_line_fixes, fix_srvc_names, patch_srvc_polish
+and fix_lowen_captions in one go.
+
+What makes an in-place rewrite safe is the padding: srvc_apply pads every
+caption to the byte length of the japanese it replaced, and japanese is two
+bytes per character against our one, so nearly every field carries a spendable
+run of trailing spaces. The field START never moves - voice-sync offsets are
+absolute - and a line too long for its run is reported, never truncated.
+
+**45 applied** across both copies of the caption pool (8 occurrences each is
+normal: the same shout is stored once per unit that can speak it).
+**37 are over budget**, by 1 to 17 bytes, listed with their exact shortfall in
+`analysis/caption_over_budget.json` so they can go back to the proofreader.
+
+One repair to a proposal, which the tool otherwise never does: b11:f66359c698d4
+arrived missing its closing quote mark - '"Gain! You're worthless! Regardless
+of a new Overman!' - and every other line Hakhan wrote is balanced, so it is a
+typo rather than a choice. Restored in all 8 occurrences; the field had room.
+Also spotted and NOT applied, since it is over budget anyway: "oppponent" in
+b100:de9abc03b8c0.
+
+The applier scanned the image once per string at first - 83 passes over 4.5 GB,
+370 GB of IO for a few dozen small writes. It now searches every string in a
+single pass.
+
+Gates: integrity 0 problems, terms 24 OK, box OK, control bytes OK, ELF patches
+present, pointers 94.50%.
+
+## 0.9.12 (2026-09-01) - the Sphere had six names, and a misread modifier
+
+From a screenshot check of three lines.
+
+**傷だらけの獅子 is a proper noun** - the Sphere inside Gunleon - and the script
+was rendering it SIX ways across 11 lines: Scarred Lion 4, wounded lion 3,
+battered lion 2, scarred lion 1, Wounded Lion 1. Nothing gated it because it
+had no glossary entry.
+
+The Super Robot Wars wiki, this project's naming baseline, calls it the
+**Sphere of the Wounded Lion** - so the majority spelling, "Scarred Lion", was
+the wrong one. All 11 normalised to "Wounded Lion", with the article fixed
+where the line read as a common noun ("A wounded lion is a pitiful sight" ->
+"The Wounded Lion is a pitiful sight").
+
+Added to glossary.json and to verify_terms.py's BANNED table, so all four
+wrong spellings now fail a build.
+
+**rec57 0x00a320, a misplaced modifier.** あの日 modifies 歪められた運命 - the
+fate warped THAT DAY, the day the bomb went off - not the rescue:
+
+    JP  "ano hi" + "the fate that was warped" + "he will save me"
+    was "That day, from the warped fate... he'll save me..."
+    now "He'll save me from the fate warped that day..."
+
+The old english read as though the rescue happens that day, which inverts the
+line: the warping is in the past, the rescue is what Ziene is still waiting
+for.
+
+The other two lines checked out. Asakim's "Gunleon's outlived its use" and the
+backlog pair "But your opponent will be... / Once I end the fool who trusted
+her friends' killer" are both faithful to もうガンレオンは要らない and
+"after I dispose of the foolish girl who trusted her comrades' killer", and
+0x00db85 has zero spare
+bytes anyway.
+
+ONE ROW WAS CAUGHT BY THE GATE, NOT BY EYE. "「The Wounded Lion is a pitiful"
+is 31 columns with the corner brackets and 30 without - the exact v1.55 crash
+signature - so verify_boxes refused it. Re-wrapped to 30. This is the fifth
+time a hand-wrapped 3-line row has been written at 34 instead of 30.
+
+`tools/fix_wounded_lion.py`, idempotent: a row already carrying its
+replacement is a no-op, so a partial run can be finished without hand-editing.
+
+Gates: box OK, pointers 94.50%, integrity 0 problems, terms 24 spellings OK.
+
+## 0.9.11 (2026-09-01) - the dot was japanese typography, not a bug in our data
+
+Asked why a main character still had a dot in the middle of their name, and
+the answer reframes the flag at head+67. It is not "display order", it is
+NAME KIND:
+
+    flag 1   field2 + field3     japanese name - 兜甲児, no separator
+    flag 0   field3 ・ field2     foreign name  - アムロ・レイ, middle dot
+
+A middle dot between a given name and a surname is correct japanese
+typography. So branch B was never producing the wrong ORDER - it was producing
+the wrong PUNCTUATION for english, and it had been doing so all along for
+every foreign-named character, not just the protagonist.
+
+**Changed the separator in branch B's format from '・' to ' '** (VA 0x442710,
+referenced exactly once in the ELF, from 0x35f1ac, so only names can be
+affected).
+
+This is also the only fix that can reach the protagonist. Their record is
+built at 0x195aac from the name-entry buffer in the SAVE, so no data pass
+touches an existing save - but the format lives in the executable.
+
+Simulated over every record first: 32 records / 14 distinct pairs are still on
+branch B and all 14 read correctly with a space, with no empty halves to leave
+a stray space behind:
+
+    Setsuko・Ohara      -> Setsuko Ohara
+    Andrew・Waltfeld    -> Andrew Waltfeld
+    Mu・La Fraga        -> Mu La Fraga
+    Gym・Ghingnham      -> Gym Ghingnham
+    R． Dorothy・Wayneright -> R． Dorothy Wayneright
+
+Flag-1 records use the other format and are untouched. '・' is two bytes and
+' ' is one, so the string shrank inside its 8-byte slot.
+
+`tools/fix_name_separator_fmt.py`, and the bytes are in verify_elf_patches.py.
+
+## 0.9.10 (2026-09-01) - it was never a formatting bug: the flag the swap forgot
+
+0.9.9 fixed Jiron and broke the protagonist - "OharaSetsuko" on the Pilot
+screen. Forcing compose_name down its western branch was the wrong fix, and
+this entry records why, because the right answer was in the data all along.
+
+Each pilot record carries a byte at head+67 (base+69 to the code) that
+compose_name tests:
+
+    lb   v0, 69(v1)
+    bne  v0, zero, ->C
+    B    "%s・%s" % (field3, field2)     flag 0: japanese order, insert ・
+    C    "%s%s"   % (field2, field3)     flag 1: already in display order
+
+It is a boolean meaning "these fields are already in the order they should be
+drawn in". The proof is two records with identical layout:
+
+    Koji Kabuto   field2 'Koji '  flag 1  -> "Koji Kabuto"    correct on screen
+    Jiron Amos    field2 'Jiron ' flag 0  -> "Amos・Jiron"    the reported bug
+
+The 422-record swap in 0.9.7 rewrote field2/field3 into western order and
+never touched the flag, so 322 records claimed japanese order while holding
+western data. All 933 flags were still byte-identical to the japanese disc,
+which is what proves nothing had ever written them.
+
+**Fixed by setting the flag on the 322 western records** - 115 pilots,
+including Amuro Ray, Kira Yamato, Athrun Zala, Shinn Asuka and Kamille Bidan.
+The 0.9.9 instruction patch is REVERTED; the flag decides again, as it should.
+
+The protagonist is deliberately left on branch B and still draws
+"Setsuko・Ohara". Their record is not in this array - it is built at 0x195aac
+from the name-entry buffer in the save, in japanese order, with its flag from
+the save - so no data pass can reach an existing save. The user chose to keep
+the ・ there rather than have the whole naming scheme reworked around it.
+
+Not fixed here, and now visible: 18 records have flag 1 with an untranslated
+japanese surname, so they render glued - '神Hayato', '神Kappei', '紅Eiji',
+'Computer DollNo． ８'. That is the existing 神/紅 surname item, not this bug.
+('Schwarz' + 'wald' is in the same shape but deliberate and correct.)
+
+`tools/fix_name_order_flag.py`. Gates: pointers 94.50%, integrity 0 problems,
+control bytes OK, term gate OK, ELF patches present.
+
+## 0.9.9 (2026-09-01) - the third screen, and why the data swap could not reach it
+
+0.9.8 still drew "Amos・Jiron". 0.9.7 had removed the dot from the save/load
+and hero-select formats and the user confirmed "Koji Kabuto" on both, so a
+THIRD screen composes names on its own.
+
+Evidence first this time, since three theories had already been wrong. Only one
+'%s・%s' is left in the ELF (0x344190), and nothing anywhere in the 4.5 GB
+image contains a composed "Amos・Jiron" - so it is built at runtime. The single
+reference to that format leads to compose_name at VA 0x35f12c:
+
+    lb   v0, 69(v1)
+    bne  v0, zero, ->C            flag byte just past the three string fields
+    A    "%s%s"   % (field3, field2)     when field3 is empty
+    B    "%s・%s" % (field3, field2)     the dotted one - Jiron's branch
+    C    "%s%s"   % (field2, field3)     western order, no separator
+
+**The argument order is reversed here.** The formats fixed in 0.9.7 are called
+with (field2, field3); this routine's A and B branches pass them the other way
+round. That is exactly why the 422-record data swap fixed every other screen
+and could not fix this one - and why just widening B's format to '%s%s' would
+have produced "AmosJiron ": right punctuation, wrong order.
+
+The record base also sits 2 bytes before the string head, which is what makes
+the code's +23/+46 line up with field2/field3 at +21/+44. Jiron's flag byte is
+zero, so he takes B. Confirmed against the render, not assumed.
+
+Branch C is already what we want and the game already runs it. It is also
+strictly more general than A and B: field2 carries a TRAILING SPACE, so C
+gives "Jiron " + "Amos", and when either half is empty it degrades to the other
+half by itself - all A ever did. So the fix is to stop testing the flag:
+
+    0x35f160   bne v0, zero, 0x35f1b8  ->  b 0x35f1b8
+
+One instruction; the delay slot was already a nop. Records whose flag was
+non-zero took C before and take C now, so their rendering is unchanged.
+`tools/fix_name_dot_screen.py`, and the word is now in verify_elf_patches.py
+so it cannot silently revert.
+
+## 0.9.8 (2026-09-01) - "Who shot down?"
+
+A player opened Operation End on Ep.15 and read a defeat condition that named
+nobody:
+
+      1. Ally battleship lost
+      2. : shot down.
+
+Byte 0x3A - ASCII ':' - is not punctuation on the text path. It is the macro
+that expands to the protagonist's name, so the japanese line is literally
+':の撃墜。' and draws as "Setsuko shot down."
+
+A translation pass had rewritten every ':' as fullwidth '：'. That rule is
+right nearly everywhere - a stray ASCII ':' expands mid-sentence, which is how
+"Setsuko" once appeared inside a help panel - but here the expansion was the
+whole point, and widening it did not escape the macro, it deleted it. '：'
+is an ordinary glyph and draws as a bare colon.
+
+Every string was re-paired against the japanese pointer by pointer: **11 had
+the macro widened, 0 had it dropped**, and 8 that are already a raw ':' were
+left alone. All 11 restored to the byte the japanese uses, in records 28, 41,
+42, 54, 56, 57 and 83 - the defeat conditions naming the protagonist alongside
+Toby, Asakim, Kamille and Holland.
+
+rec83 0x017250 was found in the same pass and had **never been translated** -
+still 'ホランド・:・アサキム...' on the disc. Now "Holland, : or Asakim shot down."
+
+COMPDATA was checked for the same loss and is clean: its 205 japanese strings
+containing ':' are binary data blobs, not prose.
+
+'：' is two bytes and ':' is one, so every string shrank in place and the
+slack was zero-filled - no row pointer moved. `tools/fix_name_macro.py`.
+
+Gates: pointers 94.50%, control bytes OK, box gate OK, integrity 0 problems.
+
+## 0.9.7 (2026-09-01) - the middle dot, and 178 pilots still in japanese order
+
+Two screens drew names as "Koji ・Kabuto" - a space AND a middle dot.
+
+The data already supplies the separator: a record in western order stores its
+given name with a TRAILING SPACE ('Koji ' + 'Kabuto'), which is why the
+concatenating screens read correctly and these two showed space-then-dot. So
+the format only had to stop adding one:
+
+    0x347728  save/load screen      %s・%s -> %s%s
+    0x347a10  hero select           %s・%s -> %s%s
+
+`%s %s` was tried first and is WRONG - it double-spaces every record that
+carries the trailing space. The third `%s・%s` at 0x344190 is left alone: it
+sits in the skill block beside %s䰥%s, %s＋%s, [Self] and [Ally], so it is
+PrevailL4 and Will+, not a name.
+
+**178 pilots were still in japanese order.** The japanese layout is
+field2=surname, field3=given; western order swaps them and appends a space to
+the given name. 422 records had never been swapped, so they rendered as
+"OharaSetsuko", "YamatoKira", "ZalaAthrun". Now Setsuko Ohara, Kira Yamato,
+Athrun Zala, Shinn Asuka, Four Murasame, Rand Travis, Jiron Amos.
+
+Found only because a screenshot of the Pilot screen showed "Amos・Jiron" and
+the record behind it turned out to be correct - the wrong ones were everywhere
+else. Two wrong theories were tried first: that the formatter took its
+arguments in the opposite order (disproved by a screenshot showing
+"Setsuko・Ohara"), and that the Kabuto family alone had been missed.
+
+Scanning for these needs care. Allowing the 2-byte record prefix into the scan
+also matched 2 bytes INTO the previous name, queueing 'bayashi' -> 'tz '
+beside the real 'Kobayashi' -> 'Katz '. 42 such duplicates were filtered before
+anything was written.
+
+**Gates**: pointers 81,345 checked / 0 broken, control bytes OK, box OK, all
+ELF patches present, integrity 0 problems.
+
 ## 0.9.6 (2026-09-01) - Koji, and the rest of the rec55 proofread
 
 **甲児 is Koji, not Kouji - 966 occurrences across 958 rows and 90

@@ -77,6 +77,12 @@
   "",
   "Valz"
  ],
+ "1:603511ca0e53:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:0793f75c31df:0": [
   "",
   "leave as is",
@@ -587,6 +593,12 @@
   "",
   "Valz"
  ],
+ "1:ab22bc59dc3a:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:55e7e16fc818:0": [
   "",
   "leave as is",
@@ -887,6 +899,12 @@
   "",
   "Valz"
  ],
+ "1:c40245403d16:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:f16d70cb4bf6:0": [
   "",
   "leave as is",
@@ -1049,6 +1067,12 @@
   "",
   "Valz"
  ],
+ "1:25d9a1a8ddf8:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:19d58951d3ca:0": [
   "",
   "leave as is",
@@ -1163,6 +1187,12 @@
   "",
   "Valz"
  ],
+ "1:4c7c610ed41d:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:70db21aa5e08:0": [
   "",
   "leave as is",
@@ -1242,6 +1272,12 @@
   "Valz"
  ],
  "1:25cb6424a384:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
+ "1:66dfbc331b81:0": [
   "",
   "leave as is",
   "",
@@ -1403,6 +1439,12 @@
   "",
   "Valz"
  ],
+ "1:78cb6f9c2de2:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:89a781b69841:0": [
   "",
   "leave as is",
@@ -1451,6 +1493,12 @@
   "",
   "Valz"
  ],
+ "1:387ea3b2f9c0:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
  "1:1f81859ffe21:0": [
   "",
   "leave as is",
@@ -1482,7 +1530,7 @@
   "Valz"
  ],
  "1:10a7d311f334:0": [
-  "Denzel\n「Too quiet, Ensign! Put some\nba- Er,  spirit into it!」",
+  "Denzel\n「Too quiet, Ensign! Put some\nba- Correction! Spirit into it!」",
   "fixed",
   "",
   "Valz"
@@ -1512,6 +1560,12 @@
   "Valz"
  ],
  "1:541443f4bb22:0": [
+  "",
+  "leave as is",
+  "",
+  "Valz"
+ ],
+ "1:0b01bb424069:0": [
   "",
   "leave as is",
   "",
@@ -1613,65 +1667,59 @@
   "",
   "Valz"
  ],
- "1:603511ca0e53:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:ab22bc59dc3a:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:c40245403d16:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:25d9a1a8ddf8:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:4c7c610ed41d:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:66dfbc331b81:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:78cb6f9c2de2:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:387ea3b2f9c0:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
- "1:0b01bb424069:0": [
-  "",
-  "leave as is",
-  "",
-  "Valz"
- ],
  "1:2dda2e21d8c5:0": [
-  "$n\n「...Virgola's launching...」",
+  "$n\n「Virgola's launching...」",
   "fixed",
   "",
   "Valz"
+ ],
+ "b8:eb308ff6d9c1": [
+  "\"ZAFT scum! Get lost\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b10:974d5d356aab": [
+  "\"Ranbu Ring Discalibur!\"",
+  "fixed",
+  "",
+  "Hakhan"
+ ],
+ "b11:d9a204ce5899": [
+  "\"Damn you Gain, how clever!\"",
+  "",
+  "",
+  ""
+ ],
+ "b11:e4e6ffa8eb38": [
+  "\"Gain! I'd gladly sell my soul to the devil to punish you!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b11:f66359c698d4": [
+  "\"Gain! You're worthless! Regardless of a new Overman!",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b11:aee5c631990d": [
+  "\"Out of my way beast!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b11:c7336fc7d35c": [
+  "\"Come on, you womanizing lecher!!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b18:971c2a45e65d": [
+  "\"You'll pay for that, Jamil Neate!\"",
+  "",
+  "",
+  "Hakhan"
  ],
  "b20:443f50ab4de5": [
   "\"I'll smash fakes like you into pieces!!\"",
@@ -1703,6 +1751,312 @@
   "",
   "Hakhan"
  ],
+ "b26:cdf1abefb551": [
+  "\"I won't forgive you, Marin Reigan!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b38:609efc8f82b4": [
+  "\"I decide your life and fate!\"",
+  "",
+  "",
+  ""
+ ],
+ "b45:fb74b0542157": [
+  "\"Geraba! Hora's little lackey!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b53:213653de7b84": [
+  "\"Bring it on Mustache!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b53:9f45ec297912": [
+  "\"Brother, this opponent is beneath us.\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:d75cf1c02ea1": [
+  "\"Behold the might of my Hyakki robot!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:f2e4f1a62ccc": [
+  "\"I'll pay you back tenfold!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:44de3b89a29f": [
+  "\"My Hyakki robot is unbeatable!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:265169945e60": [
+  "\"Damn it, I'll get you for this!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:138eaba68553": [
+  "\"I can't fall before Emperor Burai!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:5ba36e84ba13": [
+  "\"Forgive me Emperor Burai!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b74:79552aceab33": [
+  "\"You'll pay for shaming Emperor Burai, Tekkoki!\"",
+  "",
+  "",
+  ""
+ ],
+ "b100:de9abc03b8c0": [
+  "\"Diana A's your oppponent now!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b100:6da501940b33": [
+  "\"Let's do this, Diana A!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b100:32c02ec77df4": [
+  "\"Diana Missile!!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b100:f0c09c9b26b5": [
+  "\"Leave it to me Koji!\"",
+  "",
+  "",
+  ""
+ ],
+ "b100:5237d3624a02": [
+  "\"Move aside Koji!\"",
+  "",
+  "",
+  ""
+ ],
+ "b100:ce00f7013ced": [
+  "\"Naval Missile!!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:dc85cea4ef0c": [
+  "\"I'm The Edel Bernal! The architect of creation!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:5059c8bff561": [
+  "\"I'm The Edel Bernal! The watcher of dimensions!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:ec23f2bbf6e1": [
+  "\"Welcome to my wonderful world!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:09374bd8fb6f": [
+  "\"I'll put my all into this! Ha, cliche!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:2883a294b068": [
+  "\"You gotta be kidding right?\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:d8f13ff50b3a": [
+  "\"Saving the world? What a joke!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:5937ec8d538a": [
+  "\"If I can be a god or a devil, then I'll be a devil!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:4dfccee877c2": [
+  "\"Awesome! A great hero who faces the great evil!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:0f535867b74d": [
+  "\"Three souls in one aren't enough to beat me!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:2a8b7e318897": [
+  "\"Humans, Shadow Angels? Whatever, both are trash\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:4dc71c070d9d": [
+  "\"Freedom, Justice, Destiny! All mine!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:e44b597c8c62": [
+  "\"Hahahaha! Viewing the moon with you isn't so bad!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:9bb68d1c238a": [
+  "\"I'll surpass the Overskill! Wanna see?\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:f5d80ed850cf": [
+  "\"Hahaha! I'll make you weep in Asakim's place!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:6bc6b0cea5c2": [
+  "\"Goodbye The Heat! I'll remember your vigor!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:7a851d11db51": [
+  "\"See ya Xine, no regrets for lost toys!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:c2575cedcc61": [
+  "\"This might sting a little?\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:7713bd64e16a": [
+  "\"Let's launch some fireworks!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:ce9801994da5": [
+  "\"Come! The grand finale of your lifetime!\"",
+  "",
+  "",
+  ""
+ ],
+ "b107:b397a29a304d": [
+  "\"Goodbye!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:38d330ef28d3": [
+  "\"A reward for playing the hero.\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:a3e108cd0177": [
+  "\"Pain is pleasure! Let me show you!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:53f9e26b6295": [
+  "\"See, your war is just a kid's game!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:9f01f4f19ad5": [
+  "\"Ahh wonderful! Pain is life's ambrosia!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:b03caa2e52b0": [
+  "\"Nice,nice! Like being beaten up by Lady Edel!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:4bb093ee6d57": [
+  "\"Delicious! I see life and death before my eyes!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:faf02263a45a": [
+  "\"Hit me baby! One more time!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:0ad3478916cb": [
+  "\"I love you so much! You make me swoon!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b107:1f1db286cc1e": [
+  "\"Ahahaha! Getting a one sided beatdown is a thrill!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b160:db651494f4cd": [
+  "\"I'm part of the Sand Rats too!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b160:a0afb5528fa8": [
+  "\"Finishing blow! Xabungle punch!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b160:15b74f268205": [
+  "\"Hang in there Chill! We're gonna save you, I swear!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b169:1dff78272ea8": [
+  "\"You're persistent, Melonhead!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
  "b173:d081ae66b456": [
   "\"Antigravity Storm!!\"",
   "fixed",
@@ -1712,6 +2066,114 @@
  "b173:9bdc8af7762c": [
   "\"Take this! Antigravity Storm!!\"",
   "fixed",
+  "",
+  "Hakhan"
+ ],
+ "b198:3cc009deef4f": [
+  "\"Hang in there Maria!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b204:7d3b43d5ec45": [
+  "\"ELCHE!!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b222:ede0b4bf9511": [
+  "\"I am the king of space! I'm invincible!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:85ce752b3943": [
+  "\"Damn that Jiron!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:07bff8403d5a": [
+  "\"Hahaha! Go suck on a lemon!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:e3cf248208db": [
+  "\"You're outta my league Melonhead!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:975a4d66e4da": [
+  "\"Elche is mine, Melonhead!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:fb08f01641d9": [
+  "\"Out of my way Melonhead!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:56a5233e243b": [
+  "\"Shut it Melonhead! I don't have droopy eyes!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b230:b69c8cba3736": [
+  "\"Damn,from all the way there! Cheap trick!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b273:bc98b790c906": [
+  "\"Borot Dynamic Special?\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b273:963dee6d4191": [
+  "\"Naval Missile!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b277:1e0761b2ef34": [
+  "\"Get away from me, you filthy shrew!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b277:566d17acb38a": [
+  "\"I'll make you scream in Asakim's place!\"",
+  "",
+  "",
+  ""
+ ],
+ "b277:962fcdb5af13": [
+  "\"What's the matter harlot? Hiding how weak you are with good looks?\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b277:3557156302a2": [
+  "",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b277:b1057ac82ae6": [
+  "Want to see my overflowing anger shrew?!\"",
+  "",
+  "",
+  "Hakhan"
+ ],
+ "b277:e1cc694baec2": [
+  "\"Just diiiie already! You filthy broad!\"",
+  "",
   "",
   "Hakhan"
  ]

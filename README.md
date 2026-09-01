@@ -6,7 +6,7 @@ SLPS-25887), plus the English translation built with it.
 ## Contribute
 
 The project is mostly done but we haven't tested every route yet, and human
-proofreading has covered 286 lines so far out of 87,000. If you want to
+proofreading has covered 363 lines so far out of 87,000. If you want to
 contribute to this project or the next in any way — be it bug reports,
 proofreading or playtesting — please join my Discord:
 
@@ -149,7 +149,7 @@ project like this shut down.
 |---|---|
 | Project lead | pow |
 | Proofreading | Valz, Hakhan Dakharan |
-| | *286 lines read against the Japanese so far - see [Human proofreading](#human-proofreading)* |
+| | *363 lines read against the Japanese so far - see [Human proofreading](#human-proofreading)* |
 | Playtesting | pow, KagamineRin, Melfice, Melfice's friend |
 
 Translation passes, tooling and reverse engineering were done with Claude
@@ -165,9 +165,9 @@ the builds that shipped broken and why.
 
 ### Human proofreading
 
-Every line is machine-translated first. So far a human has read **286 lines**
-against the Japanese - 279 of 68,114 dialogue lines and 7 of 19,213 battle
-lines - and rewrote 56 of them. The rest they read and passed, which is work
+Every line is machine-translated first. So far a human has read **363 lines**
+against the Japanese - 279 of 68,114 dialogue lines and 84 of 19,213 battle
+lines - and rewrote 132 of them. The rest they read and passed, which is work
 too.
 
 That does not count the machine passes, which have been over the whole script

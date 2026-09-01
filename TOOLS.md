@@ -18,8 +18,8 @@ Two warnings that are not obvious from any docstring:
 | [ISO plumbing](#iso-plumbing) | 7 |
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 11 |
-| [Applying text to the image](#applying-text-to-the-image) | 5 |
-| [Fixing specific defects](#fixing-specific-defects) | 19 |
+| [Applying text to the image](#applying-text-to-the-image) | 6 |
+| [Fixing specific defects](#fixing-specific-defects) | 25 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 54 |
+| [Everything else](#everything-else) | 56 |
 
 ## The pipeline
 
@@ -179,6 +179,9 @@ Curated encyclopedia (図鑑) name translations: series titles and glossary term
 
 ## Applying text to the image
 
+**`apply_caption_fixes.py`**  
+Apply proofread battle-caption rewrites in place, both copies.
+
 **`apply_compdata_ui.py`**  
 Write the last japanese interface strings into COMPDATA.BN, in the image.
 
@@ -219,6 +222,18 @@ Unescape LITERAL backslash-n across ALL 205 STAGE records.
 **`fix_lowen_captions.py`**  
 Normalise every spelling of レーベン to Lowen in the battle captions.
 
+**`fix_name_dot_screen.py`**  
+Kill the middle dot on the THIRD screen that composes a pilot's name.
+
+**`fix_name_macro.py`**  
+Restore the protagonist-name macro in the victory/defeat objective lines.
+
+**`fix_name_order_flag.py`**  
+Set the "name is already in display order" flag the swap pass forgot.
+
+**`fix_name_separator_fmt.py`**  
+Make the foreign-name separator a space instead of a middle dot.
+
 **`fix_placeholder_wrap.py`**  
 Re-wrap dialogue whose $ placeholders overflow the box once expanded.
 
@@ -237,6 +252,9 @@ Re-wrap the rows the 「」 conversion pushed one column past the box.
 **`fix_row.py`**  
 Replace individual dialogue rows, from a list of hand-written corrections.
 
+**`fix_shadow_angels.py`**  
+Give the Shadow Angels their names back in COMPDATA.
+
 **`fix_speakers.py`**  
 Fix rows whose speaker name disagrees with the rest of the game.
 
@@ -251,6 +269,9 @@ Term fixes resolved through the pointer, so RELOCATED rows are covered.
 
 **`fix_terrain_spacing.py`**  
 Give the terrain row its 24px spaces back, so the ranks line up again.
+
+**`fix_wounded_lion.py`**  
+Normalise the Sphere name \u50b7\u3060\u3089\u3051\u306e\u7345\u5b50, and fix one misread Ziene line.
 
 **`fix_ziene.py`**  
 ツィーネ・エスピオ is "Ziene Espio" - unify the robot library with everything else.
@@ -613,11 +634,17 @@ Track which scenario records a human has actually read.
 **`rhdn_screenshots.py`**  
 Convert PCSX2 captures to a resolution romhacking.net will accept.
 
+**`sheets_note_captions.py`**  
+Write a feedback column back to the battle-line workbooks.
+
 **`sheets_preserve.py`**  
 Back up every proofreader entry from the sheets, keyed by row key.
 
 **`sheets_pull.py`**  
 Read the proofreader's work back, validate every line, emit row_fixes.json.
+
+**`sheets_pull_captions.py`**  
+Read the BATTLE-LINE workbooks back. The dialogue puller cannot see them.
 
 **`sheets_push.py`**  
 Fill the proofreading workbooks in Google Sheets from dialogue.json.

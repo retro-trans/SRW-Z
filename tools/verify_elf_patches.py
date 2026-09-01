@@ -25,6 +25,10 @@ CHECKS = [
     ("caption jal1 cave",    0x2EA47C, 0x0C000000 | (0x78BBA0 >> 2)),
     ("caption jal2 cave2",   0x2EA684, 0x0C000000 | (0x78BC40 >> 2)),
     ("lvlup spirits -30",    0x343630, 0x2447FFE2),
+    # 0.9.10: compose_name's flag test is ORIGINAL again. Forcing the branch
+    # (0.9.9) fixed Jiron and broke the protagonist - the real fix was the
+    # per-record flag in COMPDATA, see fix_name_order_flag.py.
+    ("name flag test intact", 0x35F160, 0x14400015),
 ]
 BYTES_CHECKS = [
     ("vlabel SKILL bytes", 0x443878, bytes.fromhex("82720a826a0a8268")),
@@ -32,6 +36,10 @@ BYTES_CHECKS = [
     ("ep prefix 'Ep.'",    0x445DA8, b"Ep.\x00\x00\x00\x00\x00"),
     ("ep suffix empty",    0x445CD8, b"\x00" * 8),
     ("ep fmt 'Ep.%s'",     0x441F50, b"Ep.%s: '%s'\x00"),
+    # 0.9.11: the foreign-name separator. Japanese joins a foreign name with a
+    # middle dot; english wants a space. Reverting this brings back the dot in
+    # "Setsuko Ohara" and "Andrew Waltfeld".
+    ("name separator space", 0x442710, bytes([0x25, 0x73, 0x20, 0x25, 0x73, 0, 0])),
 ]
 
 

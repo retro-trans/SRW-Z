@@ -177,7 +177,25 @@ def main():
         if "proofread" not in f["name"]:
             continue
         sh = retry(gc.open_by_key, f["id"])
-        titles = [w.title for w in retry(sh.worksheets) if w.title.startswith("rec")]
+        all_titles = [w.title for w in retry(sh.worksheets)]
+        titles = [t for t in all_titles if t.startswith("rec")]
+        # NEVER SKIP A WORKBOOK IN SILENCE. This filter once hid 76
+        # proofread battle lines for weeks: the battle workbooks name
+        # their sheets blk000, blk004 ... one per SRVC block, none of
+        # which starts with "rec", so workbooks 7 and 8 produced no rows
+        # AND no output at all - indistinguishable from "nobody has
+        # touched them". Anything unread is now named out loud.
+        skipped = [t for t in all_titles
+                   if t not in titles and t != "Sheet1"]
+        if skipped:
+            print("%s: SKIPPING %d sheet(s) this tool cannot read: %s%s"
+                  % (f["name"], len(skipped), ", ".join(skipped[:4]),
+                     " ..." if len(skipped) > 4 else ""))
+            if all(t.startswith("blk") for t in skipped):
+                print("   these are BATTLE CAPTION sheets - "
+                      "run sheets_pull_captions.py for them")
+        if not titles:
+            continue
         # ONE read request per workbook, not one per sheet: 172 sheets against a
         # 60-reads-per-minute cap is an instant 429. Columns A..E only - key and
         # proposal are all that matter, and the japanese is bulky.

@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 53 |
+| [Everything else](#everything-else) | 54 |
 
 ## The pipeline
 
@@ -588,6 +588,9 @@ Ship the name maps as FINGERPRINTS, and rebuild them from your own disc.
 
 **`preview_16level.py`**  
 Show 4-level vs 16-level alpha for the SAME face, at real size.
+
+**`proofread_status.py`**  
+How many lines a human has actually proofread, counted rather than claimed.
 
 **`release.py`**  
 Cut a release: branch it, archive the source, attach everything.

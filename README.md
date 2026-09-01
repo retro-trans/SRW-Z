@@ -148,6 +148,7 @@ project like this shut down.
 | Role | |
 |---|---|
 | Project lead | pow |
+| Proofreading | Valz, Hakhan Dakharan |
 | Playtesting | pow, KagamineRin, Melfice, Melfice's friend |
 
 Translation passes, tooling and reverse engineering were done with Claude
@@ -160,3 +161,28 @@ Names and terminology follow the Super Robot Wars community wiki.
 
 The translation is in progress. `CHANGELOG.md` is the honest record, including
 the builds that shipped broken and why.
+
+### Human proofreading
+
+Every line is machine-translated first. This table counts the lines a **human**
+has since read - not the machine passes, which have been over the whole script
+several times and are a different kind of assurance.
+
+| Proofreader | Dialogue lines | Battle lines | Rewritten |
+|---|---|---|---|
+| Valz | 275 | 0 | 45 |
+| Hakhan Dakharan | 4 | 6 | 10 |
+| unattributed | 0 | 1 | 1 |
+| **Total** | **279** | **7** | **56** |
+
+**279 of 68,114 dialogue lines (0.41%) and 7 of 19,213 battle lines (0.04%).**
+
+*Rewritten* is the subset a proofreader actually changed; the rest they read
+and passed. Both matter - reading 200 lines and changing 5 is 200 lines of
+work, not 5.
+
+Counted, not estimated: `python tools/proofread_status.py`. It reads the
+proofreading workbooks, so the number cannot drift from what was really done.
+Tracking this per stage was tried and abandoned - a proofreader stops mid
+record and "no change needed" looks identical to "never read", so only a line
+count can be honest.

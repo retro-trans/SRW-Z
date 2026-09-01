@@ -12,7 +12,10 @@ and hashes it on the spot.
 Sources, each a list of [hash, english]:
 
     analysis/nisv_rec5_en.json    90 - the SR Point, formation and save tutorial
-    analysis/nisv_rec6_toc.json  145 - the Strategy Q&A index
+    analysis/nisv_rec6_toc.json     145 - the Strategy Q&A index
+    analysis/nisv_rec6_blurbs.json   17 - the chapter blurbs
+    analysis/nisv_rec6_xref.json     49 - the "see also" term lines,
+                                          rendered from nisv_terms.py
 
 Add a new file here as more of rec6 is translated.
 
@@ -23,7 +26,8 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PARTS = ["nisv_rec5_en.json", "nisv_rec6_toc.json"]
+PARTS = ["nisv_rec5_en.json", "nisv_rec6_toc.json",
+         "nisv_rec6_blurbs.json", "nisv_rec6_xref.json"]
 OUT = os.path.join(ROOT, "analysis", "nisv_en.json")
 
 

@@ -10,6 +10,55 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.17 (2026-09-01) - the Q&A chapter blurbs and the cross-reference lines
+
+68 more NISVDATA fields, and the interesting half is that most of them were
+not translated by hand at all.
+
+**The 17 chapter blurbs** - the one- to three-line description beside each
+Strategy Q&A chapter - are ordinary prose and were written out. One of them
+was caught by a check rather than by eye: the generator compares LINE COUNT
+against the japanese, and flagged that a two-line english had been written
+where the japanese field is one line.
+
+**The 49 cross-reference lines are GENERATED**, not translated. They are pure
+lists of glossary terms in brackets, so what they need is not new english but
+the SAME english the menus already use. `tools/nisv_terms.py` collects that
+vocabulary and records where each entry came from, in order of authority:
+
+  1. analysis/compdata_pairs.json, a real japanese-english pair table
+  2. strings already shipped in COMPDATA, confirmed by searching the image -
+     Support Def, Tri Charge, Blocking, Shield Defend, Valor, Soul, Wall,
+     Spirit, Sense, Counter, Re-Attack, Armor, Mobility, Accuracy, Refit
+  3. the ability descriptions, where the japanese and english runs sit in the
+     same order and pair by position - Accel, Awaken, Strike, Alert, Focus,
+     Will
+  4. this project's own DATA HELP wording, only where the game ships none
+
+A line is rendered ALL OR NOTHING: if one term is missing from the table the
+whole line stays japanese, because "[Spirits]  <援護防御>" is worse than an
+honestly untranslated line and it would hide the gap from the next pass. 49 of
+the 158 lines render today; the other 109 are waiting on terms.
+
+TWO THINGS THAT COST A PASS EACH, worth writing down:
+
+* Pairing terms by matching offsets between the japanese and english COMPDATA
+  produced **pure garbage** - "精神コマンド" came back as "earned Support
+  Defend first, by skill level descending．". COMPDATA has been repacked and
+  the offsets no longer correspond. This file already knew that; I did it
+  anyway.
+* Keeping the japanese's fullwidth angle brackets overflowed six lines. An
+  english term is LONGER in characters than the kanji it replaces (小隊攻撃 is
+  8 bytes, "Squad Atk" is 9), and the brackets cost 2 bytes each. ASCII square
+  brackets are used instead - 0x5B/0x5D are outside the 0x2E-0x3D control
+  range and save 2 bytes a term. ASCII '<' is NOT available: 0x3C is a control
+  code here.
+
+Running total: 343 NISVDATA fields in english, 2,860 rec6 body strings still
+japanese.
+
+Gates: integrity 0 problems, pointers 94.50%, terms 40 OK, ELF patches present.
+
 ## 0.9.16 (2026-09-01) - the glued surnames, and NISVDATA starts to speak english
 
 **The 18 glued pilot names are fixed.** These carried flag 1 - "japanese name,

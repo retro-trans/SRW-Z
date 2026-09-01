@@ -17,7 +17,7 @@ Two warnings that are not obvious from any docstring:
 | [Libraries - imported, not run](#libraries--imported-not-run) | 5 |
 | [ISO plumbing](#iso-plumbing) | 7 |
 | [Build and packaging](#build-and-packaging) | 5 |
-| [Translation data](#translation-data) | 12 |
+| [Translation data](#translation-data) | 13 |
 | [Applying text to the image](#applying-text-to-the-image) | 6 |
 | [Fixing specific defects](#fixing-specific-defects) | 26 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 60 |
+| [Everything else](#everything-else) | 62 |
 
 ## The pipeline
 
@@ -170,6 +170,9 @@ English prologue narration for DATA/MTV_PROS.BIN rawt chunks.
 
 **`nisv_merge_en.py`**  
 Merge the per-record NISVDATA translations into one store for nisv_apply.py.
+
+**`nisv_xref_en.py`**  
+Translate rec6's "see also" cross-reference lines from the term table.
 
 **`soundsel_names.py`**  
 Base-name romanizations + song titles for the Sound Select tables.
@@ -618,6 +621,12 @@ Write translated help text back into NISVDATA.BIN.
 
 **`nisv_extract.py`**  
 Pull the in-game HELP/TUTORIAL text out of NISVDATA.BIN.
+
+**`nisv_rec6_blurbs_gen.py`**  
+Generate the hashed english for rec6's 17 section blurbs.
+
+**`nisv_terms.py`**  
+The UI vocabulary rec6's cross-reference lists are built from.
 
 **`preview_16level.py`**  
 Show 4-level vs 16-level alpha for the SAME face, at real size.

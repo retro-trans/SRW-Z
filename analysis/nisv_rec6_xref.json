@@ -1,0 +1,198 @@
+[
+ [
+  "1f6634b43c859195",
+  "[Formation]  [Squad]  [Tri Formation]\n[Center Formation]  [Wide Formation]"
+ ],
+ [
+  "74d112f9cc2eb690",
+  "[Tri Charge]  [Support Def]"
+ ],
+ [
+  "b6bd73a0c7b86e8f",
+  "[Squad Atk]  [Support Def]  [Squad Barrier]"
+ ],
+ [
+  "a2d7068b1be079d1",
+  "[Squad Atk]  [All Atk]"
+ ],
+ [
+  "a37519418a7d6632",
+  "[Formation Matchups]"
+ ],
+ [
+  "3a32bb77db462418",
+  "[Move]  [Squad Move]\n[Move Type]  [Squad Move Type]  [Move Cost]"
+ ],
+ [
+  "9d21e30816f9d5cb",
+  "[Spirits]  [Accel]  [Rush]"
+ ],
+ [
+  "42833fe880740797",
+  "[Parts]  [Booster]  [Mega Booster]"
+ ],
+ [
+  "6e649eda19fba09b",
+  "[Move Type]  [Squad Move Type]\n[Air]  [Land]  [Water]  [Minovsky Craft]\n[Dust Filter]  [Screw Module]"
+ ],
+ [
+  "6cda9e4dfa8dced2",
+  "[Spirits]  [Pilot Training]  [Weapon Upgrade]\n[Weapon Choice]  [Will]  [Attack Type]"
+ ],
+ [
+  "0d83f636dd9b2081",
+  "[Spirits]  [Valor]  [Soul]  [Direct Hit]"
+ ],
+ [
+  "22c34fd9ab0c6301",
+  "[Pilot Training]  [Stat Growth]  [Skill Learning]\n[Combo Atk]  [Assist Atk]  [Focused Atk]"
+ ],
+ [
+  "f3d204eb35af288f",
+  "[Will]  [Attack]  [Defence]"
+ ],
+ [
+  "fca84a8465adcad9",
+  "[Attack Type]  [Squad Atk]  [Support Atk]\n[Special Effect]  [Placement Bonus]  [Armor Down]"
+ ],
+ [
+  "5eedf76f456d7e94",
+  "[Attack]  [Normal Atk]"
+ ],
+ [
+  "527ccca3d4f6555d",
+  "[TRI weapon]  [Tri Charge]"
+ ],
+ [
+  "79a1a61163e2260e",
+  "[Squad Atk]  [PLA weapon]"
+ ],
+ [
+  "a97c02a8aef4ec0b",
+  "[Squad Atk]"
+ ],
+ [
+  "cf5c0b95ae649c1b",
+  "[Support Atk]"
+ ],
+ [
+  "6e230266e2ab5567",
+  "[Counter]  [Repeat Target Bonus]"
+ ],
+ [
+  "4e66bca74464887c",
+  "[Normal Atk]  [All Atk]  [MAP weapon]"
+ ],
+ [
+  "ce383829e935e425",
+  "[Squad Atk]  [Support Atk]"
+ ],
+ [
+  "14f0bc64946d4a0b",
+  "[Tri Charge]  [Focused Atk]  [Direct Hit]"
+ ],
+ [
+  "c08c54e55e9a9156",
+  "[IFF]  [No Counter]"
+ ],
+ [
+  "e7d74e2daf3ea6d2",
+  "[Attribute]  [Armor Down]  [Mobility Down]\n[Accuracy Down]  [Special Effect]  [Barrier Pierce]\n[Armor]  [Ignore Size]"
+ ],
+ [
+  "650e2d529e8cad9e",
+  "[HP]  [Shot Down]  [Defeat Conditions]  [Game Over]"
+ ],
+ [
+  "6a96a077864b7752",
+  "[Will]  [Spirits]  [Guts]  [Wall]  [Spirit]"
+ ],
+ [
+  "b11e3ad9857698be",
+  "[Defend]  [Skills]  [Guard]  [Blocking]\n[Shield Defend]  [Pilot Training]"
+ ],
+ [
+  "d257dc15399fead8",
+  "[Unit Upgrade]  [Armor]  [HP]  [Chobham Armor]\n[Hybrid Armor]  [Nanoskin Armor]"
+ ],
+ [
+  "dc389ac627b42847",
+  "[Terrain]"
+ ],
+ [
+  "63a3bc09979f9864",
+  "[Skills]  [Abilities]  [Support Def]  [Shield]"
+ ],
+ [
+  "361632e0c56cdbfa",
+  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Target Size]  [Terrain]\n[Range to Target]  [Attack Type]  [Final Hit Rate]"
+ ],
+ [
+  "0c926f2339eb8cbb",
+  "[Hit]  [Sense]  [Pilot Training]  [Spirits]\n[Strike]  [Focus]"
+ ],
+ [
+  "02f12532c01bd0da",
+  "[Unit Upgrade]  [Accuracy]  [Parts]\n[VR Helmet]  [Psycho Helmet]  [Size]"
+ ],
+ [
+  "3be1f889a9a70cf0",
+  "[Terrain]  [Pilot Training]"
+ ],
+ [
+  "3b162c4b2ab33418",
+  "[Center Formation]  [Squad Atk]"
+ ],
+ [
+  "67b29959e28b9a60",
+  "[Spirits]  [Pilot Training]  [Unit Upgrade]\n[Parts]  [Terrain Effect]  [Terrain]\n[Range to Target]  [Evade Method]  [Final Evade Rate]"
+ ],
+ [
+  "527dd1b4f089dc71",
+  "[Evade]  [Sense]  [Pilot Training]  [Spirits]\n[Focus]  [Alert]"
+ ],
+ [
+  "053d877c56c7240b",
+  "[Unit Upgrade]  [Mobility]  [Parts]\n[Magnet Coating]  [Inertia Control]  [Size]"
+ ],
+ [
+  "a81730c1ee7fcd59",
+  "[Tri Formation]  [Evade]"
+ ],
+ [
+  "ededa84fc4f06fe7",
+  "[Will]  [Skills]  [Abilities]"
+ ],
+ [
+  "2a2f3f89d2d56fc4",
+  "[Spirit]  [Vigor]  [Cheer]"
+ ],
+ [
+  "1f5f4df66d1cd5b3",
+  "[Abilities]"
+ ],
+ [
+  "c07148ec635bc57b",
+  "[Skills]"
+ ],
+ [
+  "c5abe5dd4cabd25d",
+  "[Leader]  [Support Atk]"
+ ],
+ [
+  "2bce3b14589fdb9f",
+  "[Squad Move]  [Squad Move Type]"
+ ],
+ [
+  "6e92ffcd26ce13ae",
+  "[Accel]  [Rush]  [Direct Hit]  [Cheer]  [Awaken]"
+ ],
+ [
+  "f38b5e2a82365f29",
+  "[Skills]  [Leader]  [Support Atk]  [Support Def]"
+ ],
+ [
+  "7374e986fde59731",
+  "[Skills]  [Guard]  [Sense]  [Combo Atk]\n[Repair Skill]"
+ ]
+]

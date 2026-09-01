@@ -10,6 +10,58 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.23 (2026-09-01) - the title card is ART, and I had been editing the wrong thing
+
+Episode 34's card still read "False Queen, Masked" after 0.9.20 supposedly
+fixed it. I checked the disc three ways before finding out why, and every check
+said the disc was right: the string is in COMPDATA at 0x07a8f0 with two live
+pointers, the old text has zero, and extracting SRWZ v0.9.22.chd and looking
+inside confirmed both. **The text on screen existed nowhere in the built
+image** - not COMPDATA, not the ELF, not STAGE, NISVDATA, MAPNAME, HSFC,
+MTV_PROS, the XOR-obfuscated ZKN banks, nor a raw sweep of all 4.5 GB.
+
+I guessed twice and was wrong twice. First a PCSX2 save state, since COMPDATA
+loads once at boot and a state would freeze it - the user said no. Then a
+truncating consumer buffer, because the screen text is the exact 19-character
+prefix of the new title and the original english was exactly 20 bytes with its
+NUL. That died on its own evidence: the longest JAPANESE title is 26 bytes, so
+any buffer must hold at least 27.
+
+The answer was in this project's own tooling, in a comment I had already read
+past. stamp_build.py:
+
+    ("VT1", 1588772, None),      # title-card bank lives here
+
+**The 第N話 title cards are PRE-RENDERED ART, not text.** patch_titlecards.py
+says so in its first line: VT1.BIN holds 107 banlz records, one per episode
+title, each a 512x64 4bpp TIM2 whose glyphs are painted in. Changing the title
+STRING can never change the card - the card has to be REPAINTED.
+
+So 0.9.20's pool_grow was not wrong, it was incomplete: it fixed the string the
+menus read and left the art alone. Updated analysis/title_list_en.json (the
+painter's source) and re-ran patch_titlecards.py - 107 records painted, 30
+needed shrinking.
+
+This also explains 第３４話 staying japanese, which 0.9.20 filed as "not a stored
+string anywhere ... needs the write-breakpoint work at 0xD02EE0". It is not a
+string because it is PART OF THE CARD ART, and the repaint only replaces the
+title line. That item is now understood rather than parked: it is an art job,
+not an RE job.
+
+FOUND ON THE WAY, not fixed: analysis/title_list_en.json and the COMPDATA title
+strings are SEPARATE sources and have drifted - the painter has "Shadow of War"
+where COMPDATA has "Shadow of the War God", and "Shadow of War" appears nowhere
+in COMPDATA at all. The card art and the in-game text can therefore disagree
+per episode. Worth a reconciliation pass.
+
+Also corrected in this entry: an earlier check here reported "0 disagreements"
+between the two lists. That was vacuous - it read the table at COMPDATA+0x72DA0,
+which does not resolve in our REPACKED COMPDATA, so every entry came back as a
+None that the comparison then skipped. A diff that compares nothing reports no
+differences.
+
+Gates: integrity 0 problems, ELF patches present.
+
 ## 0.9.22 (2026-09-01) - the skill grid overflows its columns
 
 A screenshot of the Search > Skills grid showed names running into the next

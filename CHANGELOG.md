@@ -10,6 +10,49 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.22 (2026-09-01) - the skill grid overflows its columns
+
+A screenshot of the Search > Skills grid showed names running into the next
+column: "Support AtkChain Atk", "Will+ (EvadeIgnore Size", "Will+ (Hit)Guard".
+
+VWF FIRST, because that was the obvious question. It is not available: docs/
+VWF.md marks "Milestone 4 - per-character advance (the VWF)" as **TODO**, and
+its own honest assessment calls it a multi-session build - glyph atlas and
+width table are done, the advance-site injection is not. The shipped font is
+fixed half-width, so shortening is the fix available today.
+
+THE BUDGET, measured off the screen rather than guessed: "Assist Atk" (10
+characters) sits clear of the next column and "Support Atk" (11) does not. Ten
+characters. **13 of the 29 skill names were over it**, "Morale+ (Damage)" by
+six.
+
+WHILE FIXING THE WIDTH, A NAMING BUG WORTH MORE THAN THE WIDTH. Four skills are
+one japanese family - 気力＋（回避／命中／ダメージ／撃破） - and three shipped as
+"Will+ (...)" while the fourth shipped as "Morale+ (Damage)". They are one
+family again: Will+Evade, Will+Hit, Will+Dmg, Will+Kill.
+
+The rest: Support Atk/Def -> Sup Atk/Def, Rising Will -> Morale Up, Will Cap Up
+-> Will Cap+, Ignore Size -> Ignore Sz, Spirit Resist -> Mind Guard, Repair
+Skill -> Repair, Supply Skill -> Supply, Cyber-Newtype -> Cyber-NT, Newtype (X)
+-> Newtype X. Every skill name now fits: **0 of 29 over the column**.
+
+THE TABS on the same screen were cut too - "Abilitie", "Squad Bon". They are
+sized to the japanese: 小隊ボーナス is 126px against "Squad Bonus" at 143px, so
+the english overflows at EVERY site rather than just this screen, which is what
+makes shortening all six instances safe rather than over-reach. Now **Sq
+Bonus**.
+
+NOT DONE: "Abilities" (117px) against 特殊能力 (84px) needs SIX characters to fit
+that tab, and every six-character option either loses the meaning or
+contradicts the help text, which already says "Abilities" throughout. Left as a
+decision rather than made quietly.
+
+Every replacement is shorter than what it replaces, so all are written in place
+and NUL-padded - nothing moved and no pointer changed.
+`tools/fix_skill_widths.py`.
+
+Gates: ELF patches present, integrity 0 problems.
+
 ## 0.9.21 (2026-09-01) - the federation's name, and what rec6 actually is
 
 **新地球連邦 normalised as far as the box allows.** It was rendered "New

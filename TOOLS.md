@@ -19,7 +19,7 @@ Two warnings that are not obvious from any docstring:
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 13 |
 | [Applying text to the image](#applying-text-to-the-image) | 6 |
-| [Fixing specific defects](#fixing-specific-defects) | 29 |
+| [Fixing specific defects](#fixing-specific-defects) | 30 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
@@ -206,6 +206,9 @@ Game-wide dialogue polish: kagi quotes + glossary links (all records).
 ## Fixing specific defects
 
 Each of these was written for one bug found by someone playing the game and noticing something wrong on screen. They are kept because the TECHNIQUE generalises even when the specific fix does not.
+
+**`fix_ability_widths.py`**  
+Shorten the ability names that overflow their column in the Search grid.
 
 **`fix_body_terms.py`**  
 Normalise names and terms INSIDE dialogue, not just on the speaker line.

@@ -10,6 +10,39 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.24 (2026-09-01) - the ability grid, and two tables that disagree
+
+Same grid as 0.9.22, other tab. **18 of the 40 ability names overflowed the
+ten-character column**, "Photon Mat (Strong)" by nine, and the screenshot showed
+"Resupply Devi" running into "Tactical Sw" running into "Anti-Psychi".
+
+**THERE ARE TWO ABILITY TABLES IN COMPDATA AND THEY DISAGREE.** The full list at
+0x0694c0 says Anti-Mind Attack, Transform, Repair Module, Resupply Module,
+HP Regen (S-L). The SEARCH GRID at 0x070640 says Anti-Psychic, Transfm, Repair
+Device, Resupply Device, HP Recovery. Only the grid is drawn here, so only the
+grid was touched - but where a shorter form was needed anyway it is aligned with
+the full list rather than invented a third time: **Repair Mod, Supply Mod,
+HP Regen, EN Regen, Anti-Mind**.
+
+対精神攻撃 was **"Anti-Psychic"** in the grid, which issue #2 had already ruled
+should be Anti-Mind Attack. It is "Anti-Mind" now - the longest form of that
+wording the column will hold.
+
+"Trinity Charge" becomes **"Tri Charge"**, which is what the rest of the game
+already calls it. " Reflector" had a stray leading space, the tell of an earlier
+truncation.
+
+**One name was made LONGER.** "Transfm" was already abbreviated past
+readability, and "Transform" fits the column at nine characters - but not its
+EIGHT-byte field. This is the first use of pool_grow.py for something other
+than the episode title: the string was moved into the tail and its pointer
+rewritten, so the grid now reads Transform. 21,904 bytes of tail remain.
+
+0 of 40 names now exceed the column.
+
+Gates: integrity 0 problems, control bytes OK, ELF patches present, pool strays
+62 (unchanged).
+
 ## 0.9.23 (2026-09-01) - the title card is ART, and I had been editing the wrong thing
 
 Episode 34's card still read "False Queen, Masked" after 0.9.20 supposedly

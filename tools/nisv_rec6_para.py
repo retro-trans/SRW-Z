@@ -149,16 +149,16 @@ def group(runs):
             paras.append(cur)
         elif (len(cur.lines) == 1
                 and INDENT_LO <= r.x - cur.first_x <= INDENT_HI
-                and (r.x != cur.first_x or "{a=" not in cur.lines[0])):
+                and (r.x != cur.first_x or r.attr == prev.attr)):
             # Second line sets the continuation column, which may be the SAME
             # as the first line's: a definition table's description column
             # (term at x=38, text at x=95) wraps onto itself, and splitting
             # there would cut a sentence in half for the translator.
             #
-            # But a row that opens with a label and an inline span - 攻撃時：
-            # followed by coloured text - hangs its continuation under the
-            # span, never back at the label.  So when the x is unchanged and
-            # the line carries a span, the next line is the following ROW.
+            # When the x is unchanged, the ATTRIBUTE decides: a genuine wrap
+            # carries the open span across the break (03 -> 03), while the
+            # next ROW of a table starts back at the base attribute
+            # (03 -> 00), as 攻撃時：/防御時： rows do.
             cur.cont_x = r.x
             cur.lines.append(_mark(r, cur.attr))
         elif len(cur.lines) > 1 and r.x == cur.cont_x:

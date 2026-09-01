@@ -10,6 +10,54 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.25 (2026-09-02) - the help book is in english
+
+**NISVDATA rec6 is the in-game help book (Strategy Q&A), 102 topics and 32891
+japanese characters, and it is now fully translated.** It had looked like a
+flat string table with paragraphs broken mid-word, which is why earlier passes
+never touched it. It is nothing of the kind:
+
+    rec6    := u32 count ; u32 base ; entry[count] ; section...
+    entry   := u32 offset (relative to base) ; u32 size
+    section := u16 body_length ; run... ; NUL pad
+    run     := u8 kind ; u8 attr ; u16 x ; u16 y ; u16 flag ; cp932 ; NUL
+
+The renderer does no wrapping at all. The japanese was wrapped when the game
+was authored and every VISUAL LINE was emitted as its own absolutely
+positioned run - hence the mid-word splits. A highlighted keyword inside a
+sentence is just a run with attr 0x0e sharing its neighbour's y.
+
+Metrics were measured, not assumed. This panel advances **19px per full-width
+character, not the 21px the menus use**, and its right margin is 532px. The
+half-width advance is **12**, which is what our own SADV hook in patch_hwfont
+pins it to; rec5, already shipped, proves this panel goes through that path.
+
+**The record did not grow.** Section sizes live in the index, so the sections
+were repacked and the decompressed length held byte-identical at 102288 -
+96528 used, 5760 free. Compressed it is 40139 bytes in a 43312 slot, smaller
+than the 42626 the japanese took. That matters: growing a decompressed record
+is what killed the uncompressed-STAGE experiment.
+
+A literal first draft came in at 1.127x the japanese byte count and would have
+overflowed by 7KB. Japanese tutorial prose is padded with polite constructions
+that do not need rendering literally; the terse version lands at 0.94x and
+reads better.
+
+Spirit names follow `tools/elf_ui_en.py`, which is matched on the JAPANESE and
+records its reasoning, **not** `tools/nisv_terms.py`, which disagrees and gives
+both 不屈 and 根性 the same english. The ELF descriptions settle it: 勇気 casts
+"Accel, Strike, Resolve, Valor, Spirit and Direct", so 不屈 is Resolve; "Squad
+move +4" is 迅速 = Swift, not Rush; 直撃 is Direct; 激励 is Rouse; 根性 is Vigor.
+
+Also in this build (finished but unbuilt since 0.9.24): the **Abilities tab**
+(ELF), **all 107 title cards repainted** from the COMPDATA wording (VT1), and
+**29 untranslated STAGE rows** - 16 episode synopses and 13 encyclopedia rows.
+
+`stamp_build.py` now fingerprints NISVDATA, which it never had.
+`verify_control_bytes.py` now walks rec6 too: it is drawn by the same 0x13A290
+reader, so a raw 0x2E-0x3D there is the "Type100" -> "TypeDijeh" bug, and the
+book is full of digits and full stops. The gate goes from 1291 strings to 4092.
+
 ## 0.9.24 (2026-09-01) - the ability grid, and two tables that disagree
 
 Same grid as 0.9.22, other tab. **18 of the 40 ability names overflowed the

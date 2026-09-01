@@ -41,6 +41,7 @@ REGIONS = [
     ("VT1",       1588772, None),      # title-card bank lives here
     ("KVMDATA",   1289810, None),      # UI word-sheets (bazaar, intermission)
     ("HSFC",      1568541, None),      # episode-recap bank (save screen)
+    ("NISVDATA",  1568269, 272 * SEC),  # help book (rec6) + its contents (rec0)
 ]
 # Last resort only. A fixed default silently TRUNCATES: COMPDATA is 74 sectors,
 # so hashing 64 covered none of the episode-title region and reported v1.44 and

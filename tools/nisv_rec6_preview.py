@@ -15,21 +15,23 @@ import nisv_rec6
 import nisv_rec6_para as para
 import nisv_rec6_apply as ap
 
-CELL = 13                       # one column of the grid, in pixels
+CELL = 12                       # a half-width cell, in pixels
 
 
 def render(sec):
+    """Lay the runs out on a text grid at their real pixel positions."""
     rows = {}
     for r in sec.runs:
         rows.setdefault(r.y, []).append(r)
     out = []
     for y in sorted(rows):
-        line = []
+        line, pen = [], 0
         for r in sorted(rows[y], key=lambda r: r.x):
-            col = r.x // CELL
-            while len(line) < col:
+            while pen + CELL <= r.x:      # pad by pixels, not by characters
                 line.append(" ")
+                pen += CELL
             line.append(r.text)
+            pen = r.x + para.px(r.text)
         out.append((y, "".join(line)))
     return out
 

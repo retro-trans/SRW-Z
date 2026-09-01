@@ -89,6 +89,7 @@ def translate_section(sec, en, stats):
 
     stats[0] += sum(1 for p in paras if key(p.text) in en)
     stats[1] += len(paras)
+    para.avoid_collisions(paras, lines_for)
     sec.runs = para.place(paras, lines_for)
     return sec
 
@@ -158,8 +159,9 @@ def main():
         if a.runs is None:
             continue
         assert c.runs is not None, "section %d stopped parsing" % a.index
-        assert [(r.attr, r.x, r.y, r.text) for r in a.runs] == \
-               [(r.attr, r.x, r.y, r.text) for r in c.runs], \
+        # compare the PACKED bytes: the text differs by design after a
+        # round-trip, because pack() sends . / 0-9 : ; < = out fullwidth.
+        assert [r.pack() for r in a.runs] == [r.pack() for r in c.runs], \
                "section %d did not round-trip" % a.index
     print("re-parse: all %d sections round-trip" % len(chk))
 

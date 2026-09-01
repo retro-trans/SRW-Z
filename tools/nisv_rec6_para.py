@@ -185,6 +185,28 @@ def _spans(line, base):
     return out
 
 
+def _rebalance(lines):
+    """Close and reopen spans that a line break fell inside.
+
+    Wrapping splits on spaces, so a span whose text contains a space can open
+    on one line and close on the next.  _spans() only matches a complete
+    {a=NN}...{/a} within one line, so an unbalanced line would draw its
+    markers as literal text.  Spans never nest, so the last unmatched opener
+    is all we have to track.
+    """
+    out, carry = [], None
+    for ln in lines:
+        s = ("{a=%02x}" % carry if carry is not None else "") + ln
+        o, c = s.rfind("{a="), s.rfind("{/a}")
+        if o > c:
+            carry = int(s[o + 3:o + 5], 16)
+            s += "{/a}"
+        else:
+            carry = None
+        out.append(s)
+    return out
+
+
 def wrap(p, right=RIGHT):
     """Word-wrap one paragraph's text to the panel; -> marked-up lines."""
     out, line = [], ""
@@ -198,7 +220,49 @@ def wrap(p, right=RIGHT):
             line = cand
     if line:
         out.append(line)
-    return out
+    return _rebalance(out)
+
+
+COL_GAP = 12               # smallest gap we leave between two columns
+
+
+def avoid_collisions(paras, lines_for, right=RIGHT, rounds=3):
+    """Push shared columns right so english terms cannot overrun them.
+
+    A definition table puts its term at x=38 and its description at x=133,
+    which fitted the japanese (連携攻撃 is 76px) but not "Focused Atk" at
+    132px - the term would be drawn straight over the description.
+
+    The description column is shared by every row of the table, so it has to
+    move as a unit; moving one row would leave the table ragged.  Widening a
+    column narrows it, which can rewrap a row and lengthen another term, so
+    this repeats until it settles.
+    """
+    moved = {}
+    for _ in range(rounds):
+        ends, by_y = {}, {}
+        for p in paras:
+            lines = lines_for(p)
+            ends[id(p)] = p.first_x + (px(strip(lines[0])) if lines else 0)
+            by_y.setdefault(p.y, []).append(p)
+        need = {}
+        for group in by_y.values():
+            group.sort(key=lambda q: q.first_x)
+            for a, b in zip(group, group[1:]):
+                want = ends[id(a)] + COL_GAP
+                if want > b.first_x:
+                    need[b.first_x] = max(need.get(b.first_x, 0), want)
+        if not need:
+            break
+        for p in paras:
+            new = need.get(p.first_x)
+            if new is None or new >= right:
+                continue
+            if p.cont_x == p.first_x:
+                p.cont_x = new
+            moved[p.first_x] = new
+            p.first_x = new
+    return moved
 
 
 def place(paras, lines_for):

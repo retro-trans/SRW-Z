@@ -195,6 +195,10 @@ TITLES = {
 
 # character-select bios (NUL-slot budget checked by the patcher)
 BIOS = {
-    "新型機のテストパイロットを務める地球連邦軍の兵士。\n気弱で何事にも消極的であるが、生真面目な性格で\n自分の任務を懸命に果たそうとする。":
+    # KEYED BY sha1(japanese)[:16], not by the japanese itself - the same
+    # rule nisv_apply.py follows, so that no japanese prose is committed.
+    # bio_replace() in patch_compdata.py recovers the japanese from the
+    # disc and looks the english up by hash.
+    "ca32a0357417d02d":
         "An EFF soldier serving as a test pilot for a\nnew unit. Timid and passive, but earnest -\nshe gives her duty everything she has.",
 }

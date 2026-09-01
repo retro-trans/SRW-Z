@@ -1,0 +1,187 @@
+# -*- coding: utf-8 -*-
+"""Group rec6's positioned runs back into paragraphs, and lay them out again.
+
+See nisv_rec6.py for the container format.  A paragraph is the run of visual
+lines that make up one block of prose:
+
+    first_x  x of the FIRST line (the japanese indents it, e.g. 38 vs 19)
+    cont_x   x of every following line
+    y        y of the first line
+    attr     base attribute (0 plain, 6 title, 3 pros bullet, 7 cons bullet)
+    lines    the original visual lines, as authored
+    text     those lines joined - the thing we translate
+
+Inline attribute changes are marked {a=NN}...{/a}: 0e is a highlighted
+keyword sitting inside a sentence, 03/07 are the bullets that share a line
+with their 長所 / 短所 label.
+
+The renderer does no wrapping, so laying english out is our job: wrap to the
+panel, keep each paragraph at its authored y, and push the rest of the page
+down only when a paragraph genuinely grew.
+"""
+import re
+import unicodedata
+
+from nisv_rec6 import LINE_H, Run
+
+KW = 0x0e
+RIGHT = 532                # right edge of the panel, measured from the japanese
+
+# This panel does NOT use the menu metrics (21px full / 13px half).  Every
+# tight inline pair in the japanese advances exactly 19px per full-width
+# character - 601 of the 750 measurable pairs, the rest being deliberate
+# column gaps.  Note that …  ▼  ※  →  ×  ↓  ± all advance 19 here, so width
+# is decided by "is it ASCII", not by east_asian_width (which calls several
+# of them ambiguous).
+#
+# No original run contains a half-width character - every ASCII byte in rec6
+# came from our own in-place patches - so W_HALF cannot be measured the same
+# way.  13 is the project's documented half-width pitch and is the SAFE
+# direction to err: overestimating leaves a small gap after an inline span,
+# underestimating would overlap the glyphs.
+W_FULL, W_HALF = 19, 13
+
+# A line can only be a CONTINUATION of the one above it if that line actually
+# reached the right margin - the renderer never wraps early.  Measuring every
+# y+11 transition in the japanese gives a cleanly bimodal answer: real wraps
+# stop 0/19/38/57px short of the margin (945 of them), and everything that is
+# really a new block stops 76px or more short (250).  60 sits in the gap.
+# Without this, a short table cell swallows the next row's label as its second
+# line and shunts the rest of the page down.
+WRAP_SLACK = 60
+
+_SPAN = re.compile(r"\{a=([0-9a-f]{2})\}(.*?)\{/a\}", re.S)
+
+
+def px(s):
+    return sum(W_HALF if ord(c) < 128 else W_FULL for c in s)
+
+
+def strip(text):
+    """The text as it will be drawn, markers removed."""
+    return _SPAN.sub(lambda m: m.group(2), text)
+
+
+class Para(object):
+    __slots__ = ("kind", "attr", "first_x", "cont_x", "y", "lines", "sep")
+
+    def __init__(self, kind, attr, first_x, cont_x, y, lines, sep=""):
+        self.kind, self.attr = kind, attr
+        self.first_x, self.cont_x, self.y = first_x, cont_x, y
+        self.lines, self.sep = lines, sep
+
+    @property
+    def text(self):
+        return self.sep.join(self.lines)
+
+    def __repr__(self):
+        return "Para(a=%#04x,x=%d/%d,y=%d,%r)" % (
+            self.attr, self.first_x, self.cont_x, self.y, self.text)
+
+
+def _mark(run, base):
+    if run.attr != base:
+        return "{a=%02x}%s{/a}" % (run.attr, run.text)
+    return run.text
+
+
+def group(runs):
+    """[Run] -> [Para].
+
+    Two runs can share a y for different reasons, and they are not the same
+    thing.  A run starting exactly where the previous one ended is a TIGHT
+    inline span - a highlighted keyword inside a sentence - and folds into the
+    text.  A run starting further right sits on a FIXED COLUMN (the bullets at
+    x=95 beside their 長所 label at x=38) and stays its own paragraph, so that
+    translating the label cannot drag the column with it.
+    """
+    paras, cur, prev, cursor = [], None, None, 0
+    for r in runs:
+        tight = prev is not None and r.y == prev.y and r.x == cursor
+        filled = cursor >= RIGHT - WRAP_SLACK
+        if prev is None or r.kind == 4 or prev.kind == 4                 or (r.y > prev.y + LINE_H) or (r.y == prev.y and not tight):
+            cur = Para(r.kind, r.attr, r.x, r.x, r.y, [_mark(r, r.attr)])
+            paras.append(cur)
+        elif tight:
+            cur.lines[-1] += _mark(r, cur.attr)
+        elif not filled:
+            # the line above stopped well short of the margin, so this cannot
+            # be a wrap - it is a new block (a table row, a fresh sentence)
+            cur = Para(r.kind, r.attr, r.x, r.x, r.y, [_mark(r, r.attr)])
+            paras.append(cur)
+        elif len(cur.lines) == 1 and r.x != cur.first_x:
+            cur.cont_x = r.x                      # second line sets the column
+            cur.lines.append(_mark(r, cur.attr))
+        elif len(cur.lines) > 1 and r.x == cur.cont_x:
+            cur.lines.append(_mark(r, cur.attr))
+        else:
+            # re-indented to the first-line column: a new paragraph starting
+            # on the very next line, not a continuation of this one.
+            cur = Para(r.kind, r.attr, r.x, r.x, r.y, [_mark(r, r.attr)])
+            paras.append(cur)
+        cursor = r.x + px(r.text)
+        prev = r
+    return paras
+
+
+def _spans(line, base):
+    out, i = [], 0
+    for m in _SPAN.finditer(line):
+        if line[i:m.start()]:
+            out.append((base, line[i:m.start()]))
+        out.append((int(m.group(1), 16), m.group(2)))
+        i = m.end()
+    if line[i:]:
+        out.append((base, line[i:]))
+    return out
+
+
+def wrap(p, right=RIGHT):
+    """Word-wrap one paragraph's text to the panel; -> marked-up lines."""
+    out, line = [], ""
+    for w in p.text.split(" "):
+        cand = w if not line else line + " " + w
+        lim = right - (p.first_x if not out else p.cont_x)
+        if line and px(strip(cand)) > lim:
+            out.append(line)
+            line = w
+        else:
+            line = cand
+    if line:
+        out.append(line)
+    return out
+
+
+def place(paras, lines_for):
+    """[Para] -> [Run].  `lines_for(p)` supplies the visual lines.
+
+    A paragraph keeps its authored y; the page is pushed down only where one
+    grew, and paragraphs that share a y (a label beside its heading) move
+    together.
+    """
+    runs, shift = [], 0
+    for i, p in enumerate(paras):
+        y0 = p.y + shift
+        lines = lines_for(p)
+        for n, ln in enumerate(lines):
+            x = p.first_x if n == 0 else p.cont_x
+            for attr, txt in _spans(ln, p.attr):
+                if txt:
+                    runs.append(Run(p.kind, attr, x, y0 + n * LINE_H, 1, txt))
+                    x += px(txt)
+        bottom = y0 + len(lines) * LINE_H
+        if i + 1 < len(paras) and paras[i + 1].y > p.y:
+            gap = paras[i + 1].y + shift
+            if gap < bottom:
+                shift += bottom - gap
+    return runs
+
+
+def identity(paras):
+    """Re-emit using the authored line breaks - must reproduce the input."""
+    return place(paras, lambda p: p.lines)
+
+
+def layout(paras, right=RIGHT):
+    """Re-emit with english word-wrapping."""
+    return place(paras, lambda p: wrap(p, right))

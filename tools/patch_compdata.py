@@ -18,6 +18,7 @@ compressor is stronger), so the file is relocated into /DMY/DMY.BIN's
 padding region and COMPDATA.BN's directory record (LBA+size, both-endian)
 is repointed. Usage: patch_compdata.py <iso>
 """
+import hashlib
 import os
 import struct
 import sys
@@ -83,6 +84,36 @@ def field_replace(d, jp, en, lo=0, hi=None, stats=None):
             elif stats is not None:
                 stats.append((jp, en, budget))
         i = d.find(jb, i + 1)
+    return n
+
+
+def bio_replace(d, bios, lo=0, hi=None, stats=None):
+    """Replace character-select bios, which are keyed by sha1(japanese).
+
+    BIOS cannot be keyed by the japanese itself - that would commit japanese
+    prose - so the lookup runs the other way round: walk the NUL-delimited
+    fields actually present on the disc, hash each one, and translate the
+    ones we hold an english line for.
+    """
+    hi = hi if hi is not None else len(d)
+    n, i = 0, lo
+    while i < hi:
+        j = d.find(b"\x00", i)
+        if j < 0 or j > hi:
+            break
+        if j - i > 20:
+            try:
+                jp = d[i:j].decode("cp932")
+            except UnicodeDecodeError:
+                jp = None
+            if jp is not None:
+                en = bios.get(
+                    hashlib.sha1(d[i:j]).hexdigest()[:16])
+                if en is not None:
+                    n += field_replace(d, jp, en, max(0, i - 1), hi, stats)
+        i = j + 1
+        while i < hi and d[i] == 0:
+            i += 1
     return n
 
 
@@ -541,9 +572,7 @@ def main():
         print("  enemy-pilot pass skipped: %s" % e)
     print("enemy pilot designations: %d fields" % n_ep)
 
-    n_bio = 0
-    for jp, en in BIOS.items():
-        n_bio += field_replace(d, jp, en, 0, len(d), over)
+    n_bio = bio_replace(d, BIOS, 0, len(d), over)
     print("replaced: %d unit, %d pilot, %d title, %d bio fields"
           % (n_unit, n_pilot, n_title, n_bio))
     if over:

@@ -10,6 +10,56 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.26 (2026-09-02) - one weapon, three spellings
+
+From a screenshot of Virgola Glory's weapon list. ストレイターレット shipped
+under THREE spellings at once:
+
+    ストレイターレット          Straight Turret
+    レイ・ストレイターレット     Ray Straight Turret
+    ブイ・ストレイターレット     Vee Straiterlet
+    ハイ・ストレイターレット     High Sutoreitaretto     <- raw romaji
+
+The reading is ストレイ + ターレット = **Stray Turret**. It is NOT ストレート,
+which is how "straight" is written, so "Straight Turret" was a misreading -
+and it had already reached the battle captions ("Ray Straight Turret, fire!!"),
+which are fixed here too. ブイ is the letter V, not the phonetic "Vee".
+
+**The pools cannot be paired by offset or by index.** COMPDATA is repacked, so
+the same address range holds 969 english fields in our build against 789
+japanese ones in the virgin disc, and aligning by index is what produced a fake
+off-by-one before. Each name's EFFECTIVE value was instead resolved by asking
+the disc which candidate is actually present, then compared against a
+romanisation of its own katakana: a translation diverges from the romaji, a
+transliteration does not. That flagged 11, of which Kerberos, Nefertem,
+Tristan, Sol Graviton Nova, Gagundura, Jinba and Zeraviton Sword are correct
+names that merely look like romaji. Three were real and are fixed:
+
+    ランブリング・ディスキャリバー   Ranbu Ring Disukyariba -> Rambling Discalibur
+    ビット・ラスヴェート            Bit Rasuveto           -> Bit Rassvet
+    バーン・レオン・グラップル       Banreon Grap Ru        -> Burn Leon Grapple
+
+**The weapon-name column is WIDE, and an earlier pass had assumed it was not.**
+verify_ui_width.py budgets an english string against the japanese it replaced,
+which is right for a fixed-position UI fragment but wrong for a list column
+sized once for the whole list: a normal unit ships 高エネルギー砲　アウフプラ
+ール・ドライツェーン at 483px. Four names had been squashed to fit a budget
+that was never the real one, and are spelled out again:
+
+    Dif．MegaP．Gun     -> Diffuse Mega Particle Cannon
+    Toroidal MegaP．Gun -> Toroidal Mega Particle Cannon
+    AntiShip Beam       -> Anti-Ship Beam Cannon
+    BeamAsltCraft(R)    -> Beam Assault Craft (Rapid)
+
+Five of the eleven were longer than their slot and went through pool_grow.py
+into the record's tail padding, which is down to 21,776 of its 22,035 bytes.
+**Strays on a stride stayed at exactly 62** (90 total), so the deliberate
+pointers into NUL padding were not disturbed - that is the check 0.8.81 failed.
+
+NOT a mass retranslation. The corpus is already width-matched to the japanese:
+median 169px against 168px, p90 273px against 273px. Nothing supported
+rewriting 769 names, and doing so would have been churn against live pointers.
+
 ## 0.9.25 (2026-09-02) - the help book is in english
 
 **NISVDATA rec6 is the in-game help book (Strategy Q&A), 102 topics and 32891

@@ -28,6 +28,28 @@ class Pine:
                 continue
         raise RuntimeError("could not connect to PINE (tcp or pipe)")
 
+
+def find(probe=0x006D6800, lo=SLOT, n=10):
+    """Return a Pine attached to an instance that actually has a game running.
+
+    PCSX2 takes the next free slot when 28011 is already held, so a second
+    window lands on 28012 - and a leftover instance with no game keeps 28011.
+    Connecting to the default then finds an emulator that answers every read
+    with result 255, which looks like a dead API rather than the wrong window.
+    That cost a ten-minute polling run and a screenshot of the wrong emulator
+    on 2026-08-31. Connecting is not enough: a slot only counts if a READ
+    SUCCEEDS, which is what distinguishes a running VM from an idle one.
+    """
+    last = None
+    for slot in range(lo, lo + n):
+        try:
+            p = Pine(slot=slot)
+            p.read32_batch([probe])
+            return p
+        except Exception as e:
+            last = "slot %d: %s" % (slot, e)
+    raise RuntimeError("no PCSX2 instance with a running game (%s)" % last)
+
     def _xfer(self, payload):
         msg = struct.pack("<I", 4 + len(payload)) + payload
         if self.sock:

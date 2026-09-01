@@ -12,23 +12,42 @@ string, i.e. the preceding byte is NUL. Measure the share that do; a content
 edit must not move it. In a healthy record it is typically 100%; the corrupt
 build dropped to ~26%.
 
-Run against the image BEFORE building, and against a known-good image to get
-the baseline:
+Run against the image BEFORE building:
 
-    verify_pointers.py <iso>              # report
-    verify_pointers.py <iso> --min 99     # exit 1 if any record falls below
-    verify_pointers.py <iso> --against <ref-iso>   # STRONGER, size-independent
+    verify_pointers.py <iso>                       # report only, never fails
+    verify_pointers.py <iso> --against <ref-iso>   # STRONGEST, needs a good iso
+    verify_pointers.py <iso> --min 85              # legacy, WARNS only
 
-THE RATIO HAS A BLIND SPOT. Its denominator counts every 4-aligned word whose
-value happens to fall inside the record, so it INFLATES when a record grows -
-and relocating a row (append + repoint) grows the record legitimately. rec48
-went 86.0% -> 84.9% across this session with the numerator unchanged at 1087 and
-not one pointer broken; the ratio fell purely because 16 more coincidental words
-came into range. Lowering the threshold to pass would have been the wrong fix.
+THE RATIO HAS A BLIND SPOT, and a flat threshold on it is not a gate.
 
---against is immune to that: it takes every pointer that RESOLVES in a known-good
-image and requires it to still resolve in this one. Size changes cannot affect
-it, and a genuinely broken pointer cannot hide behind a big denominator.
+Its denominator counts every 4-aligned word whose value happens to fall inside
+the record, so it INFLATES when a record grows - and relocating a row (append +
+repoint) grows the record legitimately. rec48 went 86.0% -> 84.9% across one
+session with the numerator unchanged at 1087 and not one pointer broken.
+
+`--min 85` was worse than useless. Measured 2026-08-31, TWENTY-SEVEN records of
+the UNTOUCHED JAPANESE DISC score below 85%, rec48 among them at 84.4% - lower
+than our own 84.9%. A user of the public 0.9.0 release ran this tool, got
+"FAIL: 1 records below 85.0% - DO NOT BUILD" on a perfectly good image, and
+reported it as a bug. The threshold was wrong, not the image. --min therefore
+only WARNS now and never exits non-zero; lowering a threshold until it passes
+is not a fix, so it was removed as a gate instead.
+
+WHAT GATES INSTEAD, in order of strength:
+
+  --against  takes every pointer that RESOLVES in a known-good image and
+             requires it to still resolve. Size changes cannot affect it and a
+             broken pointer cannot hide behind a big denominator. Use this
+             whenever a known-good image is on hand - it is the real check.
+
+  baseline   pointer_baseline.json holds the per-record scores of the untouched
+             Japanese disc. It is printed beside our own for scale and DOES NOT
+             GATE. Judging per-record against it was tried and is invalid for
+             the same reason a flat --min is - an English record is thousands
+             of bytes bigger, so the ratio sinks with nothing broken. It flagged
+             rec72/34/82 as failures when each had MORE pointers landing than
+             the Japanese disc did. Neither the ratio nor the raw count survives
+             the crossing between two different images.
 """
 import os
 import struct
@@ -133,11 +152,60 @@ def main():
     if floor is not None:
         bad = [w for w in worst if w[0] < floor]
         if bad:
-            print("\nFAIL: %d records below %.1f%% - DO NOT BUILD" % (len(bad), floor))
+            # Deliberately not fatal - see the header. The Japanese disc itself
+            # has 27 records under 85%, so this number says nothing on its own.
+            print("\nNOTE: %d record(s) below %.1f%%. This is NOT a failure - "
+                  "the untouched" % (len(bad), floor))
+            print("Japanese disc has 27 records below that itself. Use "
+                  "--against for a real check.")
             for pc, idx, t, o in bad[:20]:
                 print("   rec%-4d %.1f%%" % (idx, pc))
-            sys.exit(1)
-        print("\nOK: every record at or above %.1f%%" % floor)
+        else:
+            print("\nEvery record is at or above %.1f%%." % floor)
+
+    sys.exit(baseline_gate(worst))
+
+
+def baseline_gate(worst):
+    """Show each record beside the SAME record on the untouched Japanese disc.
+
+    INFORMATIONAL ONLY - always returns 0. Comparing percentages across the
+    two discs was tried as a gate on 2026-08-31 and is invalid for exactly the
+    reason a flat --min is: an English record is thousands of bytes bigger than
+    its Japanese original, so more coincidental words fall in range and the
+    ratio sinks with nothing broken. Measured:
+
+        rec72   japanese 652/652 100.0%   english 751/654 87.1%   ok +2
+        rec34   japanese 719/719 100.0%   english 823/721 87.6%   ok +2
+        rec82   japanese 716/716 100.0%   english 797/718 90.1%   ok +2
+
+    Every one of those "failures" had MORE pointers landing correctly than the
+    Japanese disc did. The numerator is not comparable either - it counts
+    coincidental words too, and different text produces a different set of
+    them. Neither half of the ratio survives the crossing, so this prints and
+    does not judge. --against is the only real gate.
+    """
+    import json
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "pointer_baseline.json")
+    if not os.path.exists(path):
+        return 0
+    base = json.load(open(path))["records"]
+    rows = []
+    for pc, idx, t, o in worst[:10]:
+        ref = base.get(str(idx))
+        if ref:
+            rows.append((idx, o, t, pc, ref[1], ref[0], 100.0 * ref[1] / ref[0]))
+    if rows:
+        print("\nsame records on the UNTOUCHED JAPANESE DISC, for scale:")
+        for idx, o, t, pc, ro, rt, rpc in rows:
+            flag = "  <- we score HIGHER than the original" if pc > rpc else ""
+            print("   rec%-4d this image %5d/%-5d %5.1f%%   japanese %5d/%-5d "
+                  "%5.1f%%%s" % (idx, o, t, pc, ro, rt, rpc, flag))
+    print("\nThis report is INFORMATIONAL and cannot fail a build - the ratio is "
+          "not\ncomparable across images. For a real check run:")
+    print("   verify_pointers.py <iso> --against <known-good iso>")
+    return 0
 
 
 if __name__ == "__main__":

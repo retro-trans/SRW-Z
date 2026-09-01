@@ -18,17 +18,17 @@ Two warnings that are not obvious from any docstring:
 | [ISO plumbing](#iso-plumbing) | 7 |
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 11 |
-| [Applying text to the image](#applying-text-to-the-image) | 4 |
-| [Fixing specific defects](#fixing-specific-defects) | 15 |
-| [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 35 |
+| [Applying text to the image](#applying-text-to-the-image) | 5 |
+| [Fixing specific defects](#fixing-specific-defects) | 19 |
+| [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
 | [Searching](#searching) | 2 |
 | [Font and texture work](#font-and-texture-work) | 8 |
-| [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 9 |
+| [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
-| [Layout and re-wrapping](#layout-and-re-wrapping) | 1 |
-| [Everything else](#everything-else) | 36 |
+| [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
+| [Everything else](#everything-else) | 53 |
 
 ## The pipeline
 
@@ -179,6 +179,9 @@ Curated encyclopedia (図鑑) name translations: series titles and glossary term
 
 ## Applying text to the image
 
+**`apply_compdata_ui.py`**  
+Write the last japanese interface strings into COMPDATA.BN, in the image.
+
 **`apply_fixes.py`**  
 Splice proofreading fixes into the shipped image.
 
@@ -225,11 +228,17 @@ Repair the pool pointers that 0.8.81's repack left behind.
 **`fix_popup_wrap.py`**  
 Restore the line breaks that translation dropped from long STAGE strings.
 
+**`fix_quote_overflow.py`**  
+Re-wrap the rows the 「」 conversion pushed one column past the box.
+
 **`fix_rank.py`**  
 \u51c6\u5c06 (Brigadier General) ships six different ways across 131 rows: General 79, Colonel 20, Vice Admiral 12, Brigadier General 10, Major General 6, Commodore 4. Agents keep fixing it one row at a time; this settles it.
 
 **`fix_row.py`**  
 Replace individual dialogue rows, from a list of hand-written corrections.
+
+**`fix_speakers.py`**  
+Fix rows whose speaker name disagrees with the rest of the game.
 
 **`fix_terms_global.py`**  
 Term fixes across ALL 205 STAGE records, not just the 26 that were exported.
@@ -239,6 +248,12 @@ Term fixes whose replacement is LONGER than the text it replaces.
 
 **`fix_terms_pass.py`**  
 Term fixes resolved through the pointer, so RELOCATED rows are covered.
+
+**`fix_terrain_spacing.py`**  
+Give the terrain row its 24px spaces back, so the ranks line up again.
+
+**`fix_ziene.py`**  
+ツィーネ・エスピオ is "Ziene Espio" - unify the robot library with everything else.
 
 ## Patching the executable, art and UI
 
@@ -318,6 +333,9 @@ Translate the OPENING's series-title cards (OP0/OP1/OP2.BIN).
 
 **`patch_outline_half.py`**  
 Experiment: halve the glyph OUTLINE offsets globally.
+
+**`patch_profile_labels.py`**  
+Paint English over the pilot-profile labels on the KVMDATA word sheet.
 
 **`patch_renderer.py`**  
 ASCII -> fullwidth glyph renderer patch for SRW Z (SLPS-25887).
@@ -444,6 +462,9 @@ Fit a battle-caption translation into its ORIGINAL byte budget.
 **`srvc_line_fixes.py`**  
 Targeted battle-caption line corrections (post-review).
 
+**`srvc_line_fixes_all.py`**  
+Apply the srvc_line_fixes table across the WHOLE image, not just BTL_SRVC.
+
 **`srvc_pairs.py`**  
 Pair every battle caption to its japanese, through the sequence records.
 
@@ -491,13 +512,28 @@ Dialogue is 3 lines of 34 columns; scenario-chart recaps get 56.
 **`make_slices.py`**  
 Cut the exported review files into agent-sized slices.
 
+**`rewrap_help.py`**  
+Re-wrap the DATA HELP panel text to the width the panel actually has.
+
 ## Everything else
 
 **`battle_quotes_en_b.py`**  
 Battle quotes, second half. Merged with battle_quotes_en.BATTLE_QUOTES.
 
+**`bisect_build.py`**  
+Build a CHD that is the VIRGIN japanese disc plus a chosen set of our files.
+
+**`bisect_quotes.py`**  
+Revert 「」 to ASCII quotes for a SLICE of rec 13's rows, and build a CHD.
+
+**`bisect_stage.py`**  
+Revert chosen STAGE records to the last-good build, inside the crashing one.
+
 **`caption_review.py`**  
 Print paired captions for a human to read, one detector class at a time.
+
+**`character_lines.py`**  
+Pull every battle line ONE character speaks, japanese beside our english.
 
 **`check_alignment.py`**  
 Find rows where our English does not correspond to its Japanese source.
@@ -517,8 +553,14 @@ Production pass for the corridor scene (rec001 rows 142-211).
 **`disasm.py`**  
 Small MIPS disassembler used by the RE tools.
 
+**`export_captions.py`**  
+Regenerate analysis/srvc_en_by_hash.json, the published battle-line export.
+
 **`export_pairs.py`**  
 Export our English keyed by JAPANESE offset, so one disc is enough to compare.
+
+**`export_proofread.py`**  
+Build the proofreading worklist: every dialogue row, japanese beside english.
 
 **`export_review.py`**  
 Export JP/EN pairs for proofreading, straight from the SHIPPED image.
@@ -529,8 +571,14 @@ Export the stage synopses as ENGLISH, keyed by scenario record.
 **`harvest_labels.py`**  
 Compose the intermission bar labels from HARVESTED original glyphs.
 
+**`help_shorten.py`**  
+Condensed DATA HELP entries for the 46 fields re-wrapping alone cannot fit.
+
 **`intermission_hotpatch.py`**  
 Live-iterate the intermission label fonts via PINE.
+
+**`issue2_names.py`**  
+Name corrections from issue #2 (creepgnome), applied to COMPDATA in 0.9.3.
 
 **`mdis.py`**  
 Word-by-word MIPS disassembler for PS2 EE code.
@@ -559,8 +607,26 @@ Restore one file's sectors in an ISO from the original Japanese image.
 **`review_status.py`**  
 Track which scenario records a human has actually read.
 
+**`rhdn_screenshots.py`**  
+Convert PCSX2 captures to a resolution romhacking.net will accept.
+
+**`sheets_preserve.py`**  
+Back up every proofreader entry from the sheets, keyed by row key.
+
+**`sheets_pull.py`**  
+Read the proofreader's work back, validate every line, emit row_fixes.json.
+
+**`sheets_push.py`**  
+Fill the proofreading workbooks in Google Sheets from dialogue.json.
+
+**`sheets_push_captions.py`**  
+Fill the battle-line proofreading workbooks (7 and 8) from caption_pairs.
+
 **`srvc.py`**  
 Parse and rebuild BTL/SRVC.BIN using its companion BTL/SRVC.SEG.
+
+**`stage_store.py`**  
+Relocate STAGE.BIN and store its records UNCOMPRESSED, so edits are instant.
 
 **`ui_batch10.py`**  
 Fix pass: forecast/char-select overlaps + control-code mode-select strings.
@@ -592,6 +658,12 @@ Library, dialogue viewer, formation confirms, upgrade extras (0x33DA-0x33F6).
 **`unify_overlap.py`**  
 One English name for 相克界: "Overlap".
 
+**`verify_boxes.py`**  
+Fail the build if a dialogue row is one column too wide for its box.
+
+**`verify_terms.py`**  
+Fail the build if a spelling we already fixed has come back, ANYWHERE.
+
 **`zkn.py`**  
 Reader/writer for the encyclopedia files (MTVZKNRT/PT/KW = 図鑑 robot / character / keyword).
 
@@ -600,3 +672,6 @@ Translate encyclopedia descriptions via DeepSeek, in the batch-file format.
 
 **`zkn_name_check.py`**  
 Cross-check every LIBRARY name against the glossary DB, by Japanese key.
+
+**`zkn_rename.py`**  
+Replace a byte sequence inside a ZKN encyclopedia archive, record in place.

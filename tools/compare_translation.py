@@ -32,6 +32,7 @@ import io
 import json
 import os
 import re
+import struct
 import sys
 import tempfile
 
@@ -39,6 +40,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import banlz
 from build_compare import as_image, s_at, JP_RE
 from rewrap_dialogue import LBA, SECTOR, SIZE
+
+BASE = 0x7566F0
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAIRS = os.path.join(ROOT, "analysis", "translation_pairs.json")
@@ -185,12 +188,37 @@ def main():
         if not got:
             continue
         b = bytes(jb)
-        k = 0
+        # ROW ORDER: bytecode order, not storage order. A record stores its
+        # strings in an order only roughly matching the order the scene plays -
+        # rec001 puts ten lines from ten different points of the stage next to
+        # each other, which reads as a scrambled conversation. The position of
+        # the POINTER that references a string is where the scenario reaches
+        # it, so that is what orders the page. Same order the sheets use; see
+        # tools/export_proofread.py. A string nothing points at inherits the
+        # position of the last one that was, so it stays beside its neighbours.
+        ptr_of = {}
+        for p_ in range(0, len(b) - 4, 4):
+            v = struct.unpack_from("<I", b, p_)[0] - BASE
+            if 0 <= v < len(b) and v not in ptr_of:
+                ptr_of[v] = p_
+        offs, k = [], 0
         while k < len(b):
             z = b.find(b"\x00", k)
             if z == -1:
                 z = len(b)
             if z - k > 2:
+                offs.append(k)
+            k = z + 1
+        seq, last = [], -1
+        for off in offs:
+            if off in ptr_of:
+                last = ptr_of[off]
+            seq.append((last, off))
+        for _pos, k in sorted(seq):
+            z = b.find(b"\x00", k)
+            if z == -1:
+                z = len(b)
+            if True:
                 jt = s_at(b, k)
                 if jt and JP_RE.search(jt):
                     v = got.get(str(k))
@@ -206,7 +234,6 @@ def main():
                         kind = "unmatched"
                         cell = u'<span class="miss">no confident match</span>'
                     else:
-                        k = z + 1
                         continue
                     n[kind] += 1
                     per[i] = per.get(i, 0) + 1
@@ -215,7 +242,6 @@ def main():
                             u"<tr class=%s data-r=%d><td class=n>%s</td>"
                             u"<td class=jp>%s</td><td class=en>%s</td></tr>"
                             % (kind, i, ident, esc(jt), cell))
-            k = z + 1
 
     sub = u"%s &middot; %s" % (
         esc(os.path.basename(src)),

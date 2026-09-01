@@ -24,6 +24,12 @@ ELL = b"\x81\x63"    # …
 OQ, CQ = b"\x81\x75", b"\x81\x76"
 
 FIXES = [
+    # 2026-08-31: the break fell inside "Roger Smith", splitting the name
+    # across two lines. Pure re-wrap - the same characters, the \\n and a
+    # space trade places, so the field is byte-for-byte the same length and
+    # no voice-sync offset moves.
+    (b'"I can see it, Roger\\nSmith! Your shocked face!"',
+     b'"I can see it, Roger Smith!\\nYour shocked face!"'),
     (b'"Roger' + FW_C + b"I'll hold back" + FW_P + b'"',
      b'"Roger' + FW_C + b'covering fire!"'),
     (OQ + b"Sorry" + FW_C + b"but" + ELL + b"\\nmine!" + CQ,

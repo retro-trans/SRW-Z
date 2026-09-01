@@ -10,6 +10,480 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.6 (2026-09-01) - Koji, and the rest of the rec55 proofread
+
+**甲児 is Koji, not Kouji - 966 occurrences across 958 rows and 90
+records, plus 5 COMPDATA fields.** The issue #2 pass had fixed his pilot record
+and nothing else, so his name plate read "Koji" while all 774 of his dialogue
+lines were attributed to "Kouji". Image-wide it is now Koji 981, Kouji 0.
+
+The rename only ever made lines SHORTER, and still tripped the box gate on
+three rows (rec28, rec66, rec98). Each had been over 30 columns on its own
+merit, so verify_boxes ignored them; dropping one character left the 「 as
+the sole reason they exceed the limit, which is the v1.55 crash signature.
+All three rewrapped under 30. Worth remembering: a shortening rename is not
+automatically safe for layout.
+
+**rec55 passes two and three** (pass one shipped in 0.9.5). Pass two found nine
+more issues in rows pass one had already read - ロドニア is Lodonia not
+Rodania, 憎いぜコンチキショー is admiring ribbing rather than "Damn, I hate
+you", and three rows still used ASCII quotes instead of 「」. Pass three
+worked by defect signature rather than re-reading and turned up one real find
+(議長 had become a vague "a man") against 24 false positives.
+
+**Gates**: box OK, control bytes OK, integrity 0 problems, verify_pointers
+--against 0.8.111 81,345 checked / 0 broken.
+
+**Known untranslated, not addressed here**: NISVDATA.BIN (LBA 1568269) holds
+7,734 japanese strings against 1,181 english. Four of its seven records are
+untouched - rec5 is the ten tutorial pages (english headings, japanese bodies),
+and rec3 + rec6 hold 7,534 more strings. No tool in this project reads that
+file.
+
+## 0.9.5 (2026-09-01) - stage rec55 proofread against the japanese, three passes
+
+Every one of rec55's **649 dialogue rows** read against its japanese. 40+ fixes.
+
+**Four rows whose english bore no relation to the japanese.** The same class as
+the rec136 bug: 風見's "Yeah, yeah. Glad to have you aboard.", キエル's
+"(No, Shaya..! If the Fed learns of this place..!)", フォウ's "Kei eased the
+crew" for 「うん…」, and アスラン's "Even now. We can win!" for 「カガリ…」.
+
+**Two rows reversed the meaning.** 外す there means to deliberately MISS - Kira
+spares cockpits, which is the point of the scene - and both Tetsuya's and
+Mizuki's lines said he rips them out.
+
+**Fifteen rows had 連邦 as "Union".** 連邦 is the Federation (869 rows) and 連合
+the Alliance (166); swapping them names the wrong faction. Orb Union is
+correct and was left alone.
+
+Also: ラクス addressing 「キエルさん、ロランさん」 said "Kihel, Lacus" - the
+speaker's own name; ギンガナム艦隊 was "Dianna's fleet"; ジュリィの兄ちゃん
+became "Julie's brother", inventing a person; 自己満足 was "self-pity";
+フっちゃいました ("I dumped him") was "He bolted"; 一時も気が抜けん ("can't drop
+your guard") was "never lets up"; ロドニア was "Rodania", not Lodonia;
+憎いぜコンチキショー (admiring ribbing) was "Damn, I hate you"; 議長 became a
+vague "a man". Kiel/Kihel, Toga/Touga, Haine/Heine and Kirakenn/Kiraken all
+disagreed with themselves inside one stage. Three rows still used ASCII quotes
+instead of 「」 - converting adds 2 columns a line, the v1.55 crash shape, so
+each was rewrapped under 30.
+
+**A third pass by signature rather than re-reading** (dropped ranks, lost
+negation, missing proper nouns, sentence-count gaps) flagged 25 rows and all
+but one were false positives - the negations are rendered idiomatically. That
+is weak evidence the stage is now sound, not proof: pass two found nine issues
+in rows pass one had already read.
+
+Still open in this stage: 神ファミリー as "Kami family" (likely Jin - the
+issue #2 surname item), ブライト艦長's dropped rank (no room in a 64-byte slot),
+and inconsistent ellipsis width.
+
+**Gates**: box OK, control bytes OK, integrity 0 problems, verify_pointers
+--against 0.8.111 81,345 checked / 0 broken.
+
+## 0.9.4 (2026-08-31) - the DATA HELP panel, measured instead of assumed
+
+**The help pool.** 271 of 1,111 english fields in the DATA HELP / description
+pool ran off the right edge of the screen. The panel is **42 half-width columns
+by 4 lines** - the width measured with a PINE ruler written into a live field
+(it clipped after "...DDDDDDDDD|EE"), the height from the japanese, which never
+uses more than 4 lines in 533 fields. The rule used when this pool was first
+translated was "english character budget = japanese width in cells", which is
+true of the description panels elsewhere and false here: the japanese draws at
+roughly 8px per cell where our english draws at 13px per character. That gave
+58 columns where the panel has 42.
+
+  * 217 re-wrapped by `rewrap_help.py`, which redoes only SOFT wraps - a field
+    splits into segments at line breaks following a sentence end, so structure
+    the translator put there survives.
+  * 5 more by its fallback: some fields held less than 168 columns yet still
+    overflowed because sentence-end breaks cost a line each (one had 143
+    columns over 6 lines). Those reflow as one paragraph.
+  * 46 rewritten by hand in `help_shorten.py` - re-wrapping cannot shorten text
+    and these held 143-199 columns against a 168 budget.
+  * 3 left alone. A pointer-shaped word lands INSIDE each of their strings and
+    the 0.8.90 guard refuses any write covering it. Almost certainly
+    coincidental, but that class of stray is what froze save-load in 0.8.72,
+    and the payoff is 1-6 columns of clipping on three pages.
+
+**`[31]` and `[8]`.** Not our garbage - literal ASCII in the shipped japanese,
+where `[31]` always begins a line as an indent. Our translation had moved one
+mid-line, and rendering STOPPED there: the barrier entry died at column 14 with
+two of its four lines missing. Replaced with plain spaces.
+
+**Names.** `Captain Quattro` -> `Lt. Quattro` (72 rows; at full "Lieutenant" 16
+rows overran their byte slot and 26 the box). `Astonage` -> `Astonaige` +
+`Medos` -> `Medoz`. `Tziine`/`Tsiine` -> `Ziene Espio` per the akurasu Pilot
+Database - 33 of these survived an earlier pass because the encyclopedia is
+compressed AND obfuscated, so no byte-level pass reaches it (`zkn_rename.py`
+now does). `Emperor Brai` -> `Emperor Burai`. `百人衆` unified as `Hyakki
+Hundred`, the term the pilot library already defined - it had three renderings.
+`Chaos Caper` -> `Chaos Capra`.
+
+**Script.** Valz's proofread of stage 1: 49 rows. One refused (33 bytes into a
+32-byte slot) and one skipped because his extract is 0.9.0-based and would have
+reverted `Lt. Quattro` - his file is keyed by raw offset, which does not
+survive a rebuild. Also `恨むんならディアナを恨みな` had been translated as blame
+the people *near* her, dropping the name and inverting the target; and an
+Athrun line said "Union" where the japanese is 連邦, Federation in 868 rows.
+
+**Gates**: control-byte OK, box gate OK, integrity 0 problems, and
+`verify_pointers --against 0.8.111` 81,345 checked / 0 broken. Note `--min 85`
+is no longer a gate: 27 records of the UNTOUCHED JAPANESE DISC score below it.
+
+## 0.9.1 (2026-08-30) - the Aquarion names, and seven lines that were not translations
+
+### Nine Shadow Angels, and why majority vote would have got six of them wrong
+
+Three screenshots of one scene: the same white-haired character labelled 'Fudo'
+in one line and 'Zushi' in the next, and a third line reading 'The legend of...'
+under a different portrait entirely.
+
+Every 翅 name was a naive on'yomi reading of the kanji. The SRW wiki settles all
+nine, and in SIX of them the wrong form held the majority:
+
+    頭翅 トーマ    Zushi  x122 -> Touma       音翅 オトハ   Onshi  x31 -> Otoha
+    詩翅 シリウス  Shishi x167 -> Sirius      双翅 フタバ   Soushi x33 -> Futaba
+    両翅 もろは    Ryoshi x47  -> Moroha      夜翅 ヨハネス Yashi  x22 -> Johannes
+    智翅 シルハ    Chishi x5   -> Shiruha     練翅 レンシ   Neri   x3  -> Renshi
+    剛翅 ごうし    already correct
+
+710 replacements. 詩翅 is Sirius de Alicia's name after he defects, so it is the
+same character the player already knows. Speakers now agree with the japanese on
+all 470 shadow-angel rows.
+
+### Seven rows in rec136 that were not translations at all
+
+A JP-to-EN speaker map found rows where BOTH the label and the line were
+unrelated to the japanese - generic combat barks sitting where a scripted
+exchange belongs, which is why nothing ever flagged them: they are the right
+length, correctly punctuated, and plausible for the character.
+
+    音翅「太陽の翼！お前は私の手で倒す！」    shipped as  Fudo「The legend of...」
+    頭翅「任せる、音翅…」                    shipped as  Reika「We're with you!」
+    音翅「次元の狭間に住まう者共も…滅びよ」  shipped as  Lina「We'll back you up!」
+    ケンゴウ「いかん！オラトリオが起動する！」shipped as  Zushi「...Forgive me...」
+    $n「何っ！？」                           shipped as  Apollo「It's over, Zushi!」
+
+Three unrelated mismatches in one record is a pattern, not chance. rec136 wants
+a dedicated row-by-row audit against the japanese; that is not this build.
+
+### rec137 has no headroom, and that shaped the whole approach
+
+Three of the nine names get LONGER, and a row that outgrows its slot is appended
+to the record and repointed. rec137 cannot take that: our compress_record_optimal
+produces EXACTLY 10000 bytes for its 10000-byte slot. Even the unmodified record
+only just fits.
+
+So the growing renames were applied by TRIMMING each affected row by 1-3 bytes to
+fit in place instead of relocating. Characters removed become NUL padding, which
+the codec encodes almost for free - that is what buys the space back. rec137 now
+packs to 9994.
+
+Any future edit to rec137 must be checked against compress_record_optimal before
+it can be called done.
+
+### rename_term.py --rules
+
+Nine separate runs recompressed the same overlapping records nine times, and a
+record whose fast blob overruns its slot falls back to the ~85s optimal path. The
+first attempt did not finish the first of nine renames in 25 minutes. One pass
+over all nine rebuilds 23 records once.
+
+### Also
+
+  * Talia: 「We're allies」 -> 「They're allies」. 同盟を結んだ間柄 has no
+    first-person subject - Orb and the Federation are the allies, not ZAFT.
+    Same class as the ダーリン、嬉しそう line: japanese drops the subject and the
+    translation supplies the wrong one. Fluent, correct length, undetectable
+    except beside the japanese.
+  * New tools/rhdn_screenshots.py: converts PCSX2 captures to a resolution
+    romhacking.net accepts, trimming letterbox bars first and picking the native
+    mode closest in aspect PER IMAGE - the dialogue screens are 4:3 (640x480),
+    the unit status screen is 1.42 (640x448).
+
+### Gates
+
+`integrity` 0, `verify_elf_patches` all present, `verify_terms` OK, `verify_boxes`
+OK, `verify_spirits` 37 distinct, `verify_control_bytes` OK, `verify_pointers
+--against` 0 broken. verify_boxes caught two 31-column rows I introduced by
+checking byte-fit and line count but not WIDTH; both fixed before the build.
+
+## 0.9.0 (2026-08-29) - release
+
+The version this is released at. Contents are 0.8.114 plus the panel-width
+calibration below; the interesting work is written up under 0.8.112-0.8.114.
+
+### What changed since 0.8.98, the last released build
+
+  * COMPDATA's interface strings: 82 japanese pool strings down to 1 - the
+    sortie-prep caution popup, squad-list pickers, spirit legend, sort help,
+    search tabs, name-input keyboard, BGM track names. The one left is an
+    orphan sentence tail with no context to translate it into.
+  * The last two untranslated speech rows in the whole script (both Loran's).
+  * The Back Log footer, the Sortie Prep status panel, and a raw 0x3A that was
+    expanding to the protagonist's name.
+  * The terrain row, settled against live memory over PINE.
+  * 97 lines that had never been translated in stg_099a, and 193 wrong speakers.
+  * The end-of-stage-1 crash.
+
+### Panel-width calibration
+
+Four description strings had been sized against the JAPANESE line width, which
+is the wrong ruler for a half-width panel. Measured against each panel's own
+shipped neighbours instead, they had room to spare:
+
+    0x722A0  spirit legend  panel 52 x 5   explanatory sentence restored
+    0x73E20  sort help      panel 46 x 2
+    0x73FA8  sort help      panel 46 x 4
+    0x76058  memory card    panel 49 x 3
+
+The caution popup stays at 25 characters: a screenshot shows it clipping at 30
+regardless of what its pool neighbours do, and a screenshot outranks a
+neighbour survey.
+
+### Release
+
+    SRWZ-English-v0.9.0.xdelta   5,581,423 bytes
+    source image sha1  e8dbe37e88afe8f82d48889b0775274ccde3cf99  (SLPS-25887)
+    result image sha1  bd4973d51ce6f5f47db46a2c52550fe4e7ed83a1
+
+Verified by applying the patch to the pristine japanese disc and comparing the
+result against the built image: identical.
+
+### Texture pack cut from 64 replacements to 20
+
+The user reported the intermission status-bar labels never applied. They could
+not: those textures are COMPOSITED FROM ELF TEXT at runtime - `SR Point`
+0x343578, `Funds` 0x3435A0, `BS` 0x343598 - and PCSX2 matches on a hash of the
+resulting PIXELS. Every build that edits one of those strings invalidates its
+replacement; 0.8.113 renaming `Funds` to `Fnd` killed the last of them. The tell
+was visible in the pack all along: 14 distinct hashes for the single word
+'SR Points'. Static disc art has one.
+
+Removed: 40 status-bar labels, 4 'Ep' variants, and both prologue title cards
+(those machine-dependent rather than version-dependent). Kept: the 20 menu
+buttons, whose words - INTERMISSION, Data, Next Map, Bazaar, Pilots, Options -
+are NOT ELF strings, so they are static art and their hashes hold.
+
+A region-bounded filename was the existing test for portability. It turns out to
+be necessary but not sufficient.
+### Gates
+
+`integrity` 0 problems, `verify_iso` OK, `verify_elf_patches` all present,
+`verify_terms` OK across script + captions + encyclopedia, `verify_boxes` OK,
+`verify_spirits` 37 distinct, `verify_control_bytes` OK, `verify_pointers
+--against` 0 broken.
+
+## 0.8.114 (2026-08-29) - a raw colon that expanded to the protagonist's name
+
+The Back Log footer read 'SetsukoUp  SetsukoPrev  Setsukofast)  SetsukoBack' on
+Setsuko's route, and 'RandUp  RandPrev  Randfast)  RandBack' on Rand's.
+
+0.8.112 shortened those fragments to :Up, :Prev, :Next, :Down, :Back, :fast) and
+wrote them with str.encode('cp932'). ASCII ':' is 0x3A, which is inside the
+0x2E-0x3D range the menu reader at 0x13A290 treats as CONTROL CODES - and 0x3A is
+the one that expands to the protagonist's name. I reached for the raw byte to save
+8px over the 21px full-width colon.
+
+There is no half-width colon. patch.encode(s, 'menuhw') maps ':' to 0x8146 and it
+costs 21px; digits and '.' get private half-width cells, but ':' and '/' do not.
+All six fragments now go through menuhw and still beat what they replaced:
+
+    ：Prev  73px where ：台詞戻し was 105px      ：Up    47px where ：行戻し was 84px
+    ：Next  73px                                ：Down  73px
+
+：Back (+10px) and ：fast) (+2px) overhang their japanese, as they did in every
+build before 0.8.112 - both sit at the end of their line.
+
+### New: tools/verify_control_bytes.py
+
+This is the THIRD defect from this one rule - 'Type100' drew as 'TypeDijeh' back in
+the COMPDATA work - and nothing checked for it. The gate scans every declared UI
+string in the ELF for a raw 0x2E-0x3D byte. It found two more that had shipped:
+
+    0x341538  'Air/Sea'  -> 'AirSea'   beside AirOnly and GndOnly
+    0x343B00  'Ally/'    -> 'Ally／'    its own neighbour 0x343B28 is '／Enemies'
+    0x3477E8  'Ep.'      -> 'Ep.'      same text, '.' now the private cell 0x8540
+
+Both slashes had full-width ／ siblings sitting a few bytes away, which is what
+makes them oversights rather than decisions.
+
+### Gates
+
+`integrity` 0, `verify_elf_patches` all present, `verify_terms` OK, `verify_boxes`
+OK, `verify_control_bytes` OK (1290 strings, none raw), `verify_pointers --against`
+81,345 resolving / 0 broken. Delta verified byte-identical to the build.
+
+## 0.8.113 (2026-08-29) - the Sortie Prep panel, and text measured against its box
+
+### The panel: right-aligned numbers have no fixed budget
+
+'Sortie Sq⁠uads' with the count 4 drawn through it and a leftover 隊 after it; one
+row up, 'Fund119,969' with no gap. Same class as 0.8.112's Back Log footer, with
+one extra wrinkle: the labels are drawn left and the VALUES right-aligned, so
+there is no fixed budget - a longer number reaches further left into the label.
+'Funds' looked fine beside a 3-digit total and lost its 's' to a 7-digit one.
+
+    出撃小隊  84px -> 'Sortie Squads' 169px -> 'Squads' 78px
+    資金      42px -> 'Funds'          65px -> 'Fnd'    39px
+
+The 隊 at 0x3435B8 is a counter suffix - '4 隊' - and the english label now
+carries the noun, so it is blanked rather than translated.
+
+Four other standalone 隊 are left alone on purpose. Three (0x3409A8, 0x3409B8,
+0x340A10) sit in a list beside Sq, 団, Corps, Team and Force: that is the squad-
+NAMING picker, two parallel lists of name components, and blanking them would
+delete choices from a menu rather than remove a stray. The fifth (0x344DC0) sits
+among ／（） on a results line with no context to judge it from.
+
+### The Caution popup overflowed, and what it taught
+
+0.8.112 translated the sortie-prep caution popup and it ran off the panel:
+'No squad able to sortie has be|en'. The text is drawn at FULL-WIDTH advance
+there - one english character per cell, not the 13px half-width the menus use -
+which is visible in the letter spacing. So the japanese line width in CELLS is
+the english budget in CHARACTERS.
+
+Measured against that, six of the 81 were over. Five now sit exactly inside their
+japanese shape, in both width and line count:
+
+    0x7A2C8  40 chars -> 25   (jp 27 cells, 3 lines)   the caution popup
+    0x73E20  50 -> 27         (jp 27)
+    0x73FA8  66 -> 32         (jp 32, 4 lines)
+    0x76058  35 -> 24         (jp 24, 2 lines)
+    0x79560  32 -> 18         (jp 19)
+
+The sixth cannot. The spirit legend lists 17 commands; with readable names that
+is ~161 characters and the japanese shape gives 4 x 34 = 136. The japanese fits
+because 熱：熱血 is four cells and 'Va Valor' is eight. It now runs 5 lines at 37,
+which is the same +3 margin the popup demonstrated (30 characters drawn where the
+japanese was 27 cells) - but it is the one string outside its original shape and
+the one to check on screen. The [10] SP costs the japanese carries were dropped;
+there is no room for them at any line count.
+
+### Gates
+
+`integrity` 0 problems, `verify_elf_patches` all present, `verify_terms` OK,
+`verify_boxes` OK, `verify_pointers --against` 81,345 resolving / 0 broken,
+stray-pointer guard clean. Delta patch verified byte-identical to the build.
+
+## 0.8.112 (2026-08-29) - the menu chrome, and pixels as a budget
+
+### The sortie-prep popup, and 80 strings behind it
+
+A screenshot of the Sortie Prep caution popup, still in japanese. It is not in
+STAGE and not findable in the raw image - it lives in COMPDATA.BN's string pool.
+82 pool strings were still japanese; 81 are now english. The one left is an
+orphan sentence tail, 'なる。', sitting between finished english sentences with
+no context to translate it into.
+
+Written IN PLACE. apply_pool.py would repack the pool and remove every length
+limit, and it REFUSES on COMPDATA - 62 pointer-shaped words sit on a
+pointer-table stride, and those are exactly the 62 that 0.8.81 broke and 0.8.90
+repaired. The guard is right; the repack is not worth re-breaking them for.
+
+The budget is each string's own slot including its NUL padding. That padding is
+not always free: 0.8.90 established that some pointers target a string's padding
+deliberately so they resolve to an EMPTY string and draw a blank slot. The
+applier now computes those 62 addresses and REFUSES any write that would cover
+one, rather than trusting that none overlap. None do - but that is now checked
+rather than assumed.
+
+Two encoding facts decided what fit. Menu text goes through the menuhw encoding
+because bytes 0x2E-0x3D are CONTROL CODES to the menu reader, so every digit and
+every '.' costs TWO bytes - which is why 'Spare 1' does not fit seven bytes and
+'Spare1' does. But button markup is NOT menu text: the original stores <-5> as
+plain ASCII 3c 2d 35 3e because the renderer consumes the token before the font
+path sees it, so encoding it would cost 6 bytes instead of 4 and change what the
+game draws. Markup now passes through verbatim and only the words around it are
+encoded.
+
+### New: tools/dump_compdata_jp.py, and a defect that never existed
+
+The 41 strings drafted first were keyed to pool offsets from a list of japanese
+read separately - two parallel lists, never checked against each other. Auditing
+them afterwards, I aligned the current pool against pristine COMPDATA by entry
+INDEX and concluded a run of squad-list pickers was off by one slot.
+
+It was not. The index alignment was the thing that was wrong: 0.8.81's repack
+moved every string, the entry counts differ (3433 against 3435), and a difflib
+pass over slot lengths aligned only 23.5% of the pool - enough to produce
+confident, wrong pairings. Read against an image built BEFORE the english was
+written, every one of the 41 was correctly placed.
+
+So the lesson is not the bug I thought I had found, it is that offsets and text
+must travel together. dump_compdata_jp.py writes both from one image in one
+pass, and translations are now keyed to that file. Its first version also
+reported 1058 japanese strings against the true 82, because its character class
+included fullwidth ASCII - which translated menu text uses on purpose.
+
+Three labels were genuinely inconsistent and are fixed: 小隊指定 is 'Pick Squad'
+everywhere else in the set, and トライ is 'Tri' at 0x7A130, so 'Trinity Squad
+Select' became "'Tri' Pick Squad".
+
+### The Back Log footer, or: bytes were never the constraint
+
+The same screenshot showed the footer reading
+
+    :Row bac(triangle):Prev (Hime[R1]l:fast)
+
+The footer is assembled from FRAGMENTS with a button icon between each pair, and
+the icons sit at FIXED x positions chosen for the japanese. Every english
+fragment was wider than what it replaced:
+
+    :Prev line   138px  where 台詞戻し was 105px
+    :Row back    125px  where 行戻し   was  84px
+
+So the triangle landed on the final 'k' and everything after it piled up. The
+fragments are now :Prev :Next :Up :Down :fast) - each inside the japanese budget,
+with an ASCII colon (13px) instead of the full-width one (21px).
+
+Nothing detected this. The strings fit their byte slots, were spelled correctly,
+and verify_ui_strings.py confirmed they had reached the image. Bytes were never
+the constraint - pixels were.
+
+### New: tools/verify_ui_width.py
+
+The font is fixed-pitch (13px half-width, 21px full-width), so width is
+arithmetic and the japanese a string replaced is the budget the layout was built
+around. This measures every ELF UI string against its original, per LINE rather
+than per string - summing across newlines makes every six-line item description
+look like the worst offender while hiding the short fragments that actually
+collide.
+
+It OVER-REPORTS by design: 388 strings are wider than their japanese and most
+overhang into nothing. It ranks, it does not judge. 299 are short single-line
+fragments, which is where the risk is - the two in this bug were +41px and +33px.
+
+### The last two untranslated rows in the script
+
+A backlog screenshot caught Loran speaking japanese. A sweep of all 205 STAGE
+records found exactly two untranslated speech rows left in the whole script, both
+in rec18, both his:
+
+    「あれ…」        -> 「What's that...」
+    「落ちてくる…!?」 -> 「It's coming down...!?」
+
+落ちてくる is falling TOWARD the speaker, which 'It's falling' loses.
+
+### A gate that failed and should not have
+
+verify_pointers --min 85 reported rec48 at 84.9% and FAIL. It is the blind spot
+already written into that tool's own docstring: the denominator counts every
+4-aligned word whose value lands inside the record, so it inflates when a record
+grows, and 0.8.110 grew rec48 by relocating rows. The numerator never moved.
+--against is size-independent: 81,345 pointers resolving in the pre-change image,
+0 no longer resolving. Lowering the threshold would have been the wrong fix, and
+so would trusting the ratio.
+
+### Gates
+
+`integrity` 0 problems, `verify_elf_patches` all present, `verify_terms` OK
+across script + captions + encyclopedia, `verify_boxes` OK, `verify_spirits` 37
+distinct, `verify_pointers --against` 0 broken, stray-pointer guard clean.
+stamp_build --diff: COMPDATA, ELF and STAGE changed, nothing else.
+
 ## 0.8.111 (2026-08-29) - the terrain row, settled against live memory
 
 Four builds went at this by eye. This one was measured.

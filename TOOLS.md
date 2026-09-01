@@ -19,7 +19,7 @@ Two warnings that are not obvious from any docstring:
 | [Build and packaging](#build-and-packaging) | 5 |
 | [Translation data](#translation-data) | 13 |
 | [Applying text to the image](#applying-text-to-the-image) | 6 |
-| [Fixing specific defects](#fixing-specific-defects) | 26 |
+| [Fixing specific defects](#fixing-specific-defects) | 27 |
 | [Patching the executable, art and UI](#patching-the-executable-art-and-ui) | 36 |
 | [Generators](#generators) | 4 |
 | [Scanning and auditing](#scanning-and-auditing) | 8 |
@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 62 |
+| [Everything else](#everything-else) | 63 |
 
 ## The pipeline
 
@@ -209,6 +209,9 @@ Each of these was written for one bug found by someone playing the game and noti
 
 **`fix_body_terms.py`**  
 Normalise names and terms INSIDE dialogue, not just on the speaker line.
+
+**`fix_bracket_pairs.py`**  
+Make the UI's hint brackets match each other.
 
 **`fix_fullwidth.py`**  
 Fullwidth punctuation -> ASCII, in ENGLISH DIALOGUE only.
@@ -627,6 +630,9 @@ Generate the hashed english for rec6's 17 section blurbs.
 
 **`nisv_terms.py`**  
 The UI vocabulary rec6's cross-reference lists are built from.
+
+**`pool_grow.py`**  
+Grow one COMPDATA string past its slot, by moving it and repointing.
 
 **`preview_16level.py`**  
 Show 4-level vs 16-level alpha for the SAME face, at real size.

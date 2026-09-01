@@ -10,6 +10,150 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.20 (2026-09-01) - the episode-title budget was never real
+
+Episode 34 read **"False Queen, Masked"** on the title card - an adjective with
+nothing attached to it. The japanese is 偽りの女王、仮面の姫, "False Queen,
+Masked **Princess**", and the noun had been dropped because the field holds 23
+characters and the full title needs 28. Checked the other titles before
+assuming a pattern: the rest are faithful, this was the only one that lost a
+word.
+
+Every rewrite inside 23 characters cost something. "False Queen, Masked Girl"
+is 24 - over by exactly one. "Fake Queen, Masked Lady" fits and was shipped
+first, buying the noun by weakening "False" to "Fake".
+
+**Then the budget turned out not to be real.** pool.py had already established
+that COMPDATA's record loads at a hardcoded 0x006D6800 and is used IN PLACE,
+and that every pool string is reached through an ABSOLUTE RAM POINTER stored
+earlier in the same record - nothing indexes the pool by position. So a string
+is pinned to its offset only by the pointers that name it. And the record ends
+in **22,035 bytes of unused padding**.
+
+`tools/pool_grow.py` moves one string into that tail and rewrites every pointer
+to it. Episode 34 is now the full **"False Queen, Masked Princess"**, 28 bytes
+in a field that held 23.
+
+It relocates ONE string on purpose rather than repacking. repack() refuses
+without --allow-stray because 60 pointer-table entries deliberately aim into a
+string's NUL padding or a few bytes INTO a string, and 0.8.81 broke all 60 by
+assuming they were coincidence. Moving a single string touches only the
+pointers naming that string and never goes near them - the stray count is 62
+before and after. The old text is deliberately LEFT in place rather than
+blanked, for the same reason: something may point into the middle of it.
+
+Refuses unless the string is found exactly once as a whole field, at least one
+pointer names it, every pointer is rewritten, and the destination is 8-byte
+aligned inside the tail and entirely zero first.
+
+This lifts the limit for any COMPDATA UI string, not just this one - weapon
+names, ability names, menu labels. 22,032 bytes remain.
+
+NOT FIXED, and on the same card: **第３４話 is still japanese.** It is not a stored
+string anywhere - not COMPDATA, MAPNAME, STAGE or NISVDATA - which matches the
+earlier finding that the card is composed at runtime from a transient string.
+The "Ep." patches already in the ELF gate belong to a different screen. Fixing
+it needs the write-breakpoint work parked at 0xD02EE0.
+
+Gates: integrity 0 problems, control bytes OK, terms 40 OK, pool strays 62
+(unchanged).
+
+### then the same question was asked of everything else
+
+**Names that were transliterated instead of translated, because the slot was
+too small.** Comparing each japanese-english pair against its slot found 147
+whose english fills every byte; three of those had been romanised rather than
+rendered:
+
+    ミーティア・フルバースト  'Mitiafuru Burst'  ->  METEOR Full Burst
+    ナイトメア・ストライク   'Naitomea Strike'  ->  Nightmare Strike
+    ザ・ヒート・クラッシャー  'Za Heat Crusher'  ->  The Heat Crusher
+
+ナイトメア is Nightmare and ザ is the english article "The" - both had simply
+been spelled out in romaji to fit 15 bytes. All three are now correct AND
+NARROWER than the japanese they replace (-31px, -23px, -44px), so they cannot
+collide with anything either.
+
+**百鬼戦闘機一斉攻撃 was "Hyakki Full Atk"** - it had lost 戦闘機 entirely and
+abbreviated the rest into 15 bytes. Now **Hyakki Fighter Volley**.
+
+**Episode 37 was "The New Federation Reborn"** for 新地球連邦再編. That drops 地球
+and renders 再編 (reorganisation) as "Reborn", which is 再生. Now **New Earth
+Federation Reformed**, which fits its field without moving.
+
+**A terminology split, found while checking that title.** For the SAME japanese
+term 新地球連邦, ignoring rows that also use the short form:
+
+    New Federation        23 rows
+    New Earth Federation  22 rows
+
+Both appear inside rec23 alone. The japanese is not ambiguous - it uses two
+names and so do we, we just applied them at random:
+
+    新連邦     (short)  ->  New Federation        134 correct, 1 stray
+    新地球連邦 (full)   ->  New Earth Federation   22 correct, 23 wrong
+
+23 rows to normalise, and 3 rows use BOTH japanese forms in one line so they
+cannot go through a blind rename. NOT DONE YET - recorded here so it is not
+lost.
+
+**35 strings opened with a fullwidth ＜ and closed with an ASCII >.** Not
+carelessness: ASCII '<' is 0x3C, inside the control range, so only the OPENING
+bracket could be widened, leaving one glyph wide and one narrow on screen.
+Square brackets fix it properly - 0x5B/0x5D are both outside the range, both
+half-width, and they SHRINK the string so nothing has to move.
+`tools/fix_bracket_pairs.py`. Zero mismatched pairs remain.
+
+A check worth keeping: the japanese width is NOT the practical budget for
+these. The pool already ships names up to 39 characters and 507px
+('High-Energy Cannon Aufu Prall Doraitsen'), and an existing episode title is
+exactly as wide as the new one - which is why verify_ui_width.py over-reports
+by design and says so.
+
+## 0.9.19 (2026-09-01) - checking a claim I had made without checking it
+
+0.9.18 left 8 cross-reference lines japanese and said they could not be
+shortened because the shorter english would "disagree with the menus". Asked
+why, and the honest answer is that the claim was only true for a quarter of
+them.
+
+Checked by searching the shipped english for each term:
+
+    Repair Module     present   - shortening it WOULD contradict a real label
+    Resupply Module   present   - same
+    Transform         present
+    Combine           present
+    Separate          present
+    Terrain Effect    ABSENT    - I invented this wording
+    Unit type         ABSENT    - so did I
+    Repair Skill      ABSENT
+    Leader Bonus      ABSENT
+    Personality       ABSENT
+    Difficulty        ABSENT
+    Squad Building    ABSENT
+    Special type      ABSENT
+    Terrain type      ABSENT
+
+Two of the eight lines are blocked by words the game really shows. The rest
+were blocked by words that exist nowhere but nisv_terms.py, so shortening them
+contradicts nothing at all - it only had to stay self-consistent.
+
+Shortened, none of them shipped anywhere: 性格 Personality -> **Nature**;
+機体系 / 地形系 / 特殊系, which are the bazaar's PART CATEGORIES and not the
+stats they sound like, -> **Unit / Terrain / Special**; 機体・武器改造, already
+named individually elsewhere in the same table, -> **Upgrades**;
+隊長ボーナス -> **Lead Bonus**.
+
+**95 of the 158 lines now render, up from 91.** Four remain, and now the reason
+is specific rather than a general excuse: two are genuinely blocked by shipped
+labels (Repair/Resupply Module, and Transform/Combine/Separate), and two miss
+by 1 and 4 bytes on wordings I would rather leave readable than abbreviate
+into "Terrain Eff" and "Squad Edit".
+
+Running total: 390 NISVDATA fields in english, 2,830 still japanese.
+
+Gates: integrity 0 problems, pointers 94.50%.
+
 ## 0.9.18 (2026-09-01) - 102 more UI terms, and the lines they unlock
 
 43 more fields, all of them cross-reference lines, and none translated by

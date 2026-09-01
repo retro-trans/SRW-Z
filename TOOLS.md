@@ -28,7 +28,7 @@ Two warnings that are not obvious from any docstring:
 | [Battle voice lines (SRVC)](#battle-voice-lines-srvc) | 10 |
 | [Live instrumentation](#live-instrumentation) | 8 |
 | [Layout and re-wrapping](#layout-and-re-wrapping) | 2 |
-| [Everything else](#everything-else) | 57 |
+| [Everything else](#everything-else) | 58 |
 
 ## The pipeline
 
@@ -636,6 +636,9 @@ Convert PCSX2 captures to a resolution romhacking.net will accept.
 
 **`sheets_budget_captions.py`**  
 Give the caption sheets a live byte counter and the budget to compare it to.
+
+**`sheets_budget_dialogue.py`**  
+Live budget, width and line count for the DIALOGUE sheets.
 
 **`sheets_note_captions.py`**  
 Write a feedback column back to the battle-line workbooks.

@@ -159,10 +159,10 @@ unrelated to the japanese - generic combat barks sitting where a scripted
 exchange belongs, which is why nothing ever flagged them: they are the right
 length, correctly punctuated, and plausible for the character.
 
-    音翅「太陽の翼！お前は私の手で倒す！」    shipped as  Fudo「The legend of...」
+    音翅「太陽の翼！お前…    shipped as  Fudo「The legend of...」
     頭翅「任せる、音翅…」                    shipped as  Reika「We're with you!」
-    音翅「次元の狭間に住まう者共も…滅びよ」  shipped as  Lina「We'll back you up!」
-    ケンゴウ「いかん！オラトリオが起動する！」shipped as  Zushi「...Forgive me...」
+    音翅「次元の狭間に住…  shipped as  Lina「We'll back you up!」
+    ケンゴウ「いかん！オ…shipped as  Zushi「...Forgive me...」
     $n「何っ！？」                           shipped as  Apollo「It's over, Zushi!」
 
 Three unrelated mismatches in one record is a pattern, not chance. rec136 wants
@@ -901,7 +901,7 @@ This generalises. Any character can now be pulled the same way.
 
 ### Meaning inverted
 
-    女をいじめるのが趣味の男じゃ、この程度が関の山だな！
+    女をいじめるのが趣味…
       was "To bully women is my pleasure... this is all!"
 
 Said OF the enemy, about the enemy. The english made Rand the woman-beater. It
@@ -918,7 +918,7 @@ is fluent, correctly punctuated and fits the box - the same shape of defect as
 next line in his own bank, お釣りを忘れてるぜ, was already "You forgot your
 change!". The two readings sat four lines apart.
 
-    メール！お前の命、俺が預かる！！  was "Mel! Your life, I'm taking it now!"
+    メール！お前の命、俺…  was "Mel! Your life, I'm taking it now!"
 
 預かる is to hold in TRUST. He is promising to keep her safe, and the english
 read as a threat to kill her.
@@ -1027,7 +1027,7 @@ regression below - a verification that was true once, reported as if current.
                             -> "You there! Tough luck for you!"
       A taunt, not a two-word fragment.
 
-    わかってるって！そいじゃ、いくぜ！  "I know, I know! Then let's go!"
+    わかってるって！そい…  "I know, I know! Then let's go!"
       Checked and left alone - this one is right.
 
 ## 0.8.98 (2026-08-28) - the prologue, and 110 caption corrections
@@ -1085,7 +1085,7 @@ retreat!") and dropped evidentials.
 
 ### Also
 
-The advert 宇宙戦闘の必需品、スラスターモジュール was untranslated in 9 places.
+The advert 宇宙戦闘の必需品、ス… was untranslated in 9 places.
 New tools: srvc_pairs, caption_audit, caption_review, compare_captions,
 fix_row, rename_term, export_pairs, compare_translation, release.
 
@@ -1101,7 +1101,7 @@ From a screenshot: a caption overflowing its box and ending `down Teral!"!"`.
 The row had THREE faults, not one.
 
     stored : Kazuki / people of Io, make sure you take / down Teral!"!"
-    japanese: 香月「頼むぜ、闘志也さん、テラル…！
+    japanese: 香月「頼むぜ、闘志也……！
                 　イオの人達のためにも、
                 　絶対に[JP name]を倒してくれよ！」
 
@@ -2910,7 +2910,7 @@ terminal punctuation". 329 flagged; filtered to 118 with real content loss
                                               carrying weapons?!"
   女性が戦場に立つのは   "No women in battle"  -> "I cannot approve of a woman
                                               standing on a battlefield"
-  ニュータイプ…黒歴史の闇に封印された力  restored (the whole second clause
+  ニュータイプ…黒歴史…  restored (the whole second clause
                                        had been dropped)
 Also folded in the four fixes staged earlier tonight: 320 "There you are!",
 4953 Black History restored, 17101 keeps ためにも ("for this world's sake as
@@ -3632,7 +3632,7 @@ stamps AIR/GND/SEA/SPC/WTR art into the master-font cells of 空陸海宇水.
     the grown fsz and must be re-run if this patch is ever re-applied.
 CAPTIONS (user spot-check): 実戦経験の少ない子供 was "A kid with no real
 combat..." (dropped "experience", and 少ない = "little", not "no") ->
-"A kid with little real combat experience...!"; 「シャアか？違う…！こいつは！」
+"A kid with little real combat experience...!"; 「シャアか？違う…！…
 tightened; Psycommu spelling. Em-dash U+2014 is NOT cp932-encodable -
 use "..." instead (srvc_apply raises on it).
 

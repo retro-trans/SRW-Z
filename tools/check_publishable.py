@@ -84,6 +84,17 @@ def walk(root, staged):
                               "--diff-filter=ACM"],
                              capture_output=True, text=True, cwd=root).stdout
         return [f for f in out.split() if not f.lower().endswith(SKIP)]
+    # WHAT WOULD BE PUBLISHED IS WHAT GIT TRACKS, not what sits on disk.
+    # os.walk was used here and could not tell the two apart, so a translation
+    # table deliberately kept local - gitignored, and read by name_map.py only
+    # "if still present in the tree" - was reported as unpublishable forever.
+    # release.py archives with `git archive HEAD`, so tracked files are exactly
+    # the right set. Falls back to a walk outside a git checkout.
+    out = subprocess.run(["git", "ls-files"], capture_output=True, text=True,
+                         cwd=root)
+    if out.returncode == 0 and out.stdout.strip():
+        return [f for f in out.stdout.split("\n")
+                if f.strip() and not f.lower().endswith(SKIP)]
     files = []
     for base, dirs, names in os.walk(root):
         dirs[:] = [d for d in dirs if d not in (".git", "__pycache__")]

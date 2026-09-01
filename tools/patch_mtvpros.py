@@ -32,6 +32,7 @@ with spaces to the ORIGINAL chunk size, so no header maths is needed.
 Usage: patch_mtvpros.py <iso> [--dry]
 """
 import os
+import hashlib
 import struct
 import sys
 
@@ -163,8 +164,15 @@ def main():
             size = struct.unpack_from("<I", dat, j + 4)[0]
             jp_raw = bytes(dat[j + 8:j + 8 + size])
             jp_txt = jp_raw.decode("cp932", "replace")
-            jp_prefix, en = queue[0]
-            assert jp_raw.startswith(jp_prefix.encode("cp932")),                 "chunk order mismatch at rec%d +%#x" % (ri, j)
+            # Guards chunk ORDER: the chunk about to be overwritten must be
+            # the one this english was written for, or a mis-ordered walk
+            # splices narration into the wrong slot. The expected japanese is
+            # stored as a HASH, not as text - it was only ever compared, never
+            # read, and holding Banpresto's prologue verbatim is what made
+            # check_publishable refuse the repo.
+            nbytes, want, en = queue[0]
+            got = hashlib.sha1(jp_raw[:nbytes]).hexdigest()[:16]
+            assert got == want, "chunk order mismatch at rec%d +%#x (%s != %s)" % (ri, j, got, want)
             queue.pop(0)
             jp_lines = jp_txt.split(chr(10))
             flags = [ln.startswith(IDSP) for ln in jp_lines]

@@ -78,6 +78,20 @@ def main():
         print("WARNING: no --preserve file. Any proofreader entry in these "
               "sheets will be BLANKED.")
 
+    # --only takes a WORKBOOK NUMBER (1..len(groups)), not a record number.
+    # Passing a record number - "--only 61" for STAGE rec61 - matched no
+    # workbook and pushed nothing, silently, while still exiting 0. That left
+    # the sheet stale for two whole stages that had been reported as synced.
+    if only is not None and not 1 <= only <= len(groups):
+        raise SystemExit(
+            "--only takes a WORKBOOK number 1..%d, not a record number. "
+            "Got %d. To push one record, push its workbook: %s"
+            % (len(groups), only,
+               ", ".join("rec %s-%s -> book %d" % (r[0], r[-1], i)
+                         for i, r in enumerate(groups, 1))))
+    if only:
+        print("pushing ONLY workbook %d of %d" % (only, len(groups)))
+
     gc = gspread.authorize(Credentials.from_service_account_file(key, scopes=SCOPES))
     books = {f["name"]: f["id"] for f in gc.list_spreadsheet_files()}
 

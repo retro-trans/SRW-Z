@@ -10,6 +10,58 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.33 (2026-09-02) - the Methuss that drew a Nemo
+
+Reported with two screenshots: the Methuss unit screen shows a Nemo. Name,
+stats and equipped parts are all correct - only the artwork is wrong.
+
+The user bisected it: **0.8.89 clean, 0.8.90 broken**. That is decisive,
+because 0.8.90 changes exactly one thing on the disc - COMPDATA - and its only
+content change is tools/fix_pool_strays.py.
+
+**What 0.8.90 did.** 0.8.81 repacked the string pool and rewrote every word
+that looked like a pool pointer, skipping 91 that did not land on a string
+start because they "were u16 pairs". 0.8.90 judged that wrong for the 60
+sitting on a pointer-table stride, and repaired 62 words. For 57 that was
+right. For 5 it was not - they really are u16 ID pairs, and a stride test
+cannot tell the difference, because a unit record's FIRST WORD is on a stride
+by construction.
+
+    @0x050d44  (0x00d1, 0x0074)   @0x050dcc  (0x00d2, 0x0074)
+    @0x050d88  (0x00d1, 0x0075)   @0x050e10  (0x00d3, 0x0074)
+                                  @0x050e54  (0x00d3, 0x0075)
+
+**Why they read as pointers.** The pool sits at RAM 0x0073E080..0x00756700, so
+a pair whose HIGH half is 0x0073/0x0074/0x0075 resolves inside it by pure
+coincidence. The record immediately above proves it: 0x050d00 holds
+(0x00d0, 0x0073), which resolves BELOW the pool and was therefore left alone,
+while (0x00d1, 0x0074) resolved inside and was overwritten.
+
+**Why the mech changes.** The unit table runs on a 0x44 stride - id pair, index
+(0xf9, 0xfa, 0xfb... sequential), name pointer, HP. Methuss owns three records;
+two had their leading pair clobbered, so each still carries the right name and
+the right stats and picks its artwork from a corrupted id.
+
+**The fix.** Restore the five words from the pristine japanese disc - they were
+never translated and never legitimately repointed, so the original value is
+correct by definition. A sweep of the whole record confirms these were the only
+five: 29 words carry the id-pair signature and all 29 now match japanese.
+
+**The gate.** `fix_unit_id_pairs.py --check` scans by TARGET, not by stride: a
+real pointer lands on a string START, an id pair lands mid-string because its
+value is not an address. That is the test 0.8.90 needed and did not have, and
+it is the one that separates these 5 from the 57 genuine repairs and from the
+METEOR Saber weapon pointers that also match the numeric signature.
+
+Ruled out along the way, by full per-file diff against the japanese disc: every
+mech graphics archive (TICI, TCI, TRB, TBG, TWP, VEFF2DX) is byte-identical;
+VT1 differs only in one 256KB title-card region; the texture pack holds 20 UI
+labels and no mech art. The user confirmed both by test: disabling texture
+replacement did not help, and BISECT-ART was clean.
+
+Gates: boxes OK, control bytes OK, terms OK (51), pointers every record >= 85%,
+id pairs 29/29 OK.
+
 ## 0.9.32 (2026-09-02) - stage 36 retranslated; a pairing bug hid 196 rows
 
 A player sent a back-log capture of stage 36 reading

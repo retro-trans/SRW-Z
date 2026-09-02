@@ -73,6 +73,18 @@ BANNED = {
     "Ze Edel": "The Edel",
     "Jee": "Jie",
     "Jay Babel": "Jie Babel",
+    # 0.9.30. One katakana, two english spellings, found by pairing every line
+    # against its japanese rather than by spell-check.
+    "Gym Dianna": "Gym Ghingnham",   # ギム・ギンガナム - Dianna said his name
+                                     # and it came out as her own
+    "Kiel": "Kihel", "Kihal": "Kihel",          # キエル, 347 lines already right
+    "Sueson": "Suesson",                        # スエッソン
+    "Chirum": "Chiram",                         # チラム
+    "Diana Counter": "Dianna Counter",          # ディアナ. NOT bare "Diana":
+                                                # ダイアナン is "Diana A",
+                                                # Sayaka's machine, and legit
+    "Asuha": "Athha", "Atha": "Athha", "Attha": "Athha",   # アスハ. \b keeps
+    "Kagarill": "Cagalli", "Kagari": "Cagalli",            # Asuham safe
 }
 # "Raven" and "Leben" are ordinary words and appear legitimately - a different
 # character IS called Raven - so they are checked against the japanese by

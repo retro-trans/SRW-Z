@@ -76,6 +76,19 @@ def pair(eb, jb):
     return out
 
 
+# WHAT COUNTS AS A DIALOGUE ROW
+#
+# This used to be "the english has a newline AND a 「". Stage 35 then had its
+# corner brackets removed - they do nothing in the engine, and dropping them
+# gives back 4 columns and 4 bytes a row - and the whole record disappeared
+# from this export, because every row failed the 「 test. The sheet push then
+# died on KeyError: '61'.
+#
+# The japanese is the fixed point: it is never edited, and every spoken line
+# carries 「 there. So the bracket test belongs on the JAPANESE, which also
+# keeps recap panels and help text out just as effectively.
+
+
 def text_at(b, off):
     z = b.find(b"\x00", off)
     if z <= off:
@@ -114,10 +127,10 @@ def main():
         occ, key_of = {}, {}
         for off in sorted(m):
             et, _slot = text_at(eb, off)
-            if not et or NL not in et or KAGI not in et:
+            if not et or NL not in et:
                 continue
             jt, _ = text_at(jb, m[off][0])
-            if not jt:
+            if not jt or KAGI not in jt:
                 continue
             h = hashlib.sha1(jt.encode("cp932", "ignore")).hexdigest()[:12]
             n = occ.get(h, 0)
@@ -127,10 +140,10 @@ def main():
         rows = []
         for off in sorted(m, key=lambda o: m[o][1]):
             et, slot = text_at(eb, off)
-            if not et or NL not in et or KAGI not in et:
+            if not et or NL not in et:
                 continue
             jt, _ = text_at(jb, m[off][0])
-            if not jt:
+            if not jt or KAGI not in jt:
                 unpaired += 1
                 continue
             body = et.split(NL)[1:]

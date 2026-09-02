@@ -10,6 +10,69 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.30 (2026-09-02) - one katakana, two english spellings
+
+Asked to retranslate stage 35, I read all 483 rows of STAGE rec61 first. The
+prose is sound, so rewriting it would have been churn with real regression
+risk. What was actually wrong were the names - and pairing every english line
+against the japanese beside it found the same defect across the whole script.
+
+**179 fields.** Each confirmed against its japanese, not spell-checked:
+
+    Gym Dianna   <- ギム・ギンガナム   6 lines: Dianna says the villain's name
+                                      and it comes out as her own. 311 other
+                                      lines say Ghingnham.
+    Kiel, Kihal  <- キエル            Kihel in 347 places. Every bad row sat at
+                                      free=0, so these were SHORTENED to fit,
+                                      not mistyped.
+    Sueson       <- スエッソン        Suesson in 25 places.
+    Chirum       <- チラム            Chiram in 348.
+    Diana        <- ディアナ          Dianna in 925.
+    Asuha, Atha,
+    Attha,
+    Kagarill,
+    Kagari       <- アスハ / カガリ   five renderings of Athha; rec109 had raw
+                                      "Kagari Yura Asuha" twice.
+
+Three guards earned their place. `Diana A` is ダイアナン, Sayaka's machine, and
+is excluded by lookahead - a bare `Diana` rule would have renamed a robot.
+The width rule is "never wider than it already was", not an absolute 34, so the
+56-column recap panels were not mangled; judging fragments against an absolute
+is what caused the weapon-name mistake in 0.9.26. And no renamed term is a
+《glossary link》, so no scene can crash on a dead link.
+
+**Five corrupted thought lines, pre-existing.** Fields ending in a fragment of
+themselves - `...but...).)`, `...intentions.)ions.)` - left by an older pass
+that wrote a shorter string over a longer one without NUL-padding the tail.
+rec9 and rec154 were untouched by anything this build, which is how we know it
+predates it. Detected, not listed: the text after the first closing delimiter
+is a suffix of everything before it, which ordinary text never is.
+
+**Stage 35 without the corner brackets.** At the user's instruction, all 483
+rows of rec61 lost their 「」 and were re-wrapped, reclaiming 1,932 bytes and
+1,674 columns. The brackets do no work in the engine - a field is stored as
+`speaker 
+ body-lines` and the renderer already takes line 1 as the name
+plate. Nor do they separate speech from thought: thought lines are written
+「(...)」, brackets AND parens, so the parens carry that. This is a trial on one
+stage before the other 171 records follow.
+
+The re-wrap is a small DP over the word list: each line is charged the square
+of its width, which is minimised when lines are even, and refunded a bonus for
+ending on punctuation. Greedy filling leaves stubs; pure balancing splits
+clauses. Both together turn
+
+    Time limit: six minutes. Past / that, we fall back once.
+    Time limit: six minutes. / Past that, we fall back once.
+
+**Gate added.** All eleven spellings are now in `verify_terms.py` (51 total).
+It immediately caught 13 `Kiel` in the ENCYCLOPEDIA that the STAGE pass could
+not reach - fixed in `analysis/zkn_en.json` and in ZKN_PT. Note the gate's own
+message names `zkn_en_round3.json`; the build actually reads `zkn_en.json`.
+
+Gates: boxes OK, control bytes OK, terms OK (51), pointers every record >= 85%
+(94.56% overall). 35 records pushed to the proofreading sheet.
+
 ## 0.9.29 (2026-09-02) - "Aaaaargh" was the weapon's name
 
 Two reported lines.

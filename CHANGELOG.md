@@ -10,6 +10,53 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.28 (2026-09-02) - weapon names that did not fit the column
+
+From a screenshot of Super Gundam showing "14 Twin Missile Po" and "Beam Rifle
+(Rapid" both run into by the Class box.
+
+**THE WEAPON-NAME COLUMN SHOWS 17 HALF-WIDTH CHARACTERS, 221px.** Measured off
+that screenshot: an 18-character name loses a whole character, not a clipped
+sliver - the closing bracket of "(Rapid)" is simply absent, as is the "d" of
+"Pod". ビーム・ライフル（連射） is 12 full-width at 19px = 228px, so the japanese
+sits right at the edge as well.
+
+**I had this wrong in 0.9.26 and made four names worse.** I claimed the column
+was "wide - a normal unit ships the "Aufprall Dreizehn" cannon at
+483px", concluded the earlier pass had abbreviated against a budget that never
+existed, and expanded Dif．MegaP．Gun (194px, fitted) to Diffuse Mega Particle
+Cannon (364px). The abbreviations were right and my expansion was the bug.
+Those four are back inside the column.
+
+The rule applied here needs BOTH conditions:
+
+    over 221px          - so it is actually clipped on screen, and
+    wider than the JP   - so the clipping is ours, not the original's
+
+Either alone is wrong. A quarter of all weapon names are over the column in
+japanese too and clip as designed ("Sol Graviton Spiral Crusher Punch"
+is 399px); and "Ion Cannon" at 91px is 15px wider than イオン砲 while being
+clipped by nothing at all.
+
+86 names shortened, mostly (Rapid)->(R), (Wild)->(W) and Cannon->Gun applied
+ONLY where needed, so names that fit keep their full wording. A few are
+unavoidably terse at 17 characters: Moonlight Btrfly, Mega Prtcl Gun(R),
+Sigma Brst Musou.
+
+**32 cannot be fixed and are left alone.** English cannot say
+７２式改ビーム・ライフル　イカヅチ in 285px - the japanese packs 15 full-width
+characters where english needs 22 - so those clip slightly more than the
+original did. Shortening them further would destroy the name.
+
+Pairing is by POINTER TABLE, which is what made any of this measurable: the
+pools cannot be paired by offset or index, but the pointer WORD POSITIONS are
+identical between the virgin disc and ours - 9,481 shared positions giving an
+exact japanese/english pair for every string. Item descriptions share the
+weapon offset range and are excluded; they end in a full stop and are drawn in
+a different, wider panel.
+
+Strays on a stride held at 62.
+
 ## 0.9.27 (2026-09-02) - 24 weapon names still in romaji
 
 Follow-up to 0.9.26, after being asked to check ALL weapon names rather than

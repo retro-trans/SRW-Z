@@ -55,7 +55,21 @@ GROUPS = {
 
 
 def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    # Drop the VALUE that follows -o as well as the flag itself. It does not
+    # start with "-", so a plain filter swept it into the region list and the
+    # build died with "unknown region(s): ELFONLY" instead of honouring -o.
+    argv = sys.argv[1:]
+    args = []
+    skip = False
+    for a in argv:
+        if skip:
+            skip = False
+            continue
+        if a == "-o":
+            skip = True
+            continue
+        if not a.startswith("-"):
+            args.append(a)
     if "--list" in sys.argv or not args:
         print("groups : %s" % ", ".join(sorted(GROUPS)))
         print("regions: %s" % ", ".join(sorted(REGIONS)))

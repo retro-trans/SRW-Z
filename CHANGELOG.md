@@ -10,6 +10,58 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.32 (2026-09-02) - stage 36 retranslated; a pairing bug hid 196 rows
+
+A player sent a back-log capture of stage 36 reading
+
+    Luna: So Leele made sure Leele never heard what we just talked about...
+
+The japanese subject is サンドマン. Sandman kept it from her. That was not one
+slip: the whole reveal scene had been miscast.
+
+    サンドマンは不老不死          shipped "Eiji's immortal"
+    リィルはサンドマンの娘なのさ   shipped "Leele is Eiji's daughter"
+    サンドマンは…聞かせないように shipped "Leele made sure Leele never heard"
+    サンドマンの所で              shipped "waiting at Leele's place"
+
+The second is the scene's central reveal, given to the wrong character.
+
+**All 667 rows of STAGE rec66 retranslated from the japanese**, brackets
+removed, fanned out across six translators working on disjoint slices with a
+shared budget and convention brief, then merged and machine-checked. Other
+errors found: 時空制御装置 (space-time control device, the stage objective)
+reduced to "device"/"tech" in three lines; 地球連邦 dropped from Durandal's
+"those who rule from the shadows", leaving no object; 住民ごと dropped, softening
+a massacre; 恩を売る ("put someone in your debt") inverted to "curry favor
+with"; 頼むぜ ("I'm counting on you") flipped to "Count on it"; 特攻させる (make
+it perform a suicide RUN) as "suicide weapon"; 光子力ロケット garbled to
+"photonic rocket power"; and Shinn's causative 戦わせない - a promise extracted
+FROM Stella's captors that they never MAKE her fight - rendered as a promise to
+Stella herself, losing the handover deal entirely. Plus "wrecking havoc" for
+"wreaking", and a Basque/Bask split for one colonel.
+
+**THE PAIRING BUG.** `apply_retrans.py` paired english to japanese BY OFFSET,
+assuming a field sits in the same place on both discs. `export_proofread.py` -
+which mints the keys the translation map uses - pairs THROUGH THE POINTER
+TABLE. The two agree for most rows and disagree for every row an earlier pass
+relocated. Those rows matched no key, so they were silently skipped: they kept
+their old english and were never reported as missing.
+
+    rec66  128 of 667 rows skipped
+    rec61  68 of 485 rows skipped in 0.9.31
+
+In rec66 the skipped rows still had their corner brackets, so half the stage
+disagreed with the other half on quote style and the mismatch was visible. In
+rec61 they had already been de-bracketed by a separate pass, so they looked
+correct and simply kept the old wording - 14% of a stage reported as
+"retranslated" was not. Both are now applied. apply_retrans.py pairs through
+the pointer table, and says so in a comment, because nothing about the failure
+was loud.
+
+Gates: boxes OK, control bytes OK, terms OK (51), pointers every record >= 85%.
+Two rec66 rows stay over 34 columns: their japanese is 48 columns wide, so they
+are glossary panels, not dialogue.
+
 ## 0.9.31 (2026-09-02) - stage 35, actually retranslated
 
 0.9.30 did not retranslate stage 35. Asked to, I read all 483 rows, judged the

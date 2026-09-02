@@ -28,12 +28,47 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import banlz
 import hashlib
+import struct
 from debracket_stage import wrap_balanced, cols, widest
 
 SEC = 2048
 LBA, SIZE = 1651029, 3910128
 WIDTH, MAXLINES = 34, 3
+BASE = 0x7566F0
 JP_ISO = "iso/srwz.bin"
+
+
+def pair(eb, jb):
+    """english offset -> japanese offset, THROUGH THE POINTER TABLE.
+
+    This must match export_proofread.pair() exactly, because the keys in the
+    translation map are `rec:sha1(japanese):occurrence` and the japanese has to
+    be found the same way to reproduce them.
+
+    Pairing by raw offset instead - assuming a field sits at the same place in
+    both discs - silently loses every row an earlier pass relocated. In rec66
+    that was 128 of 667 rows: they applied as "no key found" and simply kept
+    their old english, brackets and all, while the rest of the record was
+    rewritten. The two halves of the stage then disagreed on quote style, which
+    is how the mismatch surfaced.
+    """
+    out = {}
+    for p in range(0, min(len(eb), len(jb)) - 4, 4):
+        ve = struct.unpack_from("<I", eb, p)[0] - BASE
+        vj = struct.unpack_from("<I", jb, p)[0] - BASE
+        if 0 <= ve < len(eb) and 0 <= vj < len(jb) and ve not in out:
+            out[ve] = (vj, p)
+    return out
+
+
+def text_at(b, off):
+    z = bytes(b).find(b"\x00", off)
+    if z < 0 or z <= off:
+        return None
+    try:
+        return bytes(b[off:z]).decode("cp932")
+    except UnicodeDecodeError:
+        return None
 
 
 def fields(blob):
@@ -75,20 +110,26 @@ def main():
     hdr, data = live[rec]
     d = bytearray(data)
 
-    # japanese by offset: STAGE is spliced in place, so a field sits at the
-    # same offset in the virgin disc and in ours
-    jp_at = dict((off, t) for off, _s, t in fields(jlive[rec][1]))
-
-    occ = {}
-    done = skipped = 0
-    for off, slot, text in list(fields(d)):
-        jt = jp_at.get(off)
+    # pair through the pointer table, and assign occurrence numbers in the same
+    # order export_proofread does (ascending english offset), or the ":0"/":1"
+    # suffix of a repeated japanese line would not line up
+    m = pair(bytes(d), bytes(jlive[rec][1]))
+    jp_at, occ, key_of = {}, {}, {}
+    for off in sorted(m):
+        jt = text_at(jlive[rec][1], m[off][0])
         if not jt or u"\n" not in jt:
             continue
         h = hashlib.sha1(jt.encode("cp932", "ignore")).hexdigest()[:12]
         n = occ.get(h, 0)
         occ[h] = n + 1
-        key = "%d:%s:%d" % (rec, h, n)
+        key_of[off] = "%d:%s:%d" % (rec, h, n)
+        jp_at[off] = jt
+
+    done = skipped = 0
+    for off, slot, text in list(fields(d)):
+        key = key_of.get(off)
+        if key is None:
+            continue
         body = table.get(key)
         if body is None:
             continue

@@ -10,6 +10,52 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.31 (2026-09-02) - stage 35, actually retranslated
+
+0.9.30 did not retranslate stage 35. Asked to, I read all 483 rows, judged the
+prose sound and corrected only names and brackets. A player then reported the
+stage's translation as poor and sent a back-log capture, and he was right: the
+line in his screenshot had a meaning inversion sitting in plain sight, in the
+very first dump I read.
+
+    「フォウの事だけ…」 + the war clause
+    was  It's not about Four…There's no way those fighting a war can be in the right!
+    now  It's not just Four... There's no way we're in the right, fighting a war like this!
+
+Two errors in one line. だけ - "only" - was dropped, inverting it: Kamille says
+Four is not the WHOLE of it, he is not brushing her aside, and he says it one
+line after Shinn throws her in his face. And 俺達 is "we" - rendering it "those"
+puts him outside his own accusation when the point is that he is inside it.
+
+**All 485 rows retranslated from the japanese.** 299 changed; the rest were
+short lines ("Ray...", "Yeah...") already correct. Errors a review had missed:
+
+    ザフトに寝返ったか      "turned traitor to ZAFT" reads in english as
+                            betraying ZAFT. He DEFECTS TO them.
+    …言わせておけば！       "...Keep talking!" The idiom is anger at having let
+                            someone run their mouth: "...You've said enough!"
+    ディアナ様ーっ！！      flattened to "Lady Dianna!!"; this file's own
+                            drawn-out-name convention (ステラーッ -> "Stellaaa!")
+                            gives "Lady Diannaaa!!"
+    カメラマン              "cameraman" is a film crew in english. Miriallia and
+                            Fran are stills photojournalists: "photographer".
+    そうですわね            "I know." Lacus's register is formal: "Yes, quite."
+    議長だって、俺の事を…  "Even the Chairman said about me..." is not a
+                            sentence. Row 336 settles the reading: "understood me".
+
+**tools/apply_retrans.py** applies a translation from a json map keyed by
+`rec:sha1(japanese):occurrence`, so it survives re-ordering and rebuilds where
+a byte offset would not. One unwrapped english sentence per row; the tool wraps
+it with the same punctuation-aware DP as debracket_stage.py, then REFUSES
+anything that breaks the 34x3 box or its byte slot rather than truncating it -
+and writes nothing at all if any row is refused. Six rows were refused on the
+first pass for running to four lines and were shortened, not force-fitted.
+
+The budget for this existed only because 0.9.30 removed the corner brackets:
+rec61 went from 92 rows with zero spare bytes to none at all, median 13.
+
+Gates: boxes OK, control bytes OK, terms OK (51), pointers every record >= 85%.
+
 ## 0.9.30 (2026-09-02) - one katakana, two english spellings
 
 Asked to retranslate stage 35, I read all 483 rows of STAGE rec61 first. The

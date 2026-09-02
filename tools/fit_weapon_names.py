@@ -218,7 +218,7 @@ def main():
     # whichever language put it there.
     # The standard is NEVER WIDER THAN THE JAPANESE IT REPLACED. Targeting the
     # 221px column alone is wrong: a quarter of the names are over it in
-    # japanese too (ソルグラヴィトンスパイラルクラッシャーパンチ is 399px), so this
+    # japanese too ("Sol Graviton Spiral Crusher Punch" is 399px), so this
     # game clips long attack names as a matter of course. But the two names in
     # the report ARE worse than their japanese - Beam Rifle (Rapid) is 234
     # against 228, １４ Twin Missile Pod is 259 against 228 - and that is the

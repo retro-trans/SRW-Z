@@ -10,6 +10,37 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.29 (2026-09-02) - "Aaaaargh" was the weapon's name
+
+Two reported lines.
+
+**The Graviton ARC, read as a scream.** アーク is the weapon Touga is told to
+use one line earlier - "Touga! Use the Graviton Arc!" - and drawn out as
+アァァァァァック it had been rendered "Aaaaaaaack!" and "Aaaaargh!!", turning
+the attack name into a cry of pain. The file's own convention is to stretch
+the WORD: "Graviton Tornadooo!" for トルネードォォ, "Sol Graviton Crusheeeer!"
+for クラッシャァァ, "Graviton Swooooord!" for ソードォォォ. Three captions:
+
+    "Graviton Aaaaaaaack!"   -> "Graviton Aaaaaarc!"
+    "Graviton! Aaaaaaaack!"  -> "Graviton! Aaaaaarc!"
+    "Graviton! Aaaaargh!!"   -> "Graviton! Aaaaaarc!!"
+
+Each holds its field's byte length, NUL-padded, because scripted attack
+sequences are fetched BY BYTE OFFSET from tables this does not rebuild.
+
+**Rosamia, missing an article.** her japanese line (roughly "the people of space drop the sky...!
+and that destroyed the world!") shipped as "Spacenoids drop the sky...! And it destroyed the
+world!" - no article, and "it" with nothing to refer to. "drop the sky" itself
+is correct and is her recurring phrase, cf. 「空を落とす者達は許さない…！」, so
+only the article and the pronoun changed:
+
+    「The Spacenoids drop the sky...!
+    And that destroyed the world!」
+
+73 bytes into a 79-byte slot, wrapped 33/31 columns, and the field keeps its
+extent so no intra-record offset moves. STAGE rec50 pointers stay at 85.5%,
+the same as before the edit; overall 94.50%.
+
 ## 0.9.28 (2026-09-02) - weapon names that did not fit the column
 
 From a screenshot of Super Gundam showing "14 Twin Missile Po" and "Beam Rifle

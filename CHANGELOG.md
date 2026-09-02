@@ -10,6 +10,48 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.34 (2026-09-03) - strings past the end of a record do not exist
+
+Two reports, one cause: a hard crash at the start of stage 29, and the Tri
+Battle System tutorial showing an empty box where Mel speaks.
+
+**A string placed past the original japanese record's end is not rendered.**
+Short ones come out blank; long ones run far enough past the boundary to crash.
+Earlier passes relocated any line that outgrew its slot to the record's tail,
+starting exactly at the old end, so the FIRST relocated string in a record sits
+on the boundary.
+
+    rec79   Gain's line   at 0x7410 == japanese length 0x7410   -> CRASH
+    rec186  Mel's line    at 0x0f990 == japanese length 0x0f990 -> BLANK
+
+Bisected by the user, one variable per build: texture pack -> art -> ELF ->
+STAGE -> rec79 -> rows 151-302 -> 151-226 -> 151-188 -> 151-170 -> row 157.
+Then the decisive test: the SAME 63 bytes at a different address did not crash.
+
+**Wrong turns, recorded because they cost builds.** Record 16-byte alignment
+(151 of ours unaligned against 205/205 japanese) - real, but padding rec79 did
+not help. The header length fields at 0x0c (= len-0x10) and 0x28/0x2c
+(= BASE+len), stale in 161 records - also real, also not the bound: correcting
+them left the box blank, and pointing 0x0c at len-0x10 made the game read our
+text as a footer and print a stray "X".
+
+**The fix** moves relocated strings back inside the original bounds and
+repoints them, shortening where the original slot is a byte or two short:
+
+    rec79   5 strings   Gain, Manisha, Hayato, ???, $n
+    rec186  1 string    Mel
+
+Two lines were trimmed to fit: "Guess it's game over." lost its full stop, and
+「マジで？」 went from "For real?" to "Really?".
+
+**Still outstanding.** 7,903 strings across 161 records are still past their
+record's end - 3,050 would fit their original slot as-is, and 4,853 need
+trimming (median 2 bytes, 4,130 of them 4 bytes or fewer). Every one is a
+latent blank box or crash. That is a translation job, not a mechanical one, and
+is not in this build.
+
+Gates: boxes OK, control bytes OK, terms OK (51).
+
 ## 0.9.33 (2026-09-02) - the Methuss that drew a Nemo
 
 Reported with two screenshots: the Methuss unit screen shows a Nemo. Name,

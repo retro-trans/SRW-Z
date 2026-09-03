@@ -38,6 +38,21 @@ ZKN_FILES = ("MTVZKNPT.BIN", "MTVZKNRT.BIN", "MTVZKNKW.BIN")
 # spelling -> what it should be. Every one was fixed in a shipped build; if it
 # reappears, something rebuilt from a stale source.
 BANNED = {
+    # 0.9.36, all reported from screenshots. Each one was the build
+    # contradicting ITSELF, which is why they are worth a gate: every wrong
+    # form below shipped alongside the right one.
+    #   エルダー, God Sigma's alien empire: 529 "Elder" against 58 "Eldar".
+    #   All 158 distinct strings were read - not one is the English word.
+    "Elder": "Eldar",
+    #   キラケン, God Sigma's third pilot: one stray each against 220 correct,
+    #   and "Kilaken" sat in the same conversation as a correct "Kiraken".
+    "Kilaken": "Kiraken", "Kirakenn": "Kiraken",
+    #   スエッソン: COMPDATA said Sweatson in all 3 places, STAGE said
+    #   Suesson in all 39.
+    "Suesson": "Sweatson",
+    #   マジンパワー is Mazinger's. The search grid said "Mazin Pwr" while the
+    #   full ability list said "Majin Power" - 魔神, a different reading.
+    "Majin Power": "Mazin Power",
     # left as romaji in 3 speaker lines while COMPDATA and the rest of the
     # script already said Hyakki Hundred
     "Hyakuninshu": "Hyakki Hundred",

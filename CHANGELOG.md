@@ -10,6 +10,97 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.36 (2026-09-03) - screenshot batch: five renames, six rewrites
+
+All from user screenshots. Every japanese source was read before changing
+anything, and every edit is in place inside its own slot - no string moves, so
+nothing joins the past-the-record-end class.
+
+**Renames.** Three of these were the build disagreeing with *itself*:
+
+    Elder    -> Eldar     エルダー, God Sigma's alien empire. 529 hits - but the
+                          build already said Eldar in 58 other places. All 158
+                          distinct strings were read first to confirm not one is
+                          the English word "elder". Same length, nothing reflows.
+    Kilaken  -> Kiraken   キラケン. ONE stray against 220 correct, and the two are
+                          in the same conversation: Kiraken speaks, then Tetsuya
+                          answers "Kilaken".
+    Kirakenn -> Kiraken   doubled n, once, in the stage-0 synopsis.
+    Suesson  -> Sweatson  スエッソン. COMPDATA already said Sweatson in all three
+                          places; only STAGE said Suesson, 39 times.
+    Majin    -> Mazin     マジンパワー is Mazinger's. The search grid already said
+                          "Mazin Pwr" against the full list's "Majin Power"
+                          (魔神 is a different reading). Same length.
+
+**Rewrites.** Two were real mistranslations, not just wording:
+
+*President* (rec67 and rec96) - 「ザフトに虎の子の新兵器を落とされ、」 is the
+suffering passive: the Federation had ITS new weapon shot down BY ZAFT. The
+English had ZAFT dropping a weapon ON them, which also merged the two separate
+reasons for the withdrawal. The scene settles it - four rows earlier the
+citizens are rioting over Durandal's leak, and that is the 「後方があの騒ぎ」,
+not a weapon strike. 「…。」 had also come out as two bare periods.
+
+*Dewey* (rec68) - 「人類の殲滅」 is the ANNIHILATION of mankind; the English said
+"man's cleansing", which turns genocide into purification. 「に過ぎません」
+("nothing more than a gate") and the hedge in 「抗体とでも言うべきもの」 were both
+dropped. Kte -> Kute.
+
+Also: *Holland* rec69 ("crush that" - そんな奴ら is "guys like that", animate;
+らしいな dropped; 手先 is a pawn, not a puppet), *Ziene* rec54 (「させない…とでも
+言うのかい？」 is Ziene quoting the line back, not asking "stop it?"), *Tetsuya*
+rec54 (容赦はしない is "show no mercy", harder than "hold back").
+
+**The clipped battle caption, and what it taught us about SRVC.**
+「お前達も知ったはずだ…\n人間の心に潜む闇をな！」 is TWO lines; ours had collapsed
+to one 40-column line against a 38-column cap, so the game cut it at "the dark
+in the hear". The `...` was never the problem - those are `85 40` x3, our
+private half-width period glyphs, rendering correctly.
+
+**SRVC's line separator is a LITERAL backslash-n (`5C 6E`), not 0x0A.** The
+first attempt turned the space into 0x0A and was wrong; the japanese file uses
+`5C 6E` throughout and its only raw 0x0A bytes are in binary index data.
+Converter 0x2EA280 is what translates one into the other - the `strstr` against
+0x0043FF70 that it opens with is looking for exactly that two-character marker.
+
+So the break costs two bytes where the space cost one, and a caption may not
+grow: SRVC strings tile their block with nothing between them. (They may
+SHRINK - the block index addresses each string, so trailing dead bytes are
+never read.) The closing "!" pays for it. 45 copies, no repack.
+
+The same discovery is why the three Sweatson captions are hand-fitted to the
+exact byte: `Suesson` -> `Sweatson` gains a byte the block has nowhere to put.
+"house" -> "clan" in one of them is not a fudge to save a character - ギンガナム家
+is the Ghingnham clan either way.
+
+**Also from screenshots:** *Banjo* rec69 (さあ行くぞ is him opening the attack,
+not "now then"; 末端の君達 had lost its preposition; これも出会った不運 had been
+clipped to "bad luck") and *Loran* rec69 (「もう出来ないんでしょうか」 is "can we
+no longer…"; "never join hands again like before" was word salad against
+以前のように).
+
+**Noted, not fixed.** Two pre-existing problems this batch deliberately did not
+widen into:
+
+* the caption `"Suesson! That's no way to lead a unit!"` was ALREADY 40 columns
+  against the 38 cap, so it is clipped in the shipping build too. The
+  replacement is no wider, but rewording it is its own pass. The caption
+  column-gate in fix_batch_0936 checks "no wider than it already was" for
+  exactly this reason.
+* the surname is spelled three ways - `Stello` in the captions, `Stero` and
+  `Sterro` in the encyclopedia. Wants the wiki baseline before picking one.
+
+**Not changed: "Gym Ghingnham".** Reported as having an extra n, but ギンガナム
+is romanised "Gym Ghingnham" by Turn A itself, and it is the target verify_terms
+already enforces (it is what "Gym Dianna" gets corrected *to*). Left alone
+pending confirmation - changing it would fight our own gate.
+
+**Not changed: the Majin Power help panel.** Reported as missing its second
+line. It is not missing: the ability's description pointer (0x4c9d0) resolves to
+a two-line string byte-structurally identical to the japanese - same 0x0A, same
+full-width digits. The data is right and the panel is not drawing line 2, which
+is a rendering question, not a text one.
+
 ## 0.9.35 (2026-09-03) - the caption back-scan had no floor (REAL HARDWARE)
 
 Reported: crash on a real PS2, right before an attack animation starts. Never

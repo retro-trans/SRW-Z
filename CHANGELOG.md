@@ -10,6 +10,112 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.38 (2026-09-03) - brackets back, and the stranded-string class closed
+
+Three things in one build, in the order they happened.
+
+### 1. The brackets go back: 「」 is what colours the speaker
+
+Detailed at the end of this entry; in short, ASCII quotes and bare text leave
+the speaker name white in the Back Log and only 「」 colours it, so 1,435 rows
+got their brackets back.
+
+### 2. ...and the re-wrap that had to follow it
+
+verify_boxes failed the re-bracketed image: **174 rows of three body lines had
+gone one column past 30.** That gate exists because v1.55 did exactly this
+conversion, kept the old line breaks, and shipped 1,137 latent crashes - a
+three-line row one column too wide spills to a fourth line and overflows the
+box. My wrapper allowed 34 columns; for three-line rows the proven limit is 30.
+`fix_quote_overflow.py`, the remedy written for v1.55, re-wrapped 181 rows in
+85 records byte-neutrally (only ' ' and '\n' exchanged). Gate green again.
+
+### 3. Cynthia's 「Me too, King...」 crashed the Overman scene: same class as stage 29
+
+rec160 is 525 bytes longer than its japanese, and those bytes are ten dialogue
+lines an earlier pass relocated to the tail - the first of them sitting exactly
+ON the japanese end, as always. 0.9.34 fixed six such strings by hand in rec79
+and rec186 and recorded 7,903 more as outstanding. This is the general fix.
+
+**Every record has slack.** Our english is shorter than the japanese it
+replaced, so after each string sits a run of NULs that in the japanese held
+TEXT - provably not bytecode. `fix_stranded_strings.py` first-fits each
+stranded string into that slack (largest string first, into the SMALLEST gap
+that takes it), repoints its pointer words, zeroes the tail copy, and where
+nothing is left past the boundary cuts the record back to its exact japanese
+length.
+
+    records with stranded strings   160
+    strings moved back inside     7,889   text byte-identical, only relocated
+    strings still stranded           13   no gap large enough - need trimming
+
+The 13: two 465/512-byte stage-0 synopsis blocks, and eleven 47-65-byte lines
+in small records whose slack is spent (rec70 x3, rec99 x3, rec89, rec94,
+rec14, rec126, rec139). Each is the same latent blank-or-crash it was before,
+and each needs a few bytes trimmed - editing, not relocation.
+
+**Two coincidences the invariant caught, both worth knowing about.** The tool
+asserts that every pointer word resolves to byte-identical text after the move,
+and it fired twice on rec0 before anything was written:
+
+* A line ending `.」` followed by its NUL is the bytes `2E 81 76 00` - a value
+  that RESOLVES INSIDE THE RECORD. Twenty-four such "pointers" in rec0 all
+  landed on the same `FF FF FF FF` of bytecode. Treating that as a string
+  would have handed out the bytes after it as slack. Targets must now decode
+  as control-free cp932 text.
+* That same `.」\0` IS a "pointer word" when scanned. Repointing it rewrites a
+  line ending; zeroing the moved string it lived in made it stop resolving.
+  A pointer word never sits inside a string span, so any that does is dropped.
+
+Gates: integrity 0 problems, pointers checked --against 0.9.37, boxes OK,
+control bytes OK, terms OK (56), ELF patches present. ELF byte-identical to
+0.9.35, so the hardware fix carries forward.
+
+### (1, in full) the brackets go back: 「」 is what colours the speaker
+
+Reported as "the backlog in stage 35 and 36 looks like this". It did, and the
+cause was ours: those two records (rec61 485/485 rows, rec66 667/667) were the
+only ones in the entire script with NO speech delimiter at all.
+
+**debracket_stage.py's premise was wrong.** Its header says the brackets "do no
+work in the engine ... they are purely visual". That was measured in the
+dialogue box, where it is true - the renderer takes field line 1 as the name
+plate, so the brackets sit inside the body doing nothing.
+
+**The Back Log is a different renderer.** patch_backlog.py, from a live PINE
+session in August, had already established that it "draws the RAW record
+strings (never setText-converted)", and it has no name plate: it prints the
+name line and the body lines as one run.
+
+A three-way test decided it - three CONSECUTIVE lines of the Titans corridor
+scene, one delimiter each, read off one backlog screen:
+
+    Emma      bare        speaker drawn WHITE   reads as a sentence fragment
+    Kacricon  "ASCII"     speaker drawn WHITE   speech delimited, name is not
+    Jerid     「KAGI」      speaker drawn ORANGE  the engine colours it
+
+So 「」 is load-bearing after all, and ASCII quotes are not a substitute: they
+delimit the speech but do not colour the name. corridor_polish.py had recorded
+exactly this ("also turns the speaker name blue - engine behavior") and it was
+right; I doubted it because static search found no comparison against 0x8175
+anywhere. It is not an inline constant - the backlog's scanner at 0x221030
+takes its delimiter from a gp-relative global (`lb a0,-32412(gp)`).
+
+**1441 rows re-bracketed across 114 records**, re-flowed with debracket's own DP
+wrapper so the 4 extra columns do not push a line over the box. Every budget is
+checked and reported, never swallowed: columns against max(34, the japanese it
+replaces), lines against the 3 the box draws, bytes against the field's own
+slot. Nothing is relocated - a string moved past its record's end is what
+caused the stage 29 crash.
+
+**203 rows are OVER BUDGET and were left alone** - 199 whose slot cannot take
+the 2-4 extra bytes (many are already minimal, like `Kappei / "Help?"` needing
+16 against a slot of 15) and 4 that will not fit 3 lines. They still read wrong
+in the backlog and need the text shortened by a couple of bytes each.
+
+91 rows were correctly left alone: a `"` mid-sentence is a quotation, not
+speech marks.
+
 ## 0.9.37 (2026-09-03) - the DATA HELP panel counts rows two bytes at a time
 
 Reported as "Mazin Power is missing its second line". It was not missing from

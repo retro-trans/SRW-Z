@@ -10,6 +10,50 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.37 (2026-09-03) - the DATA HELP panel counts rows two bytes at a time
+
+Reported as "Mazin Power is missing its second line". It was not missing from
+the data - the pointer resolves to a correct two-line string - so this took
+four observations and one throwaway build to pin down.
+
+**The panel counts its rows with a pass that steps TWO BYTES PER CHARACTER**,
+i.e. it assumes fullwidth text, and only notices a newline when it lands
+exactly on one. Finding a newline costs a single byte, which flips the parity
+for everything after it. So:
+
+    Tri Charge   no newline                    -> 1 row,  showed 1
+    Mazin Power  newline at 27 (odd)           -> 1 row,  showed 1
+    AAAAA/BBBBB/CCCCC diagnostic, at 5 and 11  -> 1 row,  showed 1
+    Unite        37 odd, 66 EVEN, 101 odd      -> 3 rows, showed 3
+
+Unite is the case that proves it: it misses its first newline, finds the
+second, and the one byte that costs re-aligns it so the third is found too.
+That is also what made the first theory ("the second line is dropped") look
+right for two samples and then fall apart on the diagnostic.
+
+**Japanese text is entirely fullwidth, so every line is an even number of bytes
+and the scan never misses.** Ours is mostly 1-byte ASCII. Counted over the
+ability table: 35 of 48 multi-line descriptions lose lines in our build, 0 of
+48 in the japanese. That is the whole bug.
+
+The DRAWING pass is fine - it goes through patch_hwfont's MHOOK and honours
+every newline - which is why the text that did appear was always intact and
+correctly wrapped. Only the row count was short, so surplus lines were drawn
+over each other or off the box.
+
+**The fix is one byte per line:** pad any odd-length non-final line with a
+trailing space, invisible at end of line. The last line needs nothing, since no
+newline follows it. 22 of the 35 had room in their slot; where they did not, a
+double space elsewhere in the string was collapsed to pay for it.
+
+**Still outstanding: 13 descriptions with no spare byte at all**, listed by
+`fix_help_line_parity.py`. They need one character reworded rather than a
+space added, which is editing, not a mechanical pass. Recorded rather than
+fudged.
+
+COMPDATA-only; ELF, STAGE and SRVC are byte-identical to 0.9.36. Gates:
+integrity 0 problems, terms OK (56), control bytes OK, ELF patches present.
+
 ## 0.9.36 (2026-09-03) - screenshot batch: five renames, six rewrites
 
 All from user screenshots. Every japanese source was read before changing

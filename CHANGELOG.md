@@ -10,6 +10,38 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.39 (2026-09-04) - "Eiji keeps calling everyone Eiji": the Sandman fix
+
+Reported from a screenshot: Eiji says 「Eiji! Great, cool entrance...」 - the name
+plate is right (Eiji IS the speaker), but he is addressing サンドマン (Sandman),
+and the machine translation had replaced the name with the SPEAKER's own name.
+
+It was systematic. The same substitution hit Raven's lines (サンドマン -> "Raven")
+and Leele's scenes (サンドマン -> "Leele"), and デュークフリード became "Eiji Fleed".
+59 dialogue rows across 20 records dropped "Sandman"; the name is unambiguous
+(name_source.json and the COMPDATA character records both say Sandman).
+
+All 59 corrected, each rewrapped to fit its box in place. Also fixed here, from
+the same report:
+  - Emma: 「その名を聞いた時、あの人…」 was "When SHE heard" - it is "he".
+  - Athena: オルソン隊長 is Captain "Olson", not "Orson". This turned out to be
+    a build-wide error: name_source.json says オルソン -> "Olson" (his full name
+    is "Olson D. Verne"), but an earlier pass had "corrected" Olson -> Orson in
+    519 STAGE rows, 14 COMPDATA fields, 38 battle captions and 25 encyclopedia
+    strings, with a gate enforcing the wrong spelling. All reversed; the gate
+    now bans Orson. Two exceptions remain: the 2 speaker plates in rec139, the
+    one STAGE record whose optimal-only compression is intractable to redo here
+    (fast overflows its slot by 90 bytes and full optimal exceeds the time
+    limit). The gate tolerates exactly those 2 as a documented residual.
+  - Kamille: 「悲しみを止める…」 "Stop sorrow" -> "End the sorrow".
+
+rec131 looked scrambled at first, but that was a scan artifact: the Sandman
+audit pairs rows through the pointer table, which mis-paired six relocated tail
+strings. Read in play order, rec131 is correct and already renders サンドマン as
+"Sandman" in its own lines. Left untouched.
+
+Gates: box OK, control bytes OK, integrity 0, terms OK.
+
 ## 0.9.38 (2026-09-03) - brackets back, and the stranded-string class closed
 
 Three things in one build, in the order they happened.

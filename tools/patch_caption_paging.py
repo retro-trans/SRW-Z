@@ -45,6 +45,31 @@ CAVE = 0x78BBA0
 CAVE2 = 0x78BC40
 CONVERTER = 0x2EA280
 
+# How far back FINDSTART may walk before it gives up. The scan looks for the
+# NUL that ends the PREVIOUS field, so the honest distance is at most one
+# field: the longest string in SRVC.BIN is 86 bytes japanese, 94 ours. 256 is
+# far past that and still nothing next to a runaway.
+#
+# WHY THIS EXISTS: the loop used to have no floor at all. When p sits at the
+# start of the quote block there is no preceding NUL to find, so the scan walks
+# backwards out of the block into whatever precedes it in RAM.
+#
+#   PCSX2 zero-fills all 32 MB of EE RAM at boot, so the very first byte it
+#   reads outside the block is 0 and the scan stops immediately, with
+#   field_start == p - the "trust the offset" fast path. It is correct there by
+#   accident.
+#
+#   A real PS2 does not zero RAM. The scan runs on into garbage until it meets
+#   a byte that happens to be 0, and returns a field_start pointing at nothing.
+#   p != field_start then, so we take the mid-field paging path and hand the
+#   converter a pointer into unrelated memory; 0x2EA280 copies from it until a
+#   NUL and overruns its fixed caption buffer.
+#
+# That is a hardware-only crash on the caption-start path - i.e. exactly when a
+# battle animation begins - which is what was reported. Reaching the backstop
+# now falls back to field_start = p, the same fast path PCSX2 took by luck.
+BACKSTOP = 0x100
+
 def f(va): return CAVE_FILE + (va - CAVE_VA)
 def e(va): return FOFF + (va - VBASE)
 
@@ -61,12 +86,17 @@ def asm_cave(cave_va, chan_lw):
     w.append(chan_lw)             # lw    t0,0x54(chan)
     w.append(0x00A0C82D)          # daddu t9,a1,zero      p
     w.append(0x00A0C02D)          # daddu t8,a1,zero      field-start scanner
+    w.append(0x24090000 | BACKSTOP)   # addiu t1,zero,BACKSTOP
     labels['FINDSTART'] = at()
     w.append(0x930AFFFF)          # lbu   t2,-1(t8)
     br(0x11400000, 'GOTSTART')    # beq   t2,zero,GOTSTART
     w.append(0)                   # nop
-    br(0x10000000, 'FINDSTART')   # b     FINDSTART
+    w.append(0x2529FFFF)          # addiu t1,t1,-1
+    br(0x1D200000, 'FINDSTART')   # bgtz  t1,FINDSTART
     w.append(0x2718FFFF)          # (delay) addiu t8,t8,-1
+    # backstop hit: no field start within reach, so trust the offset instead of
+    # a pointer we invented. t8 = p makes GOTSTART's beq fire and take CALL.
+    w.append(0x0320C02D)          # daddu t8,t9,zero
     labels['GOTSTART'] = at()
     br(0x13380000, 'CALL')        # beq   t9,t8,CALL      p at field start -> trust
     w.append(0)                   # nop
@@ -140,7 +170,11 @@ def main():
                 fsz = struct.unpack("<I", iso.read(4))[0]
                 assert fsz in OLD_FSZS + (NEW_FSZ,), hex(fsz)
                 iso.seek(o + 16)
-                v = OLD_FSZS[0] if revert else NEW_FSZ
+                # NEVER shrink: grow_cave.py extends this same segment into the
+                # ELF's last-sector slack, and later hooks live above NEW_FSZ.
+                # Writing NEW_FSZ flat would unload them. Reverting this patch
+                # only zeroes the cave bodies; it does not free the segment.
+                v = max(fsz, NEW_FSZ)
                 iso.write(struct.pack("<II", v, v))
                 found = True
         assert found

@@ -10,6 +10,61 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.35 (2026-09-03) - the caption back-scan had no floor (REAL HARDWARE)
+
+Reported: crash on a real PS2, right before an attack animation starts. Never
+seen under PCSX2. **Found by reading our own cave code, not by bisect** - the
+symptom is emulator-invisible by construction, so a bisect would have cost the
+reporter a build per step and told us nothing we could reproduce.
+
+**The bug.** `patch_caption_paging`'s FINDSTART loop walks BACKWARDS from the
+caption pointer looking for the NUL that ends the previous field, and had no
+lower bound at all:
+
+    0x78bbac  lbu   t2,-1(t8)      read the byte before the pointer
+    0x78bbb0  beq   t2,zero,done   stop only on a zero byte
+    0x78bbb8  b     0x78bbac
+    0x78bbbc  addiu t8,t8,-1       ... forever
+
+When p sits at the start of the quote block there is no preceding NUL, so the
+scan leaves the block.
+
+**Why only on hardware.** PCSX2 zero-fills all 32 MB of EE RAM at boot, so the
+first byte read outside the block is 0, the scan stops instantly with
+`field_start == p`, and the code takes its "trust the offset" fast path. It has
+always been correct in the emulator *by accident*. A real PS2 does not zero
+RAM: the scan runs into garbage until some byte happens to be 0 and returns a
+field_start pointing at nothing. `p != field_start` then, so we take the
+mid-field paging path and hand converter 0x2EA280 a pointer into unrelated
+memory - and that converter ends in a plain unbounded `strcpy` (0x1A0D88) into
+a fixed caption buffer. Overrun, crash.
+
+The hook is on the caption-START path (0x2EA684, chan=s3), which fires exactly
+when a battle animation begins. That matches the report precisely.
+
+**The fix** bounds the scan at 256 bytes - the longest string in SRVC.BIN is 86
+bytes japanese, 94 ours - and on reaching the backstop sets `field_start = p`,
+which is the same fast path PCSX2 was taking by luck. Both caves (s2 and s3
+variants), +3 instructions each, 148 B of a 160 B slot.
+
+Also fixed here: the patch wrote `p_filesz = NEW_FSZ` flat over PT_LOAD[208],
+which would have SHRUNK the cave from 0x2198 to 0x1CE0 and unloaded the five
+hooks living above it. It now only ever grows the segment.
+
+One sector differs from 0.9.34 (LBA 2149, the two cave bodies). Gates:
+integrity 0 problems, ELF patches present, boxes OK, control bytes OK, terms
+OK (51).
+
+**Not confirmed on hardware yet** - this is a real defect on exactly the
+implicated path, but the reporter has still to test it.
+
+**Adjacent risk, NOT fixed here.** Four caption strings are longer than any
+japanese string in the file (94/91/91/89 B against a japanese maximum of 86).
+Since the converter's strcpy is unbounded, they overrun by the same route if
+the destination buffer was sized from the japanese maximum. The buffer's real
+size is not established, so trimming them would be a guess; noted for a future
+pass.
+
 ## 0.9.34 (2026-09-03) - strings past the end of a record do not exist
 
 Two reports, one cause: a hard crash at the start of stage 29, and the Tri

@@ -10,6 +10,29 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.43 (2026-09-04) - restore battle voice lines that shipped blank
+
+Follow-up to the 無音 discussion: rather than restore the Japanese silent marker
+(infeasible, see 0.9.42), the ask was "don't show completely blank." Scanned every
+sequence-target caption for empties: 39 blank targets, of which 33 are blank in the
+Japanese too (intentional silent steps - left alone), and 5 were REGRESSIONS - the
+Japanese has a real line but our slot shipped empty (voice plays, box blank). The
+translations already existed in srvc_en.json; they just never reached the disc.
+
+Restored the real lines (better than "..."), seeding from the current disc so all
+other captions are preserved byte-for-byte:
+  - blk65  clip257  "Shinn! Don't charge in!"          (シン！突っ込み過ぎだぜ！)
+  - blk90  clip257  "I'll mince you with this Drill!"   (このドリルでミンチにしてやるぜ！)
+  - blk151 clip261  "I'll drag out the truth\nthe military's hiding!"
+  - blk234 clip268  "I'll take a loss!"                 (赤字覚悟でいきましょ！)
+
+All four blocks resolve cleanly (no detector blind spots), so the free-mode
+repoint is exact. Verified: exactly those 4 blocks change (1 string each), every
+other caption byte-identical, SRVC re-parses lossless (+126 bytes, stays in place).
+tools/fix_blank_captions.py.
+
+Gate: 0 blank regressions remain (was 5); round-trip BIN+SEG identical.
+
 ## 0.9.42 (2026-09-04) - Eina's "..." caption, and why 無音 can't be restored
 
 Tester report: in an Eina scene the voice clip says "Touga-sama" (斗牙様) but the

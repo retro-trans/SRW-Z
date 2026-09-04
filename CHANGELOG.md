@@ -10,6 +10,31 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.40 (2026-09-04) - screenshot batch, and the brackets the rebracket pass skipped
+
+From screenshots:
+  - Gravity Lang -> Gravity Rang. ラング on a boomerang-type Overman weapon is
+    "Rang" (cf. King Gainer's "Gainer Rang"); name_source had it wrong.
+  - Ruburu -> Lubul (ルブル is Lubul Wong Dalla; the speaker plate already said
+    Lubul, one in-line vocative did not). name_source's stray ルブル="Rubble"
+    fixed too.
+  - Scirocco: "a foe not to underestimate" (ungrammatical) -> "not a foe to
+    underestimate".
+
+**Confirmed correct, not changed:** the "President" speaker is 総裁, a title,
+used on 113 speaker plates; the character has no personal name anywhere in the
+game. The Miiya/Lubul, President and Kamille lines all translate accurately.
+
+**The brackets the 0.9.38 rebracket pass had to skip.** That pass left ~200 rows
+without 「」 because adding them (2 columns, 2 bytes a side) would have
+overflowed the box or the slot. Four such rows were reported here - three Meer
+lines (one still on ASCII quotes, two bare) and Durandal's line, whose 2-line
+wrap ran 44 columns and spilled off the box. Each was re-wrapped tighter so 「」
+fits and every line is <= 30 columns. The other ~196 are still outstanding and
+want the same treatment.
+
+Gates: integrity 0, boxes OK, control OK, terms OK.
+
 ## 0.9.39 (2026-09-04) - "Eiji keeps calling everyone Eiji": the Sandman fix
 
 Reported from a screenshot: Eiji says 「Eiji! Great, cool entrance...」 - the name

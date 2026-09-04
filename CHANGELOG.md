@@ -10,6 +10,24 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.41 (2026-09-04) - Shinn (not Shin), Bask Om, and a save-frozen name
+
+From screenshots:
+  - シン is "Shinn", not "Shin". 42 rows spelled it with one n against 1,872
+    correct; verified against the japanese (only rows whose JP has シン), so an
+    unrelated "Shin" is never touched. 40 fixed (5 needed a byte trimmed to fit
+    "Shinn"); 2 rec0-synopsis rows left (rec0's recompression is intractable).
+  - バスク・オム is "Bask Om" (2 rows said "Basque Om").
+
+**The セツコ speaker plate is NOT a build bug.** The dialogue uses $n, which the
+game expands to the protagonist's name from the SAVE. Our disc has セツコ
+translated to "Setsuko" everywhere (0 occurrences of セツコ remain), but a save
+made earlier froze the japanese name in. New games show "Setsuko"; an existing
+save keeps whatever was stored. The Titans "silent" caption and the Lili line
+were both checked and are correct as they are.
+
+Gates: integrity 0, boxes OK, control OK, terms OK.
+
 ## 0.9.40 (2026-09-04) - screenshot batch, and the brackets the rebracket pass skipped
 
 From screenshots:

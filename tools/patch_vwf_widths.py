@@ -45,7 +45,7 @@ GAP = 2
 HOOK_SITE = 0x78BA94       # lhu t0,0xc(s0)
 HOOK_JOIN = 0x78BAB0       # addu v1,a0,v1
 ATLAS_END = ATLAS_VA + NART * GB   # 0x78B91B - the atlas runs to here
-TABLE_VA = 0x78C110        # 80 bytes of cave padding, clear of the atlas
+TABLE_VA = 0x78B960        # reclaimed from the (disabled) underline stub
 TRAMP_VA = 0x78B91C        # first 4-aligned byte AFTER the atlas
 
 STOCK = (0x9608000C,       # lhu   t0,0xc(s0)

@@ -10,6 +10,36 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.45 (2026-09-05) - new font: BIZ UDGothic, proportional and left-aligned
+
+Replaced the Latin half-width font with BIZ UDGothic Regular, rendered
+proportionally (VWF) instead of the old fixed 13px pitch. User-picked over Inter,
+Genei Latemin and Shippori Mincho by on-hardware comparison.
+
+  Atlas: gen_hwatlas_ttf.py (BIZ-UDGothicR.ttc, stroke 0 = true weight) ->
+    normalize_atlas.py ... 6 (left-align + centre narrow glyphs so i/l/! don't
+    float) -> analysis/hwatlas_bizud_floor6.bin, set into the ELF via set_atlas.py.
+  Advances: patch_vwf_widths.py measures each glyph (ink_right+2); floor_advance_
+    table.py 6 gives narrow glyphs a comfortable minimum. Advances now 6..12px.
+
+Two cave collisions the font's VWF table hit, and how they were resolved:
+  - The advance table could not stay at 0x78C110 (the spirit-band micro-glyph
+    BLANK-cell source) - garbled the spirit strip. Moved to 0x78B960.
+  - 0x78B960 was the glossary-link UNDERLINE STUB. We don't want underlines with
+    this font, so patch_font_linkstub.py installs a MINIMAL save-only stub
+    (saves the term end-X, no underscore draw) in the freed 0x78BA10 space and
+    re-hooks the RESTORE stub - so patch_linkpos still positions post-link text
+    correctly. Links render with colour + correct spacing, no underline.
+
+Reflow: with proportional widths a dialogue line holds ~50 chars where the fixed
+font held ~34, so lines can be rewrapped tighter. Yassaba (rec14) reflowed 3->2
+lines as a test (361/356px, box budget ~440px, JP maxed 357px). A full-game
+reflow pass is the next task.
+
+Gate: pointers 205 records / 93.14% (baseline), STAGE 205 intact. UI-width gate
+assumes fixed pitch and over-reports; every advance is <=12 < 13, so all strings
+are uniformly NARROWER than the shipped fixed-pitch build - no new overflow.
+
 ## 0.9.44 (2026-09-04) - DATA HELP spirit legend: show all 17 (row-count parity)
 
 Screenshot: the spirit-command legend showed only 8 of 17 commands (Va/Re/Wa/Fo

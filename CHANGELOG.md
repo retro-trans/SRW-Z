@@ -10,6 +10,23 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.44 (2026-09-04) - DATA HELP spirit legend: show all 17 (row-count parity)
+
+Screenshot: the spirit-command legend showed only 8 of 17 commands (Va/Re/Wa/Fo
+and So/Al/Me/Co/An were missing). The text on disc was already the full 5-line,
+17-spirit version - this was the 0.9.37 row-count bug, which the earlier parity
+pass fixed for the 48 ability descriptions but never touched this UI string.
+
+The panel counts rows two bytes per character (assumes fullwidth) and only sees
+a newline that lands on an EVEN byte offset. Legend lines L0 (51) and L3 (37)
+were ODD, so the counter saw 3 rows and clipped the rest off the box. Simulated
+the counter: 3 rows now, 5 rows after padding L0 and L3 with one trailing ASCII
+space each (invisible at line end). +2 bytes, well inside the 271-byte slot.
+COMPDATA in place; tools/fix_legend_parity.py. Verified on disc: counter now
+finds all four newlines (52, 91, 132, 171) -> 5 rows -> all 17 spirits render.
+
+COMPDATA-only; ELF, STAGE, SRVC byte-identical to 0.9.43.
+
 ## 0.9.43 (2026-09-04) - restore battle voice lines that shipped blank
 
 Follow-up to the 無音 discussion: rather than restore the Japanese silent marker

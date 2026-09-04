@@ -10,6 +10,32 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.42 (2026-09-04) - Eina's "..." caption, and why 無音 can't be restored
+
+Tester report: in an Eina scene the voice clip says "Touga-sama" (斗牙様) but the
+caption showed only "...". Cause was a caption-source error, not the game: the
+battle line 「斗牙様…」 had been translated to "..." in srvc_en.json (i=24702),
+dropping the name entirely. Fixed IN PLACE (block 324, SRVC pool offset 2692383):
+the 8-byte free-mode slot now holds `"Touga"` (7 B + 1 filler). The honorific and
+ellipsis don't fit the 8-byte slot, but the spoken name now shows instead of "...".
+tools/fix_eina_touga.py; source srvc_en.json[24702] updated to match.
+
+Restoring 「無音（本番では表示しません）……………」 (the silent-caption dev marker)
+was investigated and is NOT feasible, and is also unnecessary:
+  - The 328 marker slots hold "..." in 8-byte free-mode slots. The JP marker is
+    38 bytes - it cannot be written in place (would need each slot to grow ~5x).
+  - Growing them requires a full srvc_apply --free rebuild. An audit (rebuild to
+    a temp copy, diff by pool position vs the shipped disc) found 2,447 captions
+    on the disc that differ from what a rebuild produces - thousands of hand-fitted
+    caption edits that live only on the disc, not in srvc_en.json. A rebuild would
+    revert all of them. srvc_en.json is far behind the shipped SRVC.
+  - 本番では表示しません means "not shown in production": these captions do not
+    display, so the "..." in them is invisible. The only "..." a tester actually
+    saw was Eina's real voiced line above, now fixed. Restoring the marker would
+    change nothing on screen.
+
+Gate: SRVC re-parses (313 text blocks); STAGE untouched (SRVC-only 8-byte edit).
+
 ## 0.9.41 (2026-09-04) - Shinn (not Shin), Bask Om, and a save-frozen name
 
 From screenshots:

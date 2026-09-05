@@ -10,6 +10,32 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.48 (2026-09-05) - Divider voices, No Crew, bio/legend/captions
+
+Bundle of playthrough fixes on top of 0.9.46's reflow:
+
+- **Gundam X Divider battle voices** (regression from 0.9.43). `fix_blank_captions`
+  grew four blank caption slots; two of them (blocks 65/90) sit INSIDE the
+  voice-record array, so the grow shoved bytes into the record stride and
+  corrupted a cell - the Divider's clip mis-routed to the engine's unmanned
+  path. Fixed by restoring blocks 65/90/151/234 to their v0.9.38 routing.
+  Diagnosed by diffing sequence records vs v0.9.38 (only those 2 blocks changed).
+- **"Empty" voice-caption label -> "No Crew"** (ELF 0x3419e8, engine unmanned
+  fallback string, sits by "Invalid pilot"/"Error:").
+- **Female-hero select bio** rewrapped 4->3 lines so "she has." stops clipping
+  (COMPDATA 0x7A800, byte-neutral - only \n positions moved).
+- **DATA HELP spirit legend** now shows all 17 (was clipping the 4th command
+  row). The box can't grow past the unit panel below, so the explanatory header
+  line was dropped; the 4 command rows fit.
+- **4 blank battle captions filled** without a destructive rebuild. blk151/234
+  by in-place grow + repoint; blk65/90 by APPENDING the caption at the block
+  pool end and repointing the record's f2 (their blank slots are inside the
+  record array - growing in place is what broke the Divider). Every block's
+  (clip,section) routing verified byte-identical to before.
+
+Gate: STAGE 205 intact, 0 pointers broken vs v0.9.45, blocks 65/90 routing ==
+v0.9.38.
+
 ## 0.9.46 (2026-09-05) - full-game dialogue reflow, per box type
 
 Rewrapped every STAGE dialogue body for the new proportional font, wrapping the

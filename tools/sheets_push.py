@@ -43,9 +43,9 @@ SRC = os.path.join(ROOT, "analysis", "proofread")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets",
           "https://www.googleapis.com/auth/drive"]
 HDR = ["key", "speaker", "japanese", "current english", "PROPOSED ENGLISH",
-       "status", "note", "by", "free bytes", "cols", "lines"]
+       "status", "note", "by", "free bytes", "box", "px / limit", "lines"]
 # widths in pixels, by column index
-WIDTHS = [130, 90, 300, 300, 300, 90, 200, 70, 80, 55, 55]
+WIDTHS = [130, 90, 300, 300, 300, 90, 200, 70, 80, 80, 90, 55]
 
 
 def retry(fn, *a, **k):
@@ -132,7 +132,9 @@ def main():
                 p, st, nt, by = keep.get(x["key"], ("", "", "", ""))
                 vals.append([x["key"], x["speaker"], x["jp"], x["en"],
                              p, st, nt, by,
-                             x["free"], x["cols"], x["lines"]])
+                             x["free"], x.get("box", ""),
+                             "%d / %d" % (x.get("px", 0), x.get("pxlimit", 0)),
+                             x["lines"]])
             body.append({"range": "rec%03d!A1" % r, "values": vals})
         retry(sh.values_batch_update,
               {"valueInputOption": "RAW", "data": body})

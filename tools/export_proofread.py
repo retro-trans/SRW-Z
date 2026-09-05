@@ -38,6 +38,7 @@ import unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import banlz
+import reflow_dialogue as R   # width model + per-box-type classification
 
 SECTOR = 2048
 LBA, SIZE = 1651029, 3910128
@@ -110,6 +111,7 @@ def main():
     if not os.path.isdir(out):
         os.makedirs(out)
     en, jp = load(iso), load(pristine)
+    adv = R.load_adv(iso)   # half-width advance table for the proportional font
 
     books, seen_total, unpaired = {}, 0, 0
     for ri in range(len(en)):
@@ -117,6 +119,7 @@ def main():
             continue
         eb, jb = bytes(en[ri][1]), bytes(jp[ri][1])
         m = pair(eb, jb)
+        bm = R.boxmap(bytearray(eb))   # offset -> 1 over-map(narrow) / 0 scene(wide)
         # KEYS ARE NUMBERED IN OFFSET ORDER, ROWS ARE DISPLAYED IN POINTER
         # ORDER. These must stay separate. The key is rec:sha1(jp):occurrence,
         # and the occurrence counter follows whatever order it is computed in -
@@ -147,6 +150,10 @@ def main():
                 unpaired += 1
                 continue
             body = et.split(NL)[1:]
+            over = bm.get(off, 1) == 1   # default over-map (narrow, safe)
+            pxlimit = R.OVERMAP_PX if over else R.SCENE_PX
+            widest = max([R.width(l.replace(KAGI, "").replace(chr(0x300D), ""), adv)
+                          for l in body] or [0])
             rows.append({
                 "key": key_of[off],
                 "speaker": et.split(NL)[0],
@@ -157,6 +164,9 @@ def main():
                 "free": slot - 1 - len(et.encode("cp932")),
                 "cols": max([cols(l) for l in body] or [0]),
                 "lines": len(body),
+                "box": "over-map" if over else "scene",
+                "px": widest,
+                "pxlimit": pxlimit,
             })
         if rows:
             books[ri] = rows
@@ -170,9 +180,9 @@ def main():
     dup = sum(1 for rs in books.values() for r in rs if r["key"].endswith(":1"))
     print("rows that are a repeat of an earlier japanese line: %d" % dup)
     over = [r for rs in books.values() for r in rs
-            if r["cols"] > WIDTH or r["lines"] > MAXLINES]
-    print("rows ALREADY over the box (%d cols / %d lines): %d"
-          % (WIDTH, MAXLINES, len(over)))
+            if r["px"] > r["pxlimit"] or r["lines"] > MAXLINES]
+    print("rows ALREADY over the box (px > box limit / %d lines): %d"
+          % (MAXLINES, len(over)))
     print("wrote %s" % os.path.join(out, "dialogue.json"))
     return 0
 

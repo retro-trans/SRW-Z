@@ -10,6 +10,20 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.52 (2026-09-05) - stage 42 retranslated; Pierce/Disrupt spirit rename
+
+- **Stage 42** "The Beginning of the End" (終章開幕, rec104, 693 rows) retranslated
+  fresh from the Japanese by two sonnet subagents (split in half, ~570 rephrased).
+  One agent also flagged a ~30-line block in the prison flashback where the old
+  MT was mis-aligned to the wrong Japanese (a shifted-pairing bug) and translated
+  those straight from the JP. Applied by pointer-paired key, byte-fit to slot-1,
+  the one over-3-lines line hand-trimmed to keep "Zeravire".
+- **Spirit rename**: Direct -> Pierce (band glyph Di -> Pi), Daze -> Disrupt
+  (band glyph Co -> Di), across the ELF names, the spirit-band micro-glyphs
+  (patch_micro_glyphs.py) and the DATA HELP legend.
+
+Sheet: book 4 re-pushed. Gate: STAGE 205 intact, 0 pointers broken vs v0.9.45.
+
 ## 0.9.51 (2026-09-05) - stages 40 and 41 retranslated from the Japanese
 
 Full fresh retranslation of two stages, done by sonnet subagents against the

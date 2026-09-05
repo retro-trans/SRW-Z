@@ -10,6 +10,28 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.51 (2026-09-05) - stages 40 and 41 retranslated from the Japanese
+
+Full fresh retranslation of two stages, done by sonnet subagents against the
+Japanese (not a polish of the old MT), with the pointer-paired keys and byte
+budgets handled here:
+
+- **Stage 40** - both route versions: rec99 "Impact Again" (インパクト・アゲイン,
+  279 rows, 205 rephrased) and rec95 "Prelude to Destruction" (崩壊序曲, 518 rows,
+  ~418 rephrased). Records identified via the akurasu flow chart + dialogue
+  content (stage 40 sits between stage 39 and stage 41 "Cross Point").
+- **Stage 41** - rec102 "Cross Point" (クロス・ポイント, 474 rows, 434 rephrased).
+
+Each line was kept faithful to the Japanese, names locked to the established
+wiki spellings, 「」/() and $-codes preserved, em-dashes avoided, and every line
+re-wrapped to the over-map box and fit to its FIXED slot (STAGE can't grow).
+Budgets use slot-1 (one byte for the terminator - a first-pass off-by-one left
+24 lines a byte long; the agent tightened them). The agents also caught a name
+error (Garrod's line said "Garrod" where the JP says 勝平/Kappei).
+
+Sheet: book 4 (rec 93-117) re-pushed so the proofread sheet matches the disc.
+Gate: STAGE 205 intact, 0 pointers broken vs v0.9.45.
+
 ## 0.9.50 (2026-09-05) - restore truncated battle-dialogue fragments
 
 74 over-map battle lines shipped truncated to just their LAST line, leaving an

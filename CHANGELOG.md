@@ -10,6 +10,37 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.46 (2026-09-05) - full-game dialogue reflow, per box type
+
+Rewrapped every STAGE dialogue body for the new proportional font, wrapping the
+two box types at DIFFERENT widths (the over-map box is narrower than the scene
+big-box, so a single width either overflowed one or wasted the other):
+
+  - over-map box (32B-stride table, type=1 at pointer+16): target 415px
+  - scene big-box (16B inline structs): target 505px
+
+  `reflow_dialogue.py` now builds a per-record `boxmap` (scans 4-aligned u32
+  pointers = BASE+offset, reads d[ptr+16]); a field defaults to the SAFE narrow
+  over-map budget when its pointer isn't found. Width model: space=13px (the
+  proven constant - the earlier 6px guess caused the overflow the user saw),
+  half-width via the shipped advance table (0x78B960), full-width=21px.
+
+  68224 dialogue fields seen, 48588 reflowed (19501 over-map / 29087 scene),
+  167 records recompressed. Speaker plates, `$name` codes and 《links》 are left
+  intact; a field is skipped if it would exceed 3 lines or its byte slot.
+
+Compression note: 57 of the touched records already need the OPTIMAL codec on the
+original disc (our fast codec can't reproduce their shipped slot); reflow shrinks
+them but not enough for fast, so they go through `compress_record_optimal`
+(tractable at <=148KB; the true giants rec0/rec139 never overflow). Do NOT kill
+the build early - it churns those ~55 optimal passes for a while.
+
+Also: the voice-caption "Empty" (JP 無人, unmanned-target label) -> "No Crew",
+in-place in the ELF at 0x3419e8 (8-byte slot).
+
+Gate: pointers 0 broken vs v0.9.45 (--against), STAGE 205 records intact,
+patch round-trips to srwz_cap.bin SHA1 6c47845d.
+
 ## 0.9.45 (2026-09-05) - new font: BIZ UDGothic, proportional and left-aligned
 
 Replaced the Latin half-width font with BIZ UDGothic Regular, rendered

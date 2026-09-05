@@ -10,6 +10,30 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.50 (2026-09-05) - restore truncated battle-dialogue fragments
+
+74 over-map battle lines shipped truncated to just their LAST line, leaving an
+orphaned closing quote (user screenshot: "AEUG Soldier here!\""). Pre-existing
+(byte-identical in v0.9.45), not the reflow. The truncation kept each line's
+ORIGINAL slot, so most full lines fit back in place.
+
+The full lines live in analysis/english_script.json keyed by (rec, off), and the
+reflow is slot-preserving so the offsets still match. Fixes:
+  - **43 restored in place** from the source (no repacking) - parenthetical inner
+    monologues just had the stray quote dropped (already complete on disc); the
+    rest got their full head restored, re-wrapped to the over-map box.
+  - **20 reworded** to complete short lines where the full text is too long for
+    the slot (Edel-stage taunts, e.g. Duke "By defeating you here!\"" ->
+    "We'll stop you here!"). Faithful to the source.
+  - **11 left as-is**: the "Mobile Suit Gundam SEED DESTINY" title card, two
+    debug/demo strings, and dialogue with 4-9 byte slots too small for any
+    complete sentence.
+
+STAGE records can't grow (bytecode holds absolute offsets - apply_stage asserts
+length unchanged), so every fix fits the existing slot; recompressed serially.
+
+Gate: STAGE 205 intact, 0 pointers broken vs v0.9.45.
+
 ## 0.9.49 (2026-09-05) - map-dialogue box classification fix
 
 Over-map dialogue lines were still overflowing (user screenshot: Duke's "...change

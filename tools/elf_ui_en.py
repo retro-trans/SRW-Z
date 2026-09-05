@@ -95,6 +95,8 @@ ELF_UI.update({
     0x00336510: "Focus Atk",   # 集束攻撃 (skill)
     0x00336608: "Command",          # 指揮官 (skill, 8B slot -> exactly fits)
     0x00336E18: "Strike",           # 必中 (spirit)
+    0x003370D0: "Pierce",           # 直撃 (spirit; was "Direct", band abbrev "Pi")
+    0x003374A0: "Disrupt",          # 幻惑 (spirit; was "Daze", band abbrev "Di")
     0x00336EC8: "Resolve",          # 不屈 (spirit; "Fortitude" over budget)
     0x003374E0: "Trust",            # 信頼 (spirit)
     # tab headers: fullwidth (the tab style magnifies glyphs, so native

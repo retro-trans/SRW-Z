@@ -70,7 +70,7 @@ SPIRITS = [
     ("\u71b1", "Va"), ("\u9b42", "So"), ("\u9583", "Al"), ("\u4e0d", "Re"),
     ("\u9244", "Wa"), ("\u96c6", "Fo"), ("\u5fc5", "St"), ("\u52a0", "Ac"),
     ("\u8fc5", "Sw"), ("\u899a", "Aw"), ("\u624b", "Me"), ("\u72d9", "Sn"),
-    ("\u76f4", "Di"), ("\u5e78", "Lu"), ("\u52aa", "Ga"), ("\u4e71", "Co"),
+    ("\u76f4", "Pi"), ("\u5e78", "Lu"), ("\u52aa", "Ga"), ("\u4e71", "Di"),
     ("\u5206", "An"),
 ]
 # One more private cell: a BLANK.  The white "spirits this pilot has" string

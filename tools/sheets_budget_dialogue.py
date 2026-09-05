@@ -49,7 +49,12 @@ from google.oauth2.service_account import Credentials
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets",
           "https://www.googleapis.com/auth/drive"]
 NEED_COLS = 16                      # through P
-MAXLINES, WIDTH, RISK = 3, 34, 30
+# WIDTH/RISK were 34/30 for the OLD fixed 13px font. The font is now proportional
+# (BIZ UDGothic) and the reflow re-wraps on apply, so a line holds far more and a
+# manual char count is only a loose guide - the BYTE budget (bytes vs budget) is
+# the real hard limit. Thresholds relaxed so the width check stops false-flagging
+# valid proportional lines; bytes stays exact.
+MAXLINES, WIDTH, RISK = 3, 52, 48
 HDR = ["budget", "bytes", "widest", "lines", "fits"]
 
 # BYTES and COLUMNS are not the same measure here, and conflating them is

@@ -43,9 +43,11 @@ SRC = os.path.join(ROOT, "analysis", "proofread")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets",
           "https://www.googleapis.com/auth/drive"]
 HDR = ["key", "speaker", "japanese", "current english", "PROPOSED ENGLISH",
-       "status", "note", "by", "free bytes", "box", "px / limit", "lines"]
-# widths in pixels, by column index
-WIDTHS = [130, 90, 300, 300, 300, 90, 200, 70, 80, 80, 90, 55]
+       "status", "note", "by", "free bytes", "box", "px / limit"]
+# widths in pixels, by column index. Columns L-P are the LIVE budget counter
+# written by sheets_budget_dialogue.py (budget/bytes/widest/lines/fits) - this
+# push must stop at K so a re-push never clobbers those formulas.
+WIDTHS = [130, 90, 300, 300, 300, 90, 200, 70, 80, 80, 90]
 
 
 def retry(fn, *a, **k):
@@ -133,8 +135,7 @@ def main():
                 vals.append([x["key"], x["speaker"], x["jp"], x["en"],
                              p, st, nt, by,
                              x["free"], x.get("box", ""),
-                             "%d / %d" % (x.get("px", 0), x.get("pxlimit", 0)),
-                             x["lines"]])
+                             "%d / %d" % (x.get("px", 0), x.get("pxlimit", 0))])
             body.append({"range": "rec%03d!A1" % r, "values": vals})
         retry(sh.values_batch_update,
               {"valueInputOption": "RAW", "data": body})

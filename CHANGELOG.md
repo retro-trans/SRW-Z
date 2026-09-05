@@ -10,6 +10,23 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.49 (2026-09-05) - map-dialogue box classification fix
+
+Over-map dialogue lines were still overflowing (user screenshot: Duke's "...change
+your ways!" clipped). Root cause in reflow_dialogue.py's boxmap: it classified a
+field as the wide scene box unless `d[ptr+16] == 1`, but the 32-byte over-map
+table uses MANY type values (1, 0x16, 0x14, 0x1d, ...), so every non-1 map type
+got wrapped at scene width (484px) and overflowed.
+
+Fixed the discriminator: in a 32-byte entry ([ptr][0][0][0][type]), only type
+**0 or 2** is the wide scene box (Sochie=0, Daisuke=2); every other type is the
+narrow over-map box (Yassaba=1, Duke=0x16). Confirmed against the JP wrap and the
+clean-base hand-wrap, where every non-{0,2} type maxed <=393px. Map target also
+trimmed 415->400px (lines now cap ~379px, matching the original). 10,339 lines
+re-wrapped; scene lines untouched at 484px.
+
+Gate: STAGE 205 intact, 0 pointers broken vs v0.9.45, No Crew intact.
+
 ## 0.9.48 (2026-09-05) - Divider voices, No Crew, bio/legend/captions
 
 Bundle of playthrough fixes on top of 0.9.46's reflow:

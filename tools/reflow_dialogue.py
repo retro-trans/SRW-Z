@@ -32,7 +32,7 @@ BASE = 0x7566F0
 KO, KC = "「", "」"
 # per-box-type pixel budgets (space=13 model). over-map box ~435px (Yassaba fit
 # 431, Rand over 440); scene box ~530px (Sochie over 545). Targets sit below.
-OVERMAP_PX, SCENE_PX = 415, 505
+OVERMAP_PX, SCENE_PX = 400, 505
 CHARS = [0x2E, 0x22, 0x27, 0x21, 0x2C, 0x2D, 0x3F] + list(range(0x30, 0x3A)) + \
         list(range(0x41, 0x5B)) + list(range(0x61, 0x7B))
 LINK = re.compile(r"《[^》]*》")     # 《...》 kept whole
@@ -45,16 +45,30 @@ def load_adv(iso):
     return {chr(CHARS[i]): tbl[i] + 1 for i in range(69)}
 
 
+SCENE_TYPES = (0, 2)   # confirmed wide big-box: Sochie=0, Daisuke=2. Everything
+                       # else in the 32B table is the narrow over-map box
+                       # (Yassaba=1, Duke=0x16), verified vs the JP + clean-base
+                       # hand-wrap (every non-{0,2} type maxed <=393px there).
+
+
 def boxmap(d):
-    """offset -> box type: 1 = over-map (32B table, type=1 at ptr+16), 0 = scene.
-    The over-map box (~42 cols) is narrower than the scene big-box (~46 cols),
-    verified in-game: Yassaba(over-map)=type1, Sochie(scene)=type0."""
+    """offset -> 1 = over-map (narrow) / 0 = scene (wide). Over-map dialogue lives
+    in a 32-byte table entry [ptr][0][0][0][type]...; the type at +16 says which
+    box. type 0/2 = the wide scene box, any other small type = the narrow over-map
+    box. A pointer that is NOT such an entry (a 16-byte scene struct) = scene."""
     m = {}
     for p in range(0, len(d) - 4, 4):
         v = struct.unpack_from("<I", d, p)[0] - BASE
         if 0 <= v < len(d) and v not in m:
-            t16 = struct.unpack_from("<I", d, p + 16)[0] if p + 20 <= len(d) else 0
-            m[v] = 1 if t16 == 1 else 0
+            is32 = (p + 20 <= len(d)
+                    and struct.unpack_from("<I", d, p + 4)[0] == 0
+                    and struct.unpack_from("<I", d, p + 8)[0] == 0
+                    and struct.unpack_from("<I", d, p + 12)[0] == 0)
+            if is32:
+                t = struct.unpack_from("<I", d, p + 16)[0]
+                m[v] = 0 if (t < 0x100 and t in SCENE_TYPES) else 1
+            else:
+                m[v] = 0
     return m
 
 

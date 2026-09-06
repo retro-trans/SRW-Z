@@ -19,7 +19,9 @@ sight.
   `「` strings (0x33DB28, 0x33E258) are engine speech-bracket tokens paired
   with `（`/`》` (the set the Back Log uses to colour speakers) and are NOT
   touched.
-- Build: `SRW Z English v0.9.63.chd` (sha1 below). ELF only vs 0.9.62.
+- Build: `SRW Z English v0.9.63.chd` sha1
+  `ced038193e90363ecd03253884bb1b3274d7ec71` (2,537,445,987 B). ELF only vs
+  0.9.62. ELF patches all present. Not uploaded (MEGA full).
 
 ## 0.9.62 (2026-09-07) - glyph-cache cell reuse per frame: the real cause of the Bazaar popup text loss (USER-CONFIRMED: "it's great now")
 

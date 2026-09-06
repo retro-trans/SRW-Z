@@ -10,7 +10,30 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.61 (2026-09-06) - UI glyph-sprite pool doubled (319 -> 639): Bazaar popup text loss root cause (AWAITING in-game test)
+## 0.9.62 (2026-09-07) - glyph-cache cell reuse per frame: the real cause of the Bazaar popup text loss (AWAITING in-game test)
+
+- 0.9.61 (bigger glyph-struct pool) changed nothing: identical cut points
+  (21 / 6 / 2 / 6 glyphs). The binding limit is the glyph-cache TEXTURE: the
+  blit hands every glyph occurrence a fresh 24px cell via a cursor (ctx
+  0x46E338/3A, scratchpad 0x7000002C/2E), wrapping at 504px and two 240-row
+  pages, and ABORTS the string when the cursor passes 480 rows (0x13AA28) -
+  the cursor stays there, so every later string in the frame aborts on its
+  first glyph. Live dump at the stalled popup: cursor y == 480 exactly. The
+  JP engine never reuses a cell; English repeats ~50 codes hundreds of times
+  per screen, so a busy screen (Bazaar + long item panel) exhausts the budget
+  before the popup (drawn last). This also explains why moving items,
+  widening the box, or enlarging the struct pool did nothing.
+- **Fix** (`tools/patch_glyph_dedup.py`): per-frame code -> cell table (128
+  x 8 B at 0x78C500, tag at 0x78C3FA; cave grown by the last 1,272 B of
+  sector slack, now ends 0x78C900, ELF exactly 1696 sectors). Hooks: 0x13AA68
+  (hit -> reuse the cell: struct +0/+2/+17, skip raster-list append and
+  cursor advance), 0x13AAE0 (record cell before the advance), 0x13A260
+  (cursor reset -> tag++). t8/t9 are unused by the blit. Cache content is
+  keyed by code only (colour/outline/size are sprite-time; bold = own codes).
+  A miss behaves exactly as before.
+- Build: `SRW Z English v0.9.62.chd` (sha1 below). ELF only vs 0.9.61.
+
+## 0.9.61 (2026-09-06) - UI glyph-sprite pool doubled (319 -> 639) (user-tested: NO effect - not the cause; kept, harmless)
 
 - **The popup text loss was never the width measure.** Live PINE dump at the
   stalled "「Nanomachine Unit' wi" popup on 0.9.60: the draw list is correct

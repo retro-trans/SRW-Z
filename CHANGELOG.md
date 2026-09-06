@@ -10,6 +10,72 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## unreleased - on the build master since 0.9.58, not yet in a CHD
+
+- rec105 Sandman: 「Only my brother-in-law Hyuugi could pull that off...」 (義兄さん =
+  brother-in-law; was "brother"). In place, slot 111/103 B; gate baseline
+  unchanged; sheet book 4 read back. Three more 義兄 rows in rec64 (Zeek x2,
+  Luna) also said "brother": fixed ("my brother-in-law Hugi" where it fits; the
+  61-byte Zeek line and Luna's vocative use the bare name - the relationship is
+  stated by Sandman two lines earlier).
+- Name: ヒューギ・ゼラバイア is **Hugi Zeravire** (akurasu + every Gravion source);
+  15 rows in recs 64/105/106 renamed from "Hyuugi" in place, source maps
+  (rec064/105/106_en.py, fix_sandman.py, dlg_overrides/dlg_tighten) updated.
+
+## 0.9.58 (2026-09-06) - UI width measure v2: per-glyph advances from the blit's own table (AWAITING in-game test)
+
+- 0.9.57's flat 13 per ASCII glyph made the popup CONSISTENT (no more
+  dependence on the previous popup - user-tested) but left a gap after every
+  name growing with its length (~30%): menus are PROPORTIONAL. The live blit
+  advance hook (0x78BA60) is: space -> 13, code 0x8585 -> 12, private codes
+  0x8540..0x85C9 -> table[idx]+1 (idx<69) / table[idx-69]+2 (bold), table =
+  0x78B960. The cave (0x78C210) now mirrors that exactly; ASCII bytes go through
+  a 96-byte map at 0x78C300 built from the same table at patch time (mapped
+  glyphs table+1, space/unmapped 13). Predicted name widths 132/141/223 vs the
+  flat 169/182/299 = the observed 0.77 ratio. verify_elf_patches: all present.
+- Build: `SRW Z English v0.9.58.chd` sha1
+  `2f7b56c46c915ab17b6c7ffc728df48785b1cee9` (2,537,445,838 B). Only the ELF
+  changed vs 0.9.57.
+
+## 0.9.57 (2026-09-06) - UI width measure counts half-width glyphs (Bazaar popup); 11 line fixes; Shine Spark (user-tested: consistent, but tail too far right -> 0.9.58)
+
+- **Bazaar "「Psycho Helmet」will be bought." popup - tail text overlapping the
+  item name, and laid out differently depending on the PREVIOUS popup.** Root
+  cause in the ELF, not the strings: the popup is three appended segments (`「`,
+  name, tail) and every appended segment is placed at x += width(previous),
+  where width = **0x139B00**, the UI string-width measure. It walks TWO bytes per
+  character (Shift-JIS) and adds the full-width 22 per pair; our names are
+  1-byte ASCII drawn at a flat 13px pitch, so "Nanoskin Armor" (14 glyphs, 182px)
+  measured as 7 pairs = 154 and the tail started inside the name. Odd-length
+  names put the NUL in the second byte of a pair, which the loop never tests, so
+  it ran past the terminator into the scratch buffer's previous contents -
+  hence the dependence on the previous popup. The same measure is behind menu
+  jams like "unequipped2)" and "Jenice Kai Ennil Custom200" (encoded digits
+  0x8540.. measured as full width).
+- **Fix:** `tools/patch_measure_ascii.py` - hook at the loop head 0x139B78 ->
+  cave 0x78C210 (cave segment grown by 512 B with grow_cave.py, now ends
+  0x78C408, still inside the ELF's last-sector slack): ASCII 0x20..0x7E consumes
+  ONE byte and adds 13 (0x2E..0x3D control bytes and <0x20 go to the original
+  path), private half-width codes 0x8540..0x85C9 add 13 per code, everything
+  else unchanged. NUL is always seen at the loop head. verify_elf_patches: all
+  present. Cave disassembled back from the ISO and checked branch by branch.
+- **Line fixes (on disc + sheets, read back):** rec57 Amuro "Asakim's reason to
+  target $n" (was "Amuro's"; JP あのアサキムという男); Aphrodia's Aldebaron oath in
+  rec90 + rec104 (JP 一つ、…は死刑 - the "item:" oath form, not the numeral;
+  now "Act alone and you die! ..." / "Show the enemy mercy, or accept it, and
+  you die! Break ranks and you die!"); rec104 Kei "Olson's not a soldier
+  anymore" (軍人); rec104 Haman "I hear it proclaims rule by Newtypes as its
+  cause" (標榜); Emaan is a people/nation, never "she" - rec80 Hilda, rec104
+  Olson x3 ("worlds where Emaan exists, and worlds where it doesn't"). Stoner's
+  "she" (the Emaan negotiator) and Mimsy's 彼女 lines were correct and kept.
+- **Battle captions:** 22 Getter captions in SRVC block 344 "SHAAAIIN SPAAAAARK"
+  -> "SHIIINE SPAAAAAARK" (same length, in place). srvc_index_audit: OK.
+- Gates: verify_pointers vs JP 80,986 / 9 (baseline unchanged); SRVC index OK;
+  ELF patches all present. STAGE, SRVC and the ELF changed; nothing else.
+- Build: `SRW Z English v0.9.57.chd` sha1
+  `1822932e463f1cd086d50a67050a47077104967b` (2,537,445,739 B). NOT yet
+  user-verified: the popup fix and the menu digit jams need an in-game look.
+
 ## 0.9.56 (2026-09-06) - SRVC cell-index repair: Maaie "No Crew" FIXED (user-confirmed in-game); 1,489 blank-caption cells repointed
 
 - **Root cause of Maaie's "No Crew" (stage 41, every attack): a caption string

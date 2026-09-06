@@ -53,7 +53,7 @@ FIX = [
     (26, 0xdaf0, u"Eiji\n「Still, that Sandman... Japan is\nsealed, yet the combine order\nalways comes on time.」"),
     (48, 0x18e40, u"Eiji\n「Sandman's probably the same. He\ntold us to go with the Minerva\ntoo.」"),
     (64, 0x5780, u"Eiji\n「What's going on, Sandman!? Is\nthat blond guy you!?」"),
-    (64, 0x6180, u"Eiji\n「So this Hyuugi guy blamed\nSandman for it...」"),
+    (64, 0x6180, u"Eiji\n「So this Hugi guy blamed\nSandman for it...」"),
     (64, 0x8350, u"Eiji\n「Sandman...」"),
     (64, 0x91d0, u"Eiji\n「Not like you, Sandman. Making a\nface like that.」"),
     (65, 0xa4a0, u"Eiji\n「Come on, Zeravire! For Sandman,\nwe're your foes!」"),

@@ -10,12 +10,21 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.53 (2026-09-06) - stages 43 and 44 retranslated from the Japanese
+## 0.9.53 (2026-09-06) - stages 43, 44 and 45 retranslated from the Japanese
 
 - **Stage 43** "Destiny and Freedom" (運命と自由と, rec105, 326 rows) retranslated
   fresh from the JP by a sonnet subagent - the Athrun/Meyrin escape and the
   Destiny/Freedom confrontation. Applied by pointer-paired key, byte-fit to
   slot-1. (Applied to disc in the previous session but first shipped here.)
+- **Stage 45** "Inheritors of the Legacy" (遺産の継承者, rec108, 697 rows)
+  retranslated fresh from the JP by four sonnet subagents (~175 lines each,
+  parallel) - the Frost brothers, Titans (Jerid/Mouar) and the Gundam X
+  inheritors. 177 of 697 lines changed on disc. Cross-chunk sweep standardized
+  マウアー to "Mouar" (the spelling the rest of the game uses; the old MT drifted
+  to Mauar/Mauer) and fixed Basque->Bask, Fou->Four, a They/We subject error,
+  and two straight-quote lines that broke the 「」 Back-Log speaker colouring.
+  One line (Holland's "!") was left as the original: at a 12-byte budget even
+  "「!」" plus the name fills the slot, so re-wording could only shorten it.
 - **Stage 44** "The Falling Sun" (舞い降りる太陽, rec107, 850 rows - the largest
   stage record so far, 100 speakers) retranslated fresh from the JP by five
   sonnet subagents (170 lines each, run in parallel). 332 of the 850 lines

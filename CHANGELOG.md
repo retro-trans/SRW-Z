@@ -10,7 +10,28 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased - on the build master since 0.9.58, not yet in a CHD
+## 0.9.59 (2026-09-06) - UI width measure v3: per-glyph only for the popup layout calls (AWAITING in-game test); Hugi/brother-in-law/Athrun line fixes
+
+- **Measure v3** (`tools/patch_measure_ascii.py`): the loop hook at 0x139B78
+  now checks a flag (0x78C3F8); flag clear = the original routine exactly, for
+  all ~120 callers. Only the two popup layout calls set it, through a stub at
+  0x78C380 (`jal 0x139B00` at 0x35836C and 0x3596BC -> `jal stub`; stub sets
+  the flag, calls, clears it; v0/v1 preserved). Per-glyph widths from the
+  blit's table via MAP 0x78C300. Cave disassembled back from the ISO and
+  checked; verify_elf_patches all present.
+- rec105 Athrun: 「All the Chairman has said, his message to the world... and
+  the fact you exist... I can't trust him anymore...!」 (君の存在 = the fact
+  that you exist; 議長 kept as "the Chairman"; was "you, alive like this").
+- rec105 Durandal thought "(But it's too late now, Lacus Clein...)" -> **Clyne**
+  (the only "Clein" on disc, same length, in place). This line is a
+  parenthesised thought without 「 - the class export_proofread skips, so it is
+  NOT on the sheets; any future audit of names must scan the disc, not the
+  export (the export shows 74 "Clyne" and zero "Clein").
+- Build: `SRW Z English v0.9.59.chd` sha1
+  `ae8aea112eb4e7bdb6c574c0fe55a0bf2f192d81` (2,537,445,858 B). Gate vs JP
+  80,986 / 9 (baseline). ELF + STAGE (recs 64, 105, 106) changed vs 0.9.58.
+
+## unreleased - on the build master since 0.9.58, now in 0.9.59
 
 - rec105 Sandman: 「Only my brother-in-law Hyuugi could pull that off...」 (義兄さん =
   brother-in-law; was "brother"). In place, slot 111/103 B; gate baseline
@@ -22,7 +43,16 @@ sight.
   15 rows in recs 64/105/106 renamed from "Hyuugi" in place, source maps
   (rec064/105/106_en.py, fix_sandman.py, dlg_overrides/dlg_tighten) updated.
 
-## 0.9.58 (2026-09-06) - UI width measure v2: per-glyph advances from the blit's own table (AWAITING in-game test)
+## 0.9.58 (2026-09-06) - UI width measure v2: per-glyph advances from the blit's own table (user-tested: REGRESSION - popup text stalls part-way; superseded by v3)
+
+- User test: the buy popup now stops after a few glyphs ("「Nanomachine Unit'
+  wi", "「Prope", "「C", "「Repai") and the rest of the box never fills in.
+  0x139B00 has ~120 callers; changing its semantics globally broke at least
+  one of them (the three calls in the popup renderer 0x3585F0 only place the
+  fixed Yes / No strings, so the staller is elsewhere). v3 keeps the original
+  routine for every caller and enables the per-glyph loop only while a flag is
+  set by a stub around the two popup layout calls (0x35836C append-x sum,
+  0x3596BC line width).
 
 - 0.9.57's flat 13 per ASCII glyph made the popup CONSISTENT (no more
   dependence on the previous popup - user-tested) but left a gap after every

@@ -10,6 +10,28 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.61 (2026-09-06) - UI glyph-sprite pool doubled (319 -> 639): Bazaar popup text loss root cause (AWAITING in-game test)
+
+- **The popup text loss was never the width measure.** Live PINE dump at the
+  stalled "「Nanomachine Unit' wi" popup on 0.9.60: the draw list is correct
+  (「 x=-88, name x=-72, tail x=85 = name + measured 157, "Are you sure?" on
+  line 1); moving the tail to x=300 or widening the box to 600 changed nothing
+  - the tail still drew exactly 4 glyphs. The blit (0x13A290) stamps glyphs
+  into a pool of 32-byte structs allocated at init (`19D058(.., 0x2800)` ->
+  0x46E388) with cap 0x13F = 319 (0x13AB28); at the cap every further glyph
+  overwrites the last slot. The pool flushes only for strings drawn with a
+  packet handle; the popup's layer has none, so it appends to the frame's pool
+  last. All 319 structs were in use. The four failing items are exactly the
+  ones with long left-panel text (e.g. "Fully restore EN / Disposable /
+  Battleships only; adjacent units"); Psycho Helmet's short panel left room.
+  Japanese never hits 319 on that screen; English does. Predicts the same loss
+  on 0.9.57/0.9.56 and the original English builds for those items.
+- **Fix** (`tools/patch_glyph_pool.py`): pool allocation 0x2800 -> 0x5000 and
+  the blit cap 0x13F -> 0x27F (639 glyphs). Other 0x13F literals (dialogue
+  engine) untouched - they cannot exceed the larger buffer. Measure v3 stays
+  (it is what places the tail correctly).
+- Build: `SRW Z English v0.9.61.chd` (sha1 below). ELF only vs 0.9.60.
+
 ## 0.9.60 (2026-09-06) - save/load screen: stage-title bracket frame removed (AWAITING in-game test; also carries the untested 0.9.59 popup fix)
 
 - **"Ep 60 ＜The Right St＞ff"**: the save/load screen draws a fixed-width frame

@@ -10,7 +10,7 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.56 (2026-09-06) - SRVC cell-index repair: Maaie "No Crew" root cause found and fixed (awaiting in-game confirmation); 1,489 blank-caption cells repointed
+## 0.9.56 (2026-09-06) - SRVC cell-index repair: Maaie "No Crew" FIXED (user-confirmed in-game); 1,489 blank-caption cells repointed
 
 - **Root cause of Maaie's "No Crew" (stage 41, every attack): a caption string
   sitting INSIDE SRVC block 234's cell index.** `tools/srvc.py` parse() finds
@@ -53,7 +53,7 @@ sight.
   resolve, 9 "no longer resolve" (rec2, 29, 84, 100, 118x2, 145, 147) - byte-
   identical result on the 0.9.45 image, i.e. pre-existing JP-relative baseline,
   not from this build.
-- **Not yet confirmed in-game.** The 0.9.54 and 0.9.55 claims were wrong; this
+- **User-confirmed in-game (2026-09-06): Maaie shows her name and caption.** The 0.9.54 and 0.9.55 claims were wrong; this
   entry stays "awaiting confirmation" until the user sees Maaie's name on the
   plate.
 - Build: `SRW Z English v0.9.56.chd` sha1

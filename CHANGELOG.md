@@ -10,6 +10,110 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.56 (2026-09-06) - SRVC cell-index repair: Maaie "No Crew" root cause found and fixed (awaiting in-game confirmation); 1,489 blank-caption cells repointed
+
+- **Root cause of Maaie's "No Crew" (stage 41, every attack): a caption string
+  sitting INSIDE SRVC block 234's cell index.** `tools/srvc.py` parse() finds
+  only 1 cell in ~187 blocks and tiles the real 8-byte cell index
+  `(u16 clip, u16 sec, u16 off, 0000)` as NUL-split pseudo-strings; `srvc_apply`
+  assigns captions by string slot, so `"I'll take a loss!"` (19 B, a duplicate of
+  the real pool copy at +0x470) was written into an empty pseudo-slot between two
+  cells. The game locates the pool from the HEADER (`quote_base = base+0xE7C`,
+  identical on both discs) and reads a caption at `quote_base + off`; our pool
+  had moved to base+0xE8F, so every caption in the block was read 19 B early and
+  the cells after the stray were misaligned. Her caption buffer came back empty
+  and the plate drew 無人. Block 151 had the same defect (`"I'll drag out the
+  truth\nthe military's hiding!"`, 48 B).
+- **Diagnosis:** same save, same attack, JP disc vs 0.9.55 over PINE. Disassembled
+  the caption-start fn (0x2EA4B0): descriptor = chan[curpage] (0x2E9A00), off =
+  descriptor+4, quote_base = `*(0x5FDBF0+0x248+side*112+slot*28)`, name =
+  `0x6D2CB8[chan->pidx[curpage]]`. Replicated it on both dumps: JP quote_base
+  0x00DFEABC -> 「ごめんね！」 (the block's first caption); ours 0x00CC0AA3 -> a
+  0x19 byte inside the cell table, 19 B before our first caption `"Sorry!"`.
+  Then a byte-diff of the pre-pool region vs the JP block (offset fields masked)
+  showed the stray. Names, the save, COMPDATA, the pilot record and the caption
+  cave were never involved; 0.9.54/0.9.55 fixed real but unrelated things.
+- **Second defect found by the same audit, also shipped for weeks: 26 blocks
+  whose cells were never repointed by `--free`** (its detector is blind on those
+  blocks: 0, 12, 47, 48, 49, 56, 87, 88, 98, 99, 102, 155-157, 162, 166, 167,
+  221, 254, 256, 258, 297, 298, 306, 313, 314). They kept JAPANESE offsets over
+  a shorter ENGLISH pool, so the game read past the pool end -> blank captions
+  (name shown, no text) for those units. 1,489 cells remapped by string order
+  (srvc.build preserves order and count; block 47 mapped over its 16 leading
+  captions only, record data follows them).
+- **What changed on disc:** SRVC.BIN only, written in place at LBA 1313214, same
+  size (2,915,235 B): 2 strays excised (bytes re-added as zero padding at the
+  block end, SEG untouched), 1,489 cell offsets rewritten. Nothing else.
+- **Verification:** new gate `tools/srvc_index_audit.py <iso> --against
+  iso/srwz.bin` -> OK (353 blocks equal the JP block before the pool except
+  2-byte offset fields; every cell offset lands on a string start). The same
+  gate on the 0.9.45 image reports 30 defective blocks incl. two further strays
+  (`"Shinn! Don't charge in!"`, `"I'll mince you with this Drill!"`) that later
+  edits had displaced. `verify_pointers.py --against iso/srwz.bin`: 80,986
+  resolve, 9 "no longer resolve" (rec2, 29, 84, 100, 118x2, 145, 147) - byte-
+  identical result on the 0.9.45 image, i.e. pre-existing JP-relative baseline,
+  not from this build.
+- **Not yet confirmed in-game.** The 0.9.54 and 0.9.55 claims were wrong; this
+  entry stays "awaiting confirmation" until the user sees Maaie's name on the
+  plate.
+- Build: `SRW Z English v0.9.56.chd` sha1
+  `973ce14e796d3b6f19a84e1a53a02a8e496072ff` (2,537,445,696 B); bin sha1
+  `d481b69b701c1e2f61df119a6b7a876cfa1de9a5`. Patches (bin-based):
+  `SRWZ-English-v0.9.56.xdelta` JP -> 0.9.56 (5,719,463 B, sha1
+  `85cf227ae31ee9132e33bb449a4fba6d22108562`);
+  `APPLY-TO-v0950-iso__v0.9.56.xdelta` 0.9.50 -> 0.9.56 (168,393 B, sha1
+  `3f589335946b8739517eabd97990f053b525ea07`, base = the user's `SRWZ
+  English.iso`, sha1 40d557f0). Both round-trip to bin sha1 d481b69b.
+
+## 0.9.55 (2026-09-06) - Maaie unit-name variants renamed (Mome -> Maaie); "No Crew" NOT resolved
+
+- `tools/soundsel_names.py` had `"マーイ": "Mome"`, so her unit variants shipped as
+  "Mome E" / "Mome(E)" while her pilot name was "Maaie". Fixed the map and
+  `analysis/soundsel_en.json`; the two COMPDATA pool strings were rewritten in
+  place, byte-safe (`Maaie E`, `Maaie-E`; scratchpad/fix_maaie_unitnames.py).
+  A real translation error - but the user tested this build and Maaie still
+  showed 無人, and the live 0.9.55 dump proved the plate id was still 0. Not the
+  cause (see 0.9.56).
+- Build: `SRW Z English v0.9.55.chd` sha1 `4ff00ba6...`. COMPDATA blob only.
+
+## 0.9.54 (2026-09-06) - 16 stale empty-string sentinel refs in COMPDATA repointed (Maaie "No Crew" NOT resolved)
+
+- **CORRECTION - this build does NOT fix Maaie's "No Crew".** The sentinel repair
+  below is a real bug fix (16 placeholder units had garbage names - the "blank
+  slot draws garbage" class fix_pool_strays.py documents), but the user tested
+  0.9.54 in-game and Maaie still shows 無人. My causal chain from the phantom
+  placeholders to her participant list was inferred, not proven, and was wrong.
+  Maaie remains OPEN. Everything static has since been verified clean vs the JP
+  disc (SRVC routing, COMPDATA incl. her record, ELF, stage-41 deployment; no
+  hardcoded マーイ key anywhere) - the fault only manifests at runtime.
+- **Maaie (マーイ) showed "No Crew" + no portrait on every attack** (reported on
+  Kei's Tri attack, stage 41 "Cross Point"). Root cause was NOT the save, NOT SRVC
+  voice routing, NOT her pilot record - all verified pristine. It was a class of
+  corruption a byte-diff cannot see: the COMPDATA string-pool repack left **16
+  pointers to the JP empty-string sentinel (0x00749FF8) stale** in a unit-record
+  table (0x60400..0x60700, stride 0x30, ids 0x258-0x25F). 12 were unchanged vs
+  the JP (so every diff said "clean") but now landed mid-way through a help text;
+  4 were mis-repointed to 0x746631 (not even 8-aligned). 16 placeholder ("no
+  name") units therefore read as VALID, NAMED units and polluted the battle
+  participant scan: the Tri-attack list shifted (Roberto shoved into slot 0,
+  Maaie's unit dropped) so her plate resolved no pilot and drew 無人.
+- **Diagnosis:** same save on the Japanese disc vs ours, both dumped over PINE:
+  JP resolved her (HUD slot 0x6D2CBC -> マーイ, id list [0x55,0x5D,0x60..]); ours
+  didn't ([0x73,0x55,0x60..], plate pointers 0x6D2C50/0x6D2C38 NULL). Disassembled
+  the plate (0x2EA080 -> resolve-pilot 0x2E9BF0: returns negative when the unit's
+  pilot-id isn't in its crew -> loads "No Crew"). Then found the stale refs by
+  checking every UNCHANGED pool pointer's target for string-start in our repacked
+  pool. `fix_pool_strays.py`'s own docstring describes this exact bug ("a blank
+  slot that used to draw nothing now draws garbage") - it just hadn't been
+  re-applied after the last repack.
+- **Fix:** all 16 refs repointed to a real empty 8-aligned slot (0x0073BF30),
+  restoring the JP "no name" semantics. Decompressed record patched, recompressed
+  (144578 B, 71 sectors of 74), written at the relocated LBA 1823000; ISO dir
+  record and the game's own file table (the load-time authority) both consistent.
+  Change is confined to the COMPDATA blob. Pointer gate: 81,029 resolve, 0 broken.
+- Note for the toolchain: `patch_compdata.py` rebuilds from the JP extract every
+  run, so these refs go stale again unless the stray repair runs after the repack.
+
 ## 0.9.53 (2026-09-06) - stages 43-46 retranslated + prologue narration translated
 
 - **Prologue narration** (the black-screen "…最後の戦いが始まろうとしていた……。"

@@ -18,7 +18,7 @@ BASES = {
 "マルチーノ": "Martino", "カザミ": "Kazami", "テラル": "Terral",
 "リラ": "Lila", "ジーラ": "Zila", "リーツ": "Ritz", "ガガーン": "Gagarn",
 "ダルトン": "Dalton", "ジェーン": "Jane", "タイチロウ": "Taichiro",
-"ケイ": "Kei", "シャイア": "Shaia", "マーイ": "Mome", "リーア": "Lieea",
+"ケイ": "Kei", "シャイア": "Shaia", "マーイ": "Maaie", "リーア": "Lieea",
 "ジャビー": "Jabby", "リーグ": "League", "スレイ": "Slay", "ゴーヴ": "Gove",
 "パプティ": "Papty", "タイイ": "Taii", "ティナ": "Tina", "アテナ": "Athena",
 "オルソン": "Olson", "ロベルト": "Roberto", "ヘンリー": "Henry",

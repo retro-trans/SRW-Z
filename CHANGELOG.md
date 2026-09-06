@@ -28,6 +28,12 @@ sight.
   `7b943f45d1e01c4fdced0cf11391a66316dec596` (2,537,446,037 B). COMPDATA +
   STAGE rec109 changed vs 0.9.64; ELF unchanged. Bin sha1
   `0ea4f5a182c98880d5f5d65a01410a52d569f891`. Not uploaded (MEGA full).
+  Patches (bin-based, both round-trip to that sha1):
+  `SRWZ-English-v0.9.65.xdelta` JP -> 0.9.65 (5,719,968 B, sha1
+  `4c827075899103529bcaebe46f69818c8cf87b0e`);
+  `APPLY-TO-v0950-iso__v0.9.65.xdelta` 0.9.50 -> 0.9.65 (170,979 B, sha1
+  `b479f2e63e89527835b5cf35b6e85288d1c92b7a`, base = the user's
+  `SRWZ English.iso`, sha1 40d557f0). The 0.9.63/0.9.64 patches were removed.
 
 ## 0.9.64 (2026-09-07) - width measure v4: NUL-safe for odd-length ASCII (intermission kill-count names no longer move between loads)
 

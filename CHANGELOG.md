@@ -10,7 +10,23 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.59 (2026-09-06) - UI width measure v3: per-glyph only for the popup layout calls (AWAITING in-game test); Hugi/brother-in-law/Athrun line fixes
+## 0.9.60 (2026-09-06) - save/load screen: stage-title bracket frame removed (AWAITING in-game test; also carries the untested 0.9.59 popup fix)
+
+- **"Ep 60 ＜The Right St＞ff"**: the save/load screen draws a fixed-width frame
+  string `＜　×9　＞` (ELF 0x347780, JP table entry before the titles) and then
+  paints the title over its spaces (which is why every title in that table has
+  a leading space). patch_hwfont makes the full-width space advance 13px instead
+  of 21, so the frame shrank from ~189px to ~117px and ＞ landed inside any title
+  longer than ~9 glyphs. Keeping the brackets would need ~24 spaces for " The
+  Wandering Repairman" (does not fit the 32-byte slot), so the frame is blanked
+  (empty string; titles keep their leading space). Recorded in ui_batch7.
+- NOT touched: the `《`/`》` marker strings at 0x43C7E8/F0 - those are registered
+  at init (0x2E36E0, table 0x41FB90) as the glossary-link markers; blanking them
+  would break link detection. (Briefly blanked during diagnosis, restored and
+  verified before any build.)
+- Build: `SRW Z English v0.9.60.chd` (sha1 below). ELF only vs 0.9.59.
+
+## 0.9.59 (2026-09-06) - UI width measure v3: per-glyph only for the popup layout calls (not user-tested; superseded by 0.9.60); Hugi/brother-in-law/Athrun line fixes
 
 - **Measure v3** (`tools/patch_measure_ascii.py`): the loop hook at 0x139B78
   now checks a flag (0x78C3F8); flag clear = the original routine exactly, for

@@ -216,10 +216,14 @@ BATCH = {
     0x3476F0: "Pick Command~",
     0x347700: "Pick File~",
     0x347760: " eps cleared",
+    # 0x347780 is the save/load screen's title FRAME '＜　×9　＞' drawn under the
+    # title; our 13px full-width space shrank it so ＞ overlapped every title
+    # longer than ~9 glyphs. Blanked (0.9.60) - the titles keep their leading space.
+    0x347780: "",
     0x3477A0: " The Wandering Repairman",
     0x3477C0: " The Right Stuff",
     0x3477D8: "Hero",
-    0x3477E8: "Scenario",
+    0x3477E8: "Ep.",
     0x3477F8: "Turns",
     0x347818: "Name",
     0x347820: "Info",

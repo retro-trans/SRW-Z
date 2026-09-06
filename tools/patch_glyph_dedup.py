@@ -41,7 +41,9 @@ H3, H3_BACK = 0x13A260, 0x13A268
 CODE_VA = 0x78C408          # H1 + H2
 H3_VA = 0x78C3B0            # reset hook, in the gap between the popup stub and FLAG (0x78C3F8)
 TAG_VA = 0x78C3FA
-TABLE_VA = 0x78C500
+TABLE_VA = 0x78C520          # 112 entries x 8 B -> 0x78C8A0 (the measure's MAP lives at 0x78C8A0)
+ENTRIES = 112
+TABLE_END = TABLE_VA + ENTRIES * 8
 SEG_END = 0x78C900
 
 R = {n: i for i, n in enumerate(
@@ -77,9 +79,12 @@ def hl(va):
 
 
 def entry_ptr(w, code_reg, out_reg, tmp):
-    """out_reg = TABLE + ((code ^ code>>7) & 0x7F) * 8   (clobbers tmp)"""
+    """out_reg = TABLE + (((code ^ code>>7) & 0x7F) mod ENTRIES) * 8   (clobbers tmp, out_reg)"""
     thi, tlo = hl(TABLE_VA)
-    w += [srl(tmp, code_reg, 7), xor(tmp, tmp, code_reg), andi(tmp, tmp, 0x7F), sll(tmp, tmp, 3),
+    w += [srl(tmp, code_reg, 7), xor(tmp, tmp, code_reg), andi(tmp, tmp, 0x7F),
+          slti(out_reg, tmp, ENTRIES), bne(out_reg, 'zero', 2), NOP,     # idx < ENTRIES -> skip the subtract
+          addiu(tmp, tmp, -ENTRIES),                                      # else idx -= ENTRIES
+          sll(tmp, tmp, 3),
           lui(out_reg, thi), addiu(out_reg, out_reg, tlo), addu(out_reg, out_reg, tmp)]
 
 
@@ -153,11 +158,11 @@ def main():
         if revert:
             for site, orig, cave in sites:
                 f.seek(base + foff(site)); f.write(struct.pack("<II", *orig))
-            f.seek(base + foff(CODE_VA)); f.write(b"\x00" * (SEG_END - CODE_VA))
+            f.seek(base + foff(CODE_VA)); f.write(b"\x00" * (TABLE_END - CODE_VA))
             f.seek(base + foff(H3_VA)); f.write(b"\x00" * len(blob3))
             f.seek(base + foff(TAG_VA)); f.write(b"\x00\x00")
             print("reverted"); return 0
-        f.seek(base + foff(CODE_VA)); f.write(b"\x00" * (SEG_END - CODE_VA))
+        f.seek(base + foff(CODE_VA)); f.write(b"\x00" * (TABLE_END - CODE_VA))
         f.seek(base + foff(CODE_VA)); f.write(blob)
         f.seek(base + foff(H3_VA)); f.write(blob3)
         f.seek(base + foff(TAG_VA)); f.write(b"\x01\x00")            # TAG starts at 1 (table zero => never matches)

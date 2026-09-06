@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Popup/menu text placement: measure half-width glyphs per glyph, ONLY where
-the popup layout asks (v3).
+the popup layout asks (v3); v4 also makes the ORIGINAL path NUL-safe for odd-
+length ASCII (no more load-to-load jitter of appended text, e.g. the
+intermission kill-count names).
 
 0x139B00 is the UI string-width measure. It walks the string TWO BYTES per
 character (Shift-JIS), adds the full-width 22 per pair, and never tests the
@@ -46,8 +48,8 @@ RESUME = 0x139B84        # after `andi t4,t3,0xFFFF`
 END = 0x139D08           # function epilogue (string ended)
 MEASURE = 0x139B00
 SITES = (0x35836C, 0x3596BC)
-CAVE = 0x78C210
-MAP_VA = 0x78C300
+CAVE = 0x78C210          # code may run up to STUB (0x78C380)
+MAP_VA = 0x78C8A0        # v4: moved past the (112-entry) glyph-dedup table; 96 B to 0x78C900
 STUB = 0x78C380
 FLAG = 0x78C3F8
 TABLE_VA = 0x78B960
@@ -142,10 +144,40 @@ def build_cave():
     w.append(addiu('a0', 'a0', 2))          # 48
     w.append(beq('zero', 'zero', 0))        # 49 -> LOOP
     w.append(addu('v0', 'v0', 't4'))        # 50 (delay)
-    ORIGI = len(w)                          # ORIG:
-    w.append(andi('t4', 't3', 0xFFFF))      # 51
-    w.append(J(RESUME))                     # 52
+    ORIGI = len(w)                          # ORIG: original semantics, but NUL-safe for ASCII
+    # If t3 is a printable ASCII byte (not a 0x31/0x32/0x34 control) and the NEXT
+    # byte is NUL, the original 2-byte step would run past the terminator into
+    # stale memory (positions that changed from load to load). Add ONE pair
+    # width (exactly what the original adds for the pair) and stop at the NUL.
+    w.append(sltiu('at', 't3', 0x20))       # 51  < space -> real original
+    w.append(bne('at', 'zero', 0))          # 52 -> ORIG_REAL
     w.append(NOP)                           # 53
+    w.append(sltiu('at', 't3', 0x7F))       # 54  >= 0x7F -> real original
+    w.append(beq('at', 'zero', 0))          # 55 -> ORIG_REAL
+    w.append(NOP)                           # 56
+    w.append(lbu('t4', 1, 'a0'))            # 57
+    w.append(bne('t4', 'zero', 0))          # 58  next byte not NUL -> real original
+    w.append(NOP)                           # 59
+    w.append(addiu('at', 't3', -0x31))      # 60
+    w.append(sltiu('at', 'at', 4))          # 61  0x31..0x34 (control codes w/ param) -> real original
+    w.append(bne('at', 'zero', 0))          # 62 -> ORIG_REAL
+    w.append(NOP)                           # 63
+    w.append(lui('at', 0x47))               # 64
+    w.append(I(0x21, 'at', 't8', -7304))    # 65  lh t8, mode flag 0x46E378
+    w.append(bne('t8', 'zero', 3))          # 66  mode != 0 -> use FULL (t5)  -> 70
+    w.append(NOP)                           # 67
+    w.append(I(0x21, 'at', 't8', -7352))    # 68  lh t8, override width 0x46E348
+    w.append(beq('zero', 'zero', 2))        # 69 -> 72
+    w.append(NOP)                           # 70  (delay)
+    w.append(SPC('t5', 'zero', 't8', 0x2D)) # 71  daddu t8,t5,zero  (FULL class width)
+    w.append(addiu('a0', 'a0', 1))          # 72  consume the ASCII byte only
+    w.append(beq('zero', 'zero', 0))        # 73 -> LOOP (next byte is the NUL -> END)
+    w.append(addu('v0', 'v0', 't8'))        # 74  (delay)
+    ORIG_REAL = len(w)
+    w.append(andi('t4', 't3', 0xFFFF))      # 75
+    w.append(J(RESUME))                     # 76
+    w.append(NOP)                           # 77
+    fix(52, ORIG_REAL); fix(55, ORIG_REAL); fix(58, ORIG_REAL); fix(62, ORIG_REAL); fix(73, LOOP)
     fix(7, ORIGI); fix(10, TW); fix(14, ORIGI); fix(17, ORIGI); fix(24, LOOP)
     fix(27, ORIGI); fix(32, ORIGI); fix(37, ADD); fix(49, LOOP)
     return w
@@ -185,7 +217,7 @@ def main():
     iso = sys.argv[1]; write = "--write" in sys.argv; revert = "--revert" in sys.argv
     cave = b"".join(struct.pack("<I", x) for x in build_cave())
     stub = b"".join(struct.pack("<I", x) for x in build_stub())
-    assert CAVE + len(cave) <= MAP_VA and STUB + len(stub) <= FLAG
+    assert CAVE + len(cave) <= STUB and STUB + len(stub) <= FLAG and MAP_VA + 96 <= 0x78C900, len(cave)
     with open(iso, "r+b" if write else "rb") as f:
         base = ELF_LBA * SECTOR
         f.seek(base + 0x1C); phoff = struct.unpack("<I", f.read(4))[0]
@@ -211,9 +243,11 @@ def main():
             f.seek(base + foff(HOOK)); f.write(orig_hook)
             for s in SITES:
                 f.seek(base + foff(s)); f.write(struct.pack("<I", JAL(MEASURE)))
-            f.seek(base + foff(CAVE)); f.write(b"\x00" * (FLAG + 1 - CAVE))
+            f.seek(base + foff(CAVE)); f.write(b"\x00" * (STUB + len(stub) - CAVE))   # code + stub only (H3/FLAG/TAG untouched)
+            f.seek(base + foff(MAP_VA)); f.write(b"\x00" * 96)
+            f.seek(base + foff(FLAG)); f.write(b"\x00")
             print("reverted"); return 0
-        f.seek(base + foff(CAVE)); f.write(b"\x00" * (FLAG + 1 - CAVE))     # clean the whole area first
+        f.seek(base + foff(CAVE)); f.write(b"\x00" * (STUB + len(stub) - CAVE))
         f.seek(base + foff(CAVE)); f.write(cave)
         f.seek(base + foff(MAP_VA)); f.write(m)
         f.seek(base + foff(STUB)); f.write(stub)

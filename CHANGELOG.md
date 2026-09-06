@@ -10,7 +10,30 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.63 (2026-09-07) - buy popup quotes: "Nanomachine Unit" will be bought.
+## 0.9.64 (2026-09-07) - width measure v4: NUL-safe for odd-length ASCII (intermission kill-count names no longer move between loads)
+
+- Intermission "1st score" board: pilot names (Amuro Ray, Kamille Bidan...)
+  drifted to a different x on every load. Same mechanism as the popup: text
+  placed after other text is positioned by 0x139B00, whose 2-byte step never
+  tests the second byte for NUL, so an odd-length ASCII name runs the scan
+  into stale memory. v4 (`tools/patch_measure_ascii.py`): in the ORIGINAL
+  (flag-clear) path, a printable ASCII byte followed by NUL adds exactly one
+  pair width (override 0x46E348 when the mode flag is 0, else the FULL class
+  width already in t5) and stops - identical totals for every even-length
+  string and every Japanese string, deterministic for odd-length ASCII.
+  Positions may still sit where the JP arithmetic puts them; they no longer
+  change from load to load.
+- Cave repacked (no sector left: IOPRP310.IMG starts right after the ELF):
+  measure code 0x78C210..0x78C380, popup stub 0x78C380, dedup reset hook
+  0x78C3B0, FLAG 0x78C3F8 / TAG 0x78C3FA, dedup H1/H2 0x78C408..0x78C518,
+  dedup table 112 x 8 B at 0x78C520..0x78C8A0 (index = hash & 0x7F, minus 112
+  if >= 112), measure MAP 0x78C8A0..0x78C900. All hooks restored to their
+  original words and re-applied fresh; every cave disassembled back from the
+  ISO; verify_elf_patches OK.
+- The bottom-bar stage title showing "Cross" is the marquee (user-confirmed).
+- Build: `SRW Z English v0.9.64.chd` (sha1 below). ELF only vs 0.9.63.
+
+## 0.9.63 (2026-09-07) - buy popup quotes: "Nanomachine Unit" will be bought. (user-confirmed)
 
 - The popup opener was still the Japanese `「` (ELF 0x33DA50) while the tail
   had been translated as `' will be bought.` (0x33DA60) - so it read

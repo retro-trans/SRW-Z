@@ -10,7 +10,20 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.53 (2026-09-06) - stages 43, 44 and 45 retranslated from the Japanese
+## 0.9.53 (2026-09-06) - stages 43-46 retranslated + prologue narration translated
+
+- **Prologue narration** (the black-screen "…最後の戦いが始まろうとしていた……。"
+  intro) translated. It was never in the dialogue pipeline: no 「」, and it lives
+  in its own banlz archive `/DATA/MTV_PROS.BIN` (record 11), not the STAGE pool.
+  Replaced the JP string with English of the exact same byte span so the event
+  script's offsets don't move; recompressed rec11 into its slot, all 14 archive
+  records verified intact.
+- **Stage 46** "Justice Amongst the Chaos" (混迷の中の正義, rec109, 841 rows)
+  retranslated fresh from the JP by five sonnet subagents (parallel). 278 of 841
+  lines changed on disc. Fixes: "Chairman" made consistent for Durandal, Ghingnham
+  is "head" (not "heir") of his house, 混乱/turmoil kept distinct from the stage's
+  混迷/chaos, 無差別/"indiscriminate" (not "wanton"), a self-blame line on Cagalli,
+  Touga consistency, and three straight-quote lines fixed to 「」.
 
 - **Stage 43** "Destiny and Freedom" (運命と自由と, rec105, 326 rows) retranslated
   fresh from the JP by a sonnet subagent - the Athrun/Meyrin escape and the

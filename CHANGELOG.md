@@ -24,6 +24,11 @@ sight.
   is "head" (not "heir") of his house, 混乱/turmoil kept distinct from the stage's
   混迷/chaos, 無差別/"indiscriminate" (not "wanton"), a self-blame line on Cagalli,
   Touga consistency, and three straight-quote lines fixed to 「」.
+- Build: `SRW Z English v0.9.53.chd`
+  sha1 `6a4c71ae04d374383c40d1160672efc35fb8ca87` (2,537,445,703 B).
+  Patch `v0.9.52_to_v0.9.53.xdelta` (134,950 B, sha1
+  `fc78377d1730ad597c46fe520d9062b5d8af98b4`), round-trip verified against the
+  v0.9.52 CHD.
 
 - **Stage 43** "Destiny and Freedom" (運命と自由と, rec105, 326 rows) retranslated
   fresh from the JP by a sonnet subagent - the Athrun/Meyrin escape and the

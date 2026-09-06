@@ -31,7 +31,10 @@ sight.
   (cursor reset -> tag++). t8/t9 are unused by the blit. Cache content is
   keyed by code only (colour/outline/size are sprite-time; bold = own codes).
   A miss behaves exactly as before.
-- Build: `SRW Z English v0.9.62.chd` (sha1 below). ELF only vs 0.9.61.
+- Build: `SRW Z English v0.9.62.chd` sha1
+  `0cec86d8e1f566d03f4ddf8ee09adb0401088e89` (2,537,445,985 B). ELF only vs
+  0.9.61 (cave grown to 0x78C900; ELF exactly 1696 sectors). Not uploaded
+  (MEGA full).
 
 ## 0.9.61 (2026-09-06) - UI glyph-sprite pool doubled (319 -> 639) (user-tested: NO effect - not the cause; kept, harmless)
 

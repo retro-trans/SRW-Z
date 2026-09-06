@@ -10,7 +10,18 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.62 (2026-09-07) - glyph-cache cell reuse per frame: the real cause of the Bazaar popup text loss (AWAITING in-game test)
+## 0.9.63 (2026-09-07) - buy popup quotes: "Nanomachine Unit" will be bought.
+
+- The popup opener was still the Japanese `「` (ELF 0x33DA50) while the tail
+  had been translated as `' will be bought.` (0x33DA60) - so it read
+  「Nanomachine Unit' … Both pieces are now straight double quotes:
+  `"` + name + `" will be bought.` (ui_batch9 updated). The other standalone
+  `「` strings (0x33DB28, 0x33E258) are engine speech-bracket tokens paired
+  with `（`/`》` (the set the Back Log uses to colour speakers) and are NOT
+  touched.
+- Build: `SRW Z English v0.9.63.chd` (sha1 below). ELF only vs 0.9.62.
+
+## 0.9.62 (2026-09-07) - glyph-cache cell reuse per frame: the real cause of the Bazaar popup text loss (USER-CONFIRMED: "it's great now")
 
 - 0.9.61 (bigger glyph-struct pool) changed nothing: identical cut points
   (21 / 6 / 2 / 6 glyphs). The binding limit is the glyph-cache TEXTURE: the

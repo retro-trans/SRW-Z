@@ -10,6 +10,25 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line)
+
+- Battle caption plate showed "Teralu" (Baldios, テラル); the script and the
+  65 captions already say "Teral" (wiki spelling). The plate name is the pilot
+  record's inline name field in COMPDATA: four copies (0x5442, 0x546E, 0x54F2,
+  0x551E - regular + variant records, 16-byte NUL-padded fields) renamed in
+  place; COMPDATA recompressed (144,578 B = 71 sectors of 74) and written at
+  the relocated LBA 1823000; dir record + game file table verified on disc
+  (marker `\\DATA\\` + name, LBA at marker+0x28 = 1823000, sectors at +0x2C =
+  71). The fix script's "file table entry not found" assertion fires after it
+  has already written the entry - it was verified with the hex marker, and 8
+  name-padding bytes I had written at the wrong offset were restored to zero.
+- rec109 Julie: "…the Shadow Angel child, Teral, and the others…" (was
+  "Teralu"). In place; gate vs JP 80,986 / 9 (baseline); sheet book 4.
+- Build: `SRW Z English v0.9.65.chd` sha1
+  `7b943f45d1e01c4fdced0cf11391a66316dec596` (2,537,446,037 B). COMPDATA +
+  STAGE rec109 changed vs 0.9.64; ELF unchanged. Bin sha1
+  `0ea4f5a182c98880d5f5d65a01410a52d569f891`. Not uploaded (MEGA full).
+
 ## 0.9.64 (2026-09-07) - width measure v4: NUL-safe for odd-length ASCII (intermission kill-count names no longer move between loads)
 
 - Intermission "1st score" board: pilot names (Amuro Ray, Kamille Bidan...)
@@ -31,7 +50,9 @@ sight.
   original words and re-applied fresh; every cave disassembled back from the
   ISO; verify_elf_patches OK.
 - The bottom-bar stage title showing "Cross" is the marquee (user-confirmed).
-- Build: `SRW Z English v0.9.64.chd` (sha1 below). ELF only vs 0.9.63.
+- Build: `SRW Z English v0.9.64.chd` sha1
+  `ea772e026f3e764a502f21cbd5c9f439b653c841` (2,537,446,036 B). ELF only vs
+  0.9.63. Not uploaded (MEGA full). Patches re-cut for 0.9.64 (see below).
 
 ## 0.9.63 (2026-09-07) - buy popup quotes: "Nanomachine Unit" will be bought. (user-confirmed)
 

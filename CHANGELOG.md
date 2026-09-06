@@ -30,7 +30,9 @@ sight.
   the blit cap 0x13F -> 0x27F (639 glyphs). Other 0x13F literals (dialogue
   engine) untouched - they cannot exceed the larger buffer. Measure v3 stays
   (it is what places the tail correctly).
-- Build: `SRW Z English v0.9.61.chd` (sha1 below). ELF only vs 0.9.60.
+- Build: `SRW Z English v0.9.61.chd` sha1
+  `a4f0600a6b1263738ebd4f40c0f937967274aa1f` (2,537,445,852 B). ELF only vs
+  0.9.60. Not uploaded (MEGA full).
 
 ## 0.9.60 (2026-09-06) - save/load screen: stage-title bracket frame removed (AWAITING in-game test; also carries the untested 0.9.59 popup fix)
 

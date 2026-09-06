@@ -10,6 +10,27 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.53 (2026-09-06) - stages 43 and 44 retranslated from the Japanese
+
+- **Stage 43** "Destiny and Freedom" (運命と自由と, rec105, 326 rows) retranslated
+  fresh from the JP by a sonnet subagent - the Athrun/Meyrin escape and the
+  Destiny/Freedom confrontation. Applied by pointer-paired key, byte-fit to
+  slot-1. (Applied to disc in the previous session but first shipped here.)
+- **Stage 44** "The Falling Sun" (舞い降りる太陽, rec107, 850 rows - the largest
+  stage record so far, 100 speakers) retranslated fresh from the JP by five
+  sonnet subagents (170 lines each, run in parallel). 332 of the 850 lines
+  changed on disc; the rest already matched. A cross-chunk consistency sweep
+  after the merge unified the spellings the chunks disagreed on (Quinstein,
+  Teral, Touga, Zick, "Skull Moon Alliance", "Chancellor Gattler"). Notable
+  meaning fixes the agents caught vs the old MT: よいよい "There, there" (was
+  "Leave the child"), the 爪のアカ idiom "try to be half the man he was" (was
+  "Learn from his nails!"), 双方向性 restored on Sandman's Ergo-system line,
+  and a dropped name restored to Eiji's "Granny Umee and Shaya" line.
+- Both applied in place, ≤3 lines, 0 lines over slot. `verify_pointers
+  --against` the pre-stage-44 image: 81,029 pointers still resolve, 0 broken.
+- Book 4 of the proofreading sheet re-pushed with the new current-english for
+  rec105 and rec107; live budget counter preserved.
+
 ## 0.9.52 (2026-09-05) - stage 42 retranslated; Pierce/Disrupt spirit rename
 
 - **Stage 42** "The Beginning of the End" (終章開幕, rec104, 693 rows) retranslated

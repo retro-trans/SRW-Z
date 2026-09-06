@@ -34,6 +34,11 @@ sight.
   `APPLY-TO-v0950-iso__v0.9.65.xdelta` 0.9.50 -> 0.9.65 (170,979 B, sha1
   `b479f2e63e89527835b5cf35b6e85288d1c92b7a`, base = the user's
   `SRWZ English.iso`, sha1 40d557f0). The 0.9.63/0.9.64 patches were removed.
+- **Release DRAFTED (not published)** on GitHub: "SRW Z English — v0.9.65",
+  target `fix/srvc-index-corruption` (a1ba2ce), branch `release/v0.9.65`
+  pinned to it; assets: full patch, 0.9.50->0.9.65 patch, CHANGELOG-v0.9.65.txt,
+  texture pack, source archive (335 files, no game data). User-confirmed
+  0.9.65 in-game ("pretty good fix"). Publishing is the user's step.
 
 ## 0.9.64 (2026-09-07) - width measure v4: NUL-safe for odd-length ASCII (intermission kill-count names no longer move between loads)
 

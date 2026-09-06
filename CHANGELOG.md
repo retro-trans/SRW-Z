@@ -21,7 +21,13 @@ sight.
   touched.
 - Build: `SRW Z English v0.9.63.chd` sha1
   `ced038193e90363ecd03253884bb1b3274d7ec71` (2,537,445,987 B). ELF only vs
-  0.9.62. ELF patches all present. Not uploaded (MEGA full).
+  0.9.62. ELF patches all present. Not uploaded (MEGA full). Bin sha1
+  `ed2a39e7dfc45b0ca9c833eebb3a9cce187d9704`. Patches (bin-based, both
+  round-trip to that sha1): `SRWZ-English-v0.9.63.xdelta` JP -> 0.9.63
+  (5,719,879 B, sha1 `b4d70a4cd790e72e2212b8d0d430b21416d8ede6`);
+  `APPLY-TO-v0950-iso__v0.9.63.xdelta` 0.9.50 -> 0.9.63 (170,820 B, sha1
+  `d7e7e38166b8ece66dc19ef3070eb57215cf262b`, base = the user's
+  `SRWZ English.iso`, sha1 40d557f0).
 
 ## 0.9.62 (2026-09-07) - glyph-cache cell reuse per frame: the real cause of the Bazaar popup text loss (USER-CONFIRMED: "it's great now")
 

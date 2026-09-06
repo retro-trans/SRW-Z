@@ -24,7 +24,9 @@ sight.
   at init (0x2E36E0, table 0x41FB90) as the glossary-link markers; blanking them
   would break link detection. (Briefly blanked during diagnosis, restored and
   verified before any build.)
-- Build: `SRW Z English v0.9.60.chd` (sha1 below). ELF only vs 0.9.59.
+- Build: `SRW Z English v0.9.60.chd` sha1
+  `083fc565bf6701277da8bf5c4bc1c4774bb01e04` (2,537,445,852 B). ELF only vs
+  0.9.59. Not uploaded (MEGA at 97.6%, user waived).
 
 ## 0.9.59 (2026-09-06) - UI width measure v3: per-glyph only for the popup layout calls (not user-tested; superseded by 0.9.60); Hugi/brother-in-law/Athrun line fixes
 

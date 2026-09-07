@@ -28,9 +28,11 @@ sight.
 - rec107 Johannes: 「Before paradise falls again, the Tree will free our world
   from that vile power.」 (後は再度の楽園崩壊の前に…忌まわしき力より解放する; was
   "Ere paradise falls again … from that curse", 92/95 slot).
-- Gates: verify_pointers vs JP (see below); srvc_index_audit OK.
-- Build: `SRW Z English v0.9.66.chd` (sha1 below). STAGE (17 records), SRVC,
-  COMPDATA changed vs 0.9.65; ELF unchanged. NOTE: the GitHub draft release
+- Gates: verify_pointers vs JP 80,986 / 9 (baseline); srvc_index_audit OK.
+- Build: `SRW Z English v0.9.66.chd` sha1
+  `b9c4d9ee5f630e62f7d044b81d9f1e8001a0d43c` (2,537,446,088 B). Bin sha1
+  `f79dcdddd78822fccd12f2ba7b9b6d4429a524d9`. STAGE (17 records), SRVC,
+  COMPDATA changed vs 0.9.65; ELF unchanged. Not uploaded (MEGA full). NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

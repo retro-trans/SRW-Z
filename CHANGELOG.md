@@ -10,6 +10,59 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.70 (2026-09-07) - stage 47 "Count Down" retranslated
+
+- **Stage 47** "Count Down" (カウント・ダウン, **rec110**, 822 rows) retranslated
+  fresh from the japanese by five sonnet subagents in parallel (165 rows each).
+  60 rewrites proposed, **57 changed on disc** (3 already matched byte for
+  byte), 0 over slot, 0 needing more than 3 lines.
+  - Record identified, not guessed: every STAGE record names its own scenario
+    file, and the already-retranslated stages line up exactly - stage 44 =
+    `stg_079` (rec107) ... stage 46 = `stg_081` (rec109), so stage 47 =
+    `stg_082` = rec110. Title from `analysis/title_list_jp.json` index 81.
+  - Meaning fixes the old draft had wrong: **Edel is female** (two rows said
+    "his"/"He"); 人外の存在となる is "no longer be human", not "more than human"
+    (polarity inverted); 世界の在り様 "how the world truly is", not "should be";
+    世論の操作 "manipulating" public opinion, not "managing"; a line crediting
+    "what you taught me" to Denzel actually credits the Chief (the
+    addressee/speaker swap this MT keeps making); 互いの健闘 is mutual, not
+    one-directional; おぼろげながら (faint memories) restored; Rand's 姐さん
+    ("sis") restored; Jie's にゃ speech tic restored in two lines that had
+    dropped it; the 俺とした事が self-reproach idiom restored.
+  - Ranks and names made consistent with the rest of the game: 大尉 ->
+    "Captain" for Lowen / Schlan / Denzel (glossary agrees, and the disc
+    already said Captain 83 times vs "Lt." 42); 准将 -> "General" for Edel and
+    Blex (stray rows had "Brig. Gen.", "Commodore", "vice admiral",
+    "the Colonel"); President Kids; Rand (was "Land"), Asuham Boone (was
+    "Asham"), Kids Munt (was "Munto"), Banjo Haran, Touga (was "Toga"),
+    Siberian Railway (was an invented "Sibe Rail"), Vodarac / Vodara Palace
+    (the draft had conflated the sect with the palace), New Earth Federation
+    (the draft had invented "OMNI", a faction name absent from the japanese),
+    Lifting (was "Ref"). Ellipses normalised to three dots.
+- **Four proposed spellings were REVERTED before applying** because a chunk can
+  only see its own 165 rows and would have introduced a spelling that exists
+  nowhere else in the game: Kouji Kabuto -> **Koji Kabuto** (disc 0 vs 18),
+  Dr. Jee -> **Dr. Jie** (0 vs 40), Kotsett -> **Cattset** (0 vs 49), Taiji ->
+  **Taikyoku** (10 vs 62). Each of those four is a real glossary-vs-disc
+  conflict (glossary.json, which follows the wiki, prefers the rejected form);
+  they need a GAME-WIDE decision and pass, not a one-stage change. Left as-is
+  and recorded here.
+- Every merged row was validated before applying: speaker line unchanged,
+  cp932-encodable, no straight quotes, 「」 kept where the japanese has them,
+  `$n`/`$F` placeholder counts unchanged, and inside its byte slot.
+- New tools: `make_stage_chunks.py` (split a record into translator chunks with
+  slot budgets and the glossary terms that chunk needs) and
+  `apply_stage_json.py` (apply key -> field JSON to one record: pairs through
+  the pointer table, re-wraps to the right box, refuses anything over slot).
+- Gates: struct intrusions 0 OK; verify_pointers vs JP 80,986 / 9 (baseline);
+  srvc_index_audit OK; verify_elf_patches all present.
+- Sheets: re-exported, book 4 (rec93-117) re-pushed with --preserve; rec110
+  rows read back.
+- Build: `SRW Z English v0.9.70.chd` sha1
+  `a233a145218fab916cefc3da6e5cfd059eaa6110` (2,537,445,210 B). Bin sha1
+  `d160d4bd6c9aee0837ae9e86cd22c4eac0b5dd55`. Only STAGE changed vs 0.9.69.
+  Not uploaded (MEGA full). NOT yet user-verified in-game.
+
 ## 0.9.69 (2026-09-07) - Rey Za Burrel vs Ray Beams, "Hugi" everywhere, Ayaka's dash
 
 Three screenshots, three name/punctuation defects.

@@ -38,7 +38,14 @@ sight.
   `48e7dd0e84d7429a0ee4382dd77b5249141f8615`);
   `APPLY-TO-v0950-iso__v0.9.66.xdelta` 0.9.50 -> 0.9.66 (174,075 B, sha1
   `f9a10a669e814d3c0e3faaa7e8dd9f72ebee0bed`). Sheets: all six workbooks
-  re-pushed; rec034/107/154 read back. NOTE: the GitHub draft release
+  re-pushed; rec034/107/154 read back.
+- **GitHub draft re-pointed to 0.9.66** at the user's request ("replace the
+  release for 0.9.65 with the one for 0.9.66"): the 0.9.65 draft was deleted
+  (still a draft), `release/v0.9.65` removed (local + origin), a new draft
+  "SRW Z English — v0.9.66" created on `fix/srvc-index-corruption`, branch
+  `release/v0.9.66` pinned to fb6331a; assets: full patch, 0.9.50->0.9.66
+  patch, CHANGELOG-v0.9.66.txt, texture pack, source archive (335 files, no
+  game data). Publishing remains the user's step. NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

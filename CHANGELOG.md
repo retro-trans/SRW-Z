@@ -52,7 +52,11 @@ sight.
   notes end with the standard Contribute section.
 - **Merged into `main`** at the user's request ("yes merge into main"):
   fast-forward e612f42 -> 69ee3ec (83 commits, no merge commit), pushed.
-  `main`, `fix/srvc-index-corruption` and the v0.9.66 tag history now agree. NOTE: the GitHub draft release
+  `main`, `fix/srvc-index-corruption` and the v0.9.66 tag history now agree.
+- Extra patch on request: `SRWZ-English-v0.9.53-to-v0.9.66.xdelta` (26,557 B,
+  sha1 `1cbe6f5ba6726c20a0655fc29c66e04ebcfc0053`), source = the 0.9.53 image
+  (sha1 7b3a3cf5, reconstructed from SRWZ-English-v0.9.53.xdelta), round-trips
+  to bin sha1 f79dcddd. Local only (not attached to the release). NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

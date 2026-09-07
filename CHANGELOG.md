@@ -52,6 +52,14 @@ Three screenshots, three name/punctuation defects.
 - Build: `SRW Z English v0.9.69.chd` sha1
   `5727edcb4e7fd45d1580e746d14dcca0bbd031bd` (2,537,445,230 B). Bin sha1
   `bd655a9ed28ba737ff9e97fa81bce2d34e189bdb`. Only STAGE changed vs 0.9.68.
+  Not uploaded (MEGA full). Patches in `E:\Projects\SRW Z\`, all round-tripped
+  to the bin sha1: `SRWZ-English-v0.9.69.xdelta` JP -> 0.9.69 (5,528,606 B,
+  sha1 `876c074670e71d7d5dcb87be9fd4cf331d7f77db`);
+  `SRWZ-English-v0.9.50-to-v0.9.69.xdelta` (213,748 B, sha1
+  `11fc1d7cf4c4f8acf7fe7047d443c70518b4dbb9`);
+  `SRWZ-English-v0.9.68-to-v0.9.69.xdelta` (15,843 B, sha1
+  `911476e1bb38793af04cc49f42634e319fade0a8`). NOT yet user-verified in-game.
+- Branch `fix/character-names` (0e0f01c), pushed, not merged.
 - **Known, not done: 462 rows have 「」 in the japanese and none in ours**
   (Rey's line in the screenshot is one). Brackets cost 4 bytes and 2 columns,
   so this needs a slot+width pass, not a blind insert. Next task.

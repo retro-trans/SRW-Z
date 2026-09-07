@@ -50,7 +50,9 @@ sight.
   CHANGELOG-v0.9.68.txt, texture pack, source archive 336 files). Notes are
   the v0.9.66 body with Apply/sha1s updated and a "What changed since v0.9.66"
   section on the freeze class. Draft only - publishing is the user's step, and
-  the build is still untested in-game.
+  the build is still untested in-game. At the user's request ("add xdelta for
+  0.9.66 to 0.9.68") the 0.9.66 -> 0.9.68 patch was attached as a 6th asset and
+  the notes gained an "Already on v0.9.66?" block plus the 0.9.66 image sha1.
 
 ## 0.9.67 (2026-09-07) - WITHDRAWN (broke enemy turns; superseded by 0.9.68) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
 

@@ -105,6 +105,28 @@ def intrusions(eb, jb):
     return out
 
 
+def struct_words(jb, m):
+    """word offsets that hold a STRUCTURE pointer in the japanese record.
+
+    These must keep their japanese value. A parked string covers rows of the
+    table it sits in, so a word pointing at such a row looks (in OUR record)
+    like a pointer into the middle of that string - a "rider" - and gets
+    repointed along with it. That is what 0.9.67 did to rec43 0x1dc0, the
+    enemy-group table pointer: enemy turns ended instantly because the group
+    list resolved to text. Never repoint a word whose JAPANESE target is not
+    text.
+    """
+    out = set()
+    n = len(jb)
+    for o in range(0, n - 3, 4):
+        if m[o] or m[o + 3]:
+            continue
+        t = struct.unpack_from("<I", jb, o)[0] - BASE
+        if 0 <= t < n and not m[t]:
+            out.add(o)
+    return out
+
+
 def fix_record(eb, jb):
     bad = intrusions(eb, jb)
     if not bad:
@@ -112,6 +134,7 @@ def fix_record(eb, jb):
     d = bytearray(eb)
     pm, tops, riders = text_targets(bytes(d))
     m = safe_mask(jb)
+    protected = struct_words(jb, m)
     JPEND = len(jb)
 
     # only strings that are genuine pointer targets can be moved
@@ -144,7 +167,8 @@ def fix_record(eb, jb):
         else:
             gaps.append(g)
 
-    before = {w: F.text_at(d, v) for v, ws in pm.items() for w in ws}
+    before = {w: F.text_at(d, v) for v, ws in pm.items() for w in ws
+              if w not in protected}
     moved, unplaced = [], []
     for v in sorted(movable, key=lambda v: -len(F.text_at(d, v))):
         t = F.text_at(d, v)
@@ -158,6 +182,7 @@ def fix_record(eb, jb):
                 words = list(pm[v])
                 for r in riders.get(v, []):
                     words += pm[r]
+                words = [w for w in words if w not in protected]
                 for w in words:
                     old = struct.unpack_from("<I", d, w)[0]
                     struct.pack_into("<I", d, w, old + delta)
@@ -171,6 +196,11 @@ def fix_record(eb, jb):
     for w, t in before.items():
         nv = struct.unpack_from("<I", d, w)[0] - BASE
         assert F.text_at(d, nv) == t, "word %#x no longer resolves to its text" % w
+    # Structure pointers must come out of this pass exactly as they went in.
+    # (A few differ from the japanese since before 0.9.50 - rec29, rec109,
+    # rec139; that is not this tool's business, and the game plays with them.)
+    for w in protected:
+        assert d[w:w + 4] == eb[w:w + 4], "structure pointer %#x drifted" % w
     return bytes(d), moved, unplaced, other
 
 

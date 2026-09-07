@@ -10,6 +10,98 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.71 (2026-09-07) - every speech line has its 「」 back; four names settled game-wide
+
+### Brackets restored on 429 lines (the Back Log speaker colour)
+
+Only 「」 colours the speaker's name in the Back Log ([[backlog-needs-speech-delimiter]]),
+so a row whose japanese has them and ours does not is a defect. **0 remain.**
+
+- 429 genuine speech lines fixed: 343 by re-wrapping in place (135 of those
+  relocated into free text space), the last 86 by trimming 1-3 bytes of wording.
+- The raw count was 462. The other 33 must NOT be bracketed and are left alone:
+  encyclopedia entries that quote something mid-paragraph (they have no speaker
+  plate) and work titles such as "Mobile Suit Gundam SEED Destiny". The rule
+  now requires the JAPANESE to be a speech field - plate on line 1, body that
+  opens and closes with 「」 - and skips any english already carrying 「 or 」.
+- Straight-quoted bodies ("...") became 「...」 rather than gaining a second
+  pair; that also recovers 2 bytes, which is why most rows needed no rewording.
+- Trims were filler words, contractions, shorter synonyms or an ellipsis dot -
+  never a name or a fact the japanese states. Flagged trades: one Turn A attack
+  line lost its "!" (name untouched), one Shinn line is a comma splice, one
+  Johannes line lost a directional "To".
+- New tool `restore_brackets.py`; `apply_stage_json.py` now takes `all` and
+  applies rows across many records from one file.
+
+**TWO BUGS OF MINE, both caught by a gate rather than by a player:**
+1. **Stale free-space list.** Gaps were computed once, then in-place edits grew
+   fields into their own padding; a relocated line was then written over
+   another line's terminator, merging two lines (rec66 "…Kabuto man's
+   strengthAthena…"). verify_pointers caught it as 9 -> 11 non-resolving. Fixed:
+   the gap list is rebuilt after the in-place phase, a gap never starts on the
+   zero that TERMINATES the string before it, and relocate() now asserts its
+   destination is all zeroes before writing. The image was rolled back to the
+   0.9.70 build (bin sha1 d160d4bd) and redone rather than patched over.
+2. **Byte budget ignored the wrap newline.** The translators were given slots
+   that did not count the "\n" the box wrap inserts, so 56 rows came back
+   exactly 1 byte over. Re-sent with the corrected arithmetic
+   (`slot - (lines - 1)`) instead of accepting a partial job.
+
+Also fixed while checking: `pointer_map` riders (a second pointer aimed INSIDE
+a field) make a row unsafe to re-wrap; those rows are skipped (0 in the end).
+
+### Four names settled game-wide (the glossary-vs-disc conflicts from 0.9.70)
+
+At the user's direction ("follow you recommendation"):
+
+| japanese | was on disc | now | places |
+|---|---|---|---|
+| コトセット | Cattset 46 / Kotoseto 30 / Kotoset 20 | **Kotsett** | 96 |
+| ジエー | Jie 333 / Jiee 4 | **Jie** | 5 strays fixed |
+| 兜甲児 | Koji Kabuto 16 / reversed 4 | **Koji Kabuto** | 5 fixed |
+| 太極 | Taikyoku 57 / Taiji 10 | **Taikyoku** | 10 |
+
+- Kotsett is the only one where the glossary (wiki) beat the disc; the other
+  three keep the shipped spelling and the GLOSSARY is what was wrong. Rationale
+  in the 0.9.70 entry.
+- Six Taiji lines had no room for the 3 extra bytes and were reworded to fit
+  ("the path to the Taiji" -> "the path to Taikyoku", "with human hands" ->
+  "by human hands"); all six now sit under their slots.
+- New tool `rename_terms.py` (renames across every STAGE field with per-field
+  slot checks; longer replacements are reported, never truncated).
+- NOT done: the same names also appear in the battle captions (SRVC.BIN) and in
+  a dead unreferenced region at LBA 1826xxx (no file table or directory entry
+  points at it). The caption pass is a separate task.
+- Gates: verify_pointers 80,986 / 9 (baseline); struct intrusions 0 OK;
+  srvc_index_audit OK; verify_elf_patches all present.
+- Sheets: re-exported, all six dialogue workbooks re-pushed with --preserve.
+### 15 trims repaired before shipping
+
+Reading one row back from the sheet showed the byte-saving had been taken out
+of GRAMMAR: "pray and wait for tomorrow us all", "We too, to Tree", "Came,
+brother!" (subject gone), two comma splices, and several dropped vocative
+commas ("Watch from there Koji!"), which changes who is being addressed. The
+agents' reports called all of this clean - it WAS clean against the constraint
+I gave them, and the constraint made grammar the cheapest thing to cut.
+All 15 rewritten, taking the byte from somewhere harmless instead ("wait for"
+-> "await", a 3-dot ellipsis -> the 1-character 2-byte one). Three needed a
+second pass because their slot ON DISC was a byte smaller than the worklist
+said - always measure the slot from the image, not from an earlier export.
+**Check the output, not the agent's report.**
+
+- Build: `SRW Z English v0.9.71.chd` sha1
+  `32271ba5c760a73ac216414a74cee30626e2a6ce` (2,537,444,135 B). Bin sha1
+  `82fdff9a86c33f8ae98092b2f7b3c9ce32f52f80`. Only STAGE changed vs 0.9.70.
+  The first 0.9.71 build (df36ece0) was DELETED along with its patches: it
+  predated these repairs and would have shipped the broken wording.
+  Patches in `E:\Projects\SRW Z\`, all round-tripped to the bin sha1:
+  `SRWZ-English-v0.9.71.xdelta` JP -> 0.9.71 (5,527,908 B, sha1
+  `ed4b6afd16a108468fbc4945326bd2ce9f8331bd`);
+  `SRWZ-English-v0.9.50-to-v0.9.71.xdelta` (277,341 B, sha1
+  `fcd2a18ddba4fb5e23c7522544f86c534b04d3a3`);
+  `SRWZ-English-v0.9.70-to-v0.9.71.xdelta` (74,598 B, sha1
+  `6385d5eedfed5d0e1395a57f11aff2de79772aeb`). NOT yet user-verified in-game.
+
 ## 0.9.70 (2026-09-07) - stage 47 "Count Down" retranslated
 
 - **Stage 47** "Count Down" (カウント・ダウン, **rec110**, 822 rows) retranslated

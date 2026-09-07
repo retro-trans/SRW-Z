@@ -10,6 +10,54 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.67 (2026-09-07) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
+
+- **Report:** on-map dialogue, Gain 「Sorry I'm late, Chief!」 (rec43, King
+  Gainer stage) - "the game stop responding right after this message, the
+  cursor above still animated though". A live-loop hang (world animating,
+  script not advancing) = the script engine waiting on a lookup that never
+  resolves, not a text fault. Neighbouring fields, glossary links and the
+  file table were all clean.
+- **Cause:** the english string `Sara「......」` sat at rec43 0x1AA4 (RAM
+  0x758194), INSIDE a lookup table of (index, pointer) pairs that the
+  japanese record has as zeros: index 0 of the table read as `.」\0`
+  (0x0076812E), so the step that spawns group 0 (Gain and Emperanza entering)
+  never returned. Proven live: PINE-writing the japanese zeros back over the
+  four words while the game was hung.
+- **Class:** `fix_stranded_strings.py` (0.9.38) took the zeros after ANY
+  pointer target that passed `is_text()` as free slack - a pointer word such
+  as `c0 7e 75 00` is a 3-byte "string" to it, and the 16/32 zero bytes after
+  it are structure. 166 strings in 76 records were parked this way: 15-byte
+  lines in the 16-byte index fields of those tables (19 records) and 31-byte
+  lines in 32-byte zero blocks between `FF FF` event data. Present since
+  0.9.38, so 0.9.50 through 0.9.66 all carry them (the 0.9.50 image has the
+  rec43 one byte-for-byte).
+- **Fix:** new `tools/fix_struct_intrusions.py`. A japanese zero counts as free
+  ONLY when bracketed by real text on both sides (pointer target >=4 bytes
+  with an SJIS double-byte char or newline, and another such target right
+  after the zero run); a string whose START sits on any other japanese zero is
+  relocated into text-bracketed slack, its words repointed, the japanese bytes
+  restored. Strings that start on japanese text and merely run longer into
+  their slot padding (victory conditions, squad names, "Black Southern Cross")
+  are slot-sized replacements and are left alone. 166 moved, 0 unplaced,
+  invariant (every word resolves to identical text) held. `--check` is a new
+  build gate: `struct intrusions: 0  OK`.
+- Gates: fix_struct_intrusions --check 0 OK; verify_pointers vs JP 80,986 / 9
+  (baseline); srvc_index_audit OK; verify_elf_patches all present.
+- Build: `SRW Z English v0.9.67.chd` sha1
+  `c2ea5dd67786a7659c8bffa455a8e56a2e74085c` (2,537,445,273 B). Bin sha1
+  `05b05465ae250b8f7bcfdd02cf743d053aad41d9`. stamp_build: only STAGE changed
+  vs 0.9.66 (0.9.66 back-stamped from the image reconstructed from its
+  xdelta, bin sha1 f79dcddd matches). Not uploaded (MEGA full).
+  Patches (bin-based, in `E:\Projects\SRW Z\`):
+  `SRWZ-English-v0.9.67.xdelta` JP -> 0.9.67 (5,528,775 B, sha1
+  `f0869746116dfb9f0015d86d2d3ac1e3f48b4562`);
+  `SRWZ-English-v0.9.50-to-v0.9.67.xdelta` (212,145 B, sha1
+  `9f7b22e72207d7b55af301b4cf3b00da4b55bdb5`);
+  `SRWZ-English-v0.9.66-to-v0.9.67.xdelta` (85,032 B, sha1
+  `2b47aca49fdfd551f9a6670a3956d05e26b18dff`). Sheets unchanged (no text
+  edited, strings only moved). NOT yet user-verified in-game.
+
 ## 0.9.66 (2026-09-07) - Inglessia (was "Ingressa"), Shining Finger (was "Cutting Manip"), Johannes line
 
 - **Inglessia** (イングレッサ, Gravion): 43 script occurrences in 17 records

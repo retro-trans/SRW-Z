@@ -44,6 +44,13 @@ sight.
   `SRWZ-English-v0.9.66-to-v0.9.68.xdelta` (84,694 B, sha1
   `bdf29eaf3101d41f461cf67e93550327f383329b`). 0.9.67's CHD and patches
   deleted. NOT yet user-verified in-game.
+- **GitHub draft created** at the user's request ("create a release"):
+  "SRW Z English — v0.9.68" on `fix/struct-intrusions`, branch
+  `release/v0.9.68` pinned by release.py; 5 assets (full patch, 0.9.50 patch,
+  CHANGELOG-v0.9.68.txt, texture pack, source archive 336 files). Notes are
+  the v0.9.66 body with Apply/sha1s updated and a "What changed since v0.9.66"
+  section on the freeze class. Draft only - publishing is the user's step, and
+  the build is still untested in-game.
 
 ## 0.9.67 (2026-09-07) - WITHDRAWN (broke enemy turns; superseded by 0.9.68) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
 

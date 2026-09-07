@@ -45,7 +45,11 @@ sight.
   "SRW Z English — v0.9.66" created on `fix/srvc-index-corruption`, branch
   `release/v0.9.66` pinned to fb6331a; assets: full patch, 0.9.50->0.9.66
   patch, CHANGELOG-v0.9.66.txt, texture pack, source archive (335 files, no
-  game data). Publishing remains the user's step. NOTE: the GitHub draft release
+  game data). **PUBLISHED 2026-09-07 at the user's request ("ok release it")**:
+  https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.66 - tag v0.9.66 on
+  7efb84c (branch head; `release/v0.9.66` pins fb6331a, the commit that built
+  the image - later commits are changelog-only), marked latest, 5 assets, the
+  notes end with the standard Contribute section. NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

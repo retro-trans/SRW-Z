@@ -49,7 +49,10 @@ sight.
   https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.66 - tag v0.9.66 on
   7efb84c (branch head; `release/v0.9.66` pins fb6331a, the commit that built
   the image - later commits are changelog-only), marked latest, 5 assets, the
-  notes end with the standard Contribute section. NOTE: the GitHub draft release
+  notes end with the standard Contribute section.
+- **Merged into `main`** at the user's request ("yes merge into main"):
+  fast-forward e612f42 -> 69ee3ec (83 commits, no merge commit), pushed.
+  `main`, `fix/srvc-index-corruption` and the v0.9.66 tag history now agree. NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

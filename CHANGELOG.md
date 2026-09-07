@@ -53,6 +53,12 @@ sight.
   the build is still untested in-game. At the user's request ("add xdelta for
   0.9.66 to 0.9.68") the 0.9.66 -> 0.9.68 patch was attached as a 6th asset and
   the notes gained an "Already on v0.9.66?" block plus the 0.9.66 image sha1.
+- **PUBLISHED 2026-09-07 at the user's request ("publish")**:
+  https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.68 - marked latest,
+  6 assets, tag v0.9.68 on df7ceed (head of `fix/struct-intrusions`;
+  `release/v0.9.68` pins the commit that built the image). Published without
+  an in-game test of this build - the user was told twice and asked for it
+  anyway. Not merged to main (the user has not said to).
 
 ## 0.9.67 (2026-09-07) - WITHDRAWN (broke enemy turns; superseded by 0.9.68) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
 

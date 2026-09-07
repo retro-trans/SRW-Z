@@ -10,7 +10,30 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line)
+## 0.9.66 (2026-09-07) - Inglessia (was "Ingressa"), Shining Finger (was "Cutting Manip"), Johannes line
+
+- **Inglessia** (イングレッサ, Gravion): 43 script occurrences in 17 records
+  renamed in place - 35 fit as-is, 7 rows (rec21 Gavane, rec34 Elche + Kihel,
+  rec68 Lili, rec119/127 Gain, rec154 Bright) reworded by a byte or two to fit
+  their slots (Bright's roll-call also re-wrapped: its first line was already
+  over the box). Kihel's "3G" row patched at byte level to keep the digit's
+  existing encoding (a raw ASCII digit is a control code). 3 battle captions
+  (zero slack) reworded "those Inglessia dogs!". Not present in NISVDATA.
+  glossary.json source updated.
+- **Shining Finger**: Turn X's 溶断破砕マニピュレータ was "Cutting Manip" (a
+  truncated "Cutting Manipulator") in the COMPDATA weapon pool at 0x66D70; the
+  entry has 23 chars of room, renamed in place (weapons_en.json updated).
+  COMPDATA recompressed 144,574 B (71 sectors), dir record + file table
+  (marker+0x28/+0x2C) updated and verified.
+- rec107 Johannes: 「Before paradise falls again, the Tree will free our world
+  from that vile power.」 (後は再度の楽園崩壊の前に…忌まわしき力より解放する; was
+  "Ere paradise falls again … from that curse", 92/95 slot).
+- Gates: verify_pointers vs JP (see below); srvc_index_audit OK.
+- Build: `SRW Z English v0.9.66.chd` (sha1 below). STAGE (17 records), SRVC,
+  COMPDATA changed vs 0.9.65; ELF unchanged. NOTE: the GitHub draft release
+  still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
+
+## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")
 
 - Battle caption plate showed "Teralu" (Baldios, テラル); the script and the
   65 captions already say "Teral" (wiki spelling). The plate name is the pilot

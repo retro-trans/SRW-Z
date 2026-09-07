@@ -10,6 +10,52 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.69 (2026-09-07) - Rey Za Burrel vs Ray Beams, "Hugi" everywhere, Ayaka's dash
+
+Three screenshots, three name/punctuation defects.
+
+- **レイ is TWO characters and we spelled them alike.** SEED Destiny's
+  レイ・ザ・バレル is **Rey** Za Burrel; Eureka Seven's レイ・ビームス is **Ray**
+  Beams. 384 lines of Rey's said "Ray" (including the plate beside Shinn in the
+  screenshot) and 2 said "Rei". Ray Beams keeps "Ray" in the ten records that
+  carry her arc (85, 86, 87, 88, 89, 91, 93, 102, 148, 160 - the ones naming
+  Charles or Beams); "Amuro Ray" and "Getter Ray" are untouched (43 spots).
+  Disc now: Rey 483 / Ray 167. glossary.json レイ -> Rey, plus ヒューギ entries.
+  - Classified per SCENE, not per record: a record vote mis-calls the crossover
+    stages (Rey speaks in Eureka-Seven-heavy 25/29; Ray Beams speaks in 148,
+    which also carries SEED text). The scene is found from the nearest field
+    naming one cast and not the other, walking outward in offset order.
+  - **The japanese could not be used for this.** Pairing an english field to
+    the japanese at the SAME OFFSET is wrong since 0.9.38 relocated our
+    strings - the japanese there belongs to a different line
+    (see "pair through the pointer table"). Classification therefore reads OUR
+    english, which names the cast plainly. The first attempt used offsets and
+    mis-called ~10 lines; the tell was rec69 "Today's win makes Shinn
+    stronger" coming out as Ray Beams.
+  - Also fixed a byte-offset-into-decoded-string bug in the "Amuro Ray" guard
+    (the cp932 boundary trap): with 「 in the line the slice lands mid-name, so
+    43 "Amuro Ray"/"Getter Ray" spots were nearly renamed. The guard now tests
+    bytes.
+- **ヒューギ・ゼラバイア is "Hugi" everywhere.** 0.9.66 renamed only rec64, so
+  98 places still said "Hugy" - including the name plate in the screenshot,
+  which showed "Hugy" over a line reading "Hugi Zeravire". Disc: Hugy 0.
+- **Ayaka (rec106)**: `started -- one only you` -> `started ― one only you`
+  (cp932 0x815C horizontal bar, 2 bytes, exactly what "--" occupied; the row is
+  86 B in a 111 B slot either way). NB: python's cp932 maps U+2015, not the
+  em dash U+2014, to 0x815C.
+- All replacements were the same length as what they replaced, so no string
+  moved and no pointer changed.
+- Gates: struct intrusions 0 OK; verify_pointers vs JP 80,986 / 9 (baseline);
+  srvc_index_audit OK; verify_elf_patches all present.
+- Sheets: re-exported and all six dialogue workbooks re-pushed with
+  --preserve (638 proofreader rows backed up first).
+- Build: `SRW Z English v0.9.69.chd` sha1
+  `5727edcb4e7fd45d1580e746d14dcca0bbd031bd` (2,537,445,230 B). Bin sha1
+  `bd655a9ed28ba737ff9e97fa81bce2d34e189bdb`. Only STAGE changed vs 0.9.68.
+- **Known, not done: 462 rows have 「」 in the japanese and none in ours**
+  (Rey's line in the screenshot is one). Brackets cost 4 bytes and 2 columns,
+  so this needs a slot+width pass, not a blind insert. Next task.
+
 ## 0.9.68 (2026-09-07) - 0.9.67 redone: structure pointers must never be repointed
 
 - **Regression report (0.9.67):** "it's fixed but when I end turn, enemy just

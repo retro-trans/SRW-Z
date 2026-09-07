@@ -10,7 +10,42 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## 0.9.67 (2026-09-07) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
+## 0.9.68 (2026-09-07) - 0.9.67 redone: structure pointers must never be repointed
+
+- **Regression report (0.9.67):** "it's fixed but when I end turn, enemy just
+  skip their turn instead of move and attack"; on 0.9.66 "I need to wait to all
+  enemy to move and attack trigger the event". So 0.9.67 fixed the Gain hang
+  and broke enemy turns.
+- **Cause:** a parked string covers ROWS of the table it sits in. rec43 0x1dc0
+  holds the enemy-group table pointer (JP 0x7581A0 = rec+0x1AB0, row 1 of that
+  same table); with the string over the table, that word looked like a pointer
+  into the middle of the string - a "rider" - so 0.9.67's relocation moved it
+  along with the text. Enemy groups then resolved to text instead of a unit
+  list and every enemy turn ended instantly. 24 words across 22 records.
+- **Fix:** `struct_words()` in `fix_struct_intrusions.py` protects every word
+  whose JAPANESE target is not text; those are never repointed, and the pass
+  now asserts each comes out byte-identical to its input. Rebuilt from the
+  0.9.66 image (bin sha1 f79dcddd) rather than patching 0.9.67, so nothing
+  compounds. 166 strings moved, 0 unplaced, as before.
+- **Verified:** every structure pointer in the new image is byte-identical to
+  0.9.66, the build whose enemy turns worked (0 differences); 7 differ from the
+  japanese and did so in 0.9.66 too (rec29 0x9358, rec109 x5, rec139 0x9990) -
+  pre-existing, left alone. rec43's table at 0x1AA0 matches the japanese.
+- Gates: struct intrusions 0 OK; verify_pointers vs JP 80,986 / 9 (baseline);
+  srvc_index_audit OK; verify_elf_patches all present.
+- Build: `SRW Z English v0.9.68.chd` sha1
+  `3b8de3b048bd7bdbc7a65b817e1d230d82bb76bc` (2,537,445,220 B). Bin sha1
+  `3409248a5d76b1617f80771b7100b14d6522242f`. stamp_build: only STAGE changed
+  vs 0.9.66. Not uploaded (MEGA full). Patches in `E:\Projects\SRW Z\`, all
+  round-tripped to the bin sha1: `SRWZ-English-v0.9.68.xdelta` JP -> 0.9.68
+  (5,528,523 B, sha1 `edf3c4229e8abcdd6391ec1f290cee28215291b6`);
+  `SRWZ-English-v0.9.50-to-v0.9.68.xdelta` (211,825 B, sha1
+  `4a6cc8344b9b679eb845d36266036b68dd562210`);
+  `SRWZ-English-v0.9.66-to-v0.9.68.xdelta` (84,694 B, sha1
+  `bdf29eaf3101d41f461cf67e93550327f383329b`). 0.9.67's CHD and patches
+  deleted. NOT yet user-verified in-game.
+
+## 0.9.67 (2026-09-07) - WITHDRAWN (broke enemy turns; superseded by 0.9.68) - stage hang after Gain's 「Sorry I'm late, Chief!」: 166 strings parked over structure zeros
 
 - **Report:** on-map dialogue, Gain 「Sorry I'm late, Chief!」 (rec43, King
   Gainer stage) - "the game stop responding right after this message, the

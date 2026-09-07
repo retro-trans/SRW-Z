@@ -61,7 +61,13 @@ sight.
 - Build: `SRW Z English v0.9.70.chd` sha1
   `a233a145218fab916cefc3da6e5cfd059eaa6110` (2,537,445,210 B). Bin sha1
   `d160d4bd6c9aee0837ae9e86cd22c4eac0b5dd55`. Only STAGE changed vs 0.9.69.
-  Not uploaded (MEGA full). NOT yet user-verified in-game.
+  Not uploaded (MEGA full). Patches in `E:\Projects\SRW Z\`, all round-tripped
+  to the bin sha1: `SRWZ-English-v0.9.70.xdelta` JP -> 0.9.70 (5,528,588 B,
+  sha1 `f10ab3c34dbcc8da91598522ea690db62cf6d624`);
+  `SRWZ-English-v0.9.50-to-v0.9.70.xdelta` (218,182 B, sha1
+  `624e8311581f222ff37d9de975107a9104fdb4b9`);
+  `SRWZ-English-v0.9.69-to-v0.9.70.xdelta` (17,987 B, sha1
+  `7659366bc70930725f2c5e4a9924db864446f920`). NOT yet user-verified in-game.
 
 ## 0.9.69 (2026-09-07) - Rey Za Burrel vs Ray Beams, "Hugi" everywhere, Ayaka's dash
 

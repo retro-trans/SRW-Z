@@ -32,7 +32,13 @@ sight.
 - Build: `SRW Z English v0.9.66.chd` sha1
   `b9c4d9ee5f630e62f7d044b81d9f1e8001a0d43c` (2,537,446,088 B). Bin sha1
   `f79dcdddd78822fccd12f2ba7b9b6d4429a524d9`. STAGE (17 records), SRVC,
-  COMPDATA changed vs 0.9.65; ELF unchanged. Not uploaded (MEGA full). NOTE: the GitHub draft release
+  COMPDATA changed vs 0.9.65; ELF unchanged. Not uploaded (MEGA full).
+  Patches (bin-based, both round-trip to bin sha1 f79dcddd):
+  `SRWZ-English-v0.9.66.xdelta` JP -> 0.9.66 (5,719,942 B, sha1
+  `48e7dd0e84d7429a0ee4382dd77b5249141f8615`);
+  `APPLY-TO-v0950-iso__v0.9.66.xdelta` 0.9.50 -> 0.9.66 (174,075 B, sha1
+  `f9a10a669e814d3c0e3faaa7e8dd9f72ebee0bed`). Sheets: all six workbooks
+  re-pushed; rec034/107/154 read back. NOTE: the GitHub draft release
   still points at 0.9.65 - re-cut and re-attach if this is to ship in it.
 
 ## 0.9.65 (2026-09-07) - Teral (was "Teralu" on the battle name plate and one script line) (user-confirmed: "pretty good fix")

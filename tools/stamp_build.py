@@ -31,6 +31,7 @@ SEC = 2048
 REGIONS = [
     ("ELF",       455,     3471624),
     ("SRVC",      1313214, None),
+    ("SRVC_SEG",  1309609, None),      # block offsets/alignment: PS2 freeze in 0.9.71
     ("MTV_PROS",  1573437, 9056),
     ("STAGE",     1651029, 3910128),
     ("MAPNAME",   1652939, None),

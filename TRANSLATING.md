@@ -143,16 +143,25 @@ every period.
 ## Before you build
 
 ```sh
-python tools/verify_pointers.py <iso> --min 85    # catches the save-load freeze
+python tools/verify_pointers.py <iso> --against <known-good-iso>
 python tools/verify_elf_patches.py <iso>          # catches reverted ELF patches
+python tools/srvc_index_audit.py <iso> --against <japanese-iso>
+python tools/audit_srvc_alignment.py <iso>       # catches the real-PS2 battle freeze
 python tools/fix_dead_links.py <iso> --dry-run    # must report 0
-python tools/scan_visible_defects.py <iso>        # must report 0
+python tools/scan_visible_defects.py <iso>        # inspect the reported categories
 ```
 
 The first one matters most. An edit that moves bytes inside a record while
 leaving its pointer table alone produces an image that boots, plays fine, and
 freezes when you load a save — and every length-based check passes. That
 shipped here once.
+
+The alignment check must report zero misaligned blocks. SRVC contains binary
+records read with aligned EE loads; valid offsets and short captions alone
+do not make an archive safe on PS2. Keep every block start and the EOF aligned
+to 16 bytes, and always ship the matching BIN and SEG together. The visible
+scanner's fixed 34-column width count predates the proportional font; check
+changed dialogue using the shipped advances and each box's pixel budget.
 
 ## Naming
 

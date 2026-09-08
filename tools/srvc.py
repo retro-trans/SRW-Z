@@ -127,13 +127,19 @@ def parse(data, seg):
 
 
 def build(blocks):
-    """Re-emit (bin, seg) with every offset recomputed."""
+    """Re-emit (bin, seg), keeping the original 16-byte block alignment.
+
+    Blocks contain halfword/word records, not just strings. Preserving their
+    internal offsets is insufficient if a shorter translation misaligns the
+    next block. Real EE loads can raise Address Error on those records.
+    """
     out = bytearray()
     offsets = []
     for b in blocks:
         offsets.append(len(out))
         if not b.has_text:
             out += b.raw
+            out += b"\x00" * (-len(out) % 16)
             continue
         out += b.head
         offs, running = [], 0
@@ -145,5 +151,6 @@ def build(blocks):
         for s in b.strings:
             out += s + b"\x00"
         out += b.pad
+        out += b"\x00" * (-len(out) % 16)
     offsets.append(len(out))
     return bytes(out), b"".join(struct.pack("<I", o) for o in offsets)

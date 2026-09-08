@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, io, os, struct, json
+import sys, io, os, struct, json, hashlib
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.path.insert(0, "tools")
 import banlz
@@ -15,8 +15,8 @@ for ri,(s0,dat) in enumerate(recs):
         size=struct.unpack_from("<I",dat,j+4)[0]
         jp_raw=bytes(dat[j+8:j+8+size])
         jp_txt=jp_raw.decode("cp932","replace")
-        jp_prefix,en=queue.pop(0)
-        assert jp_raw.startswith(jp_prefix.encode("cp932")),"order mismatch rec%d"%ri
+        nbytes,want,en=queue.pop(0)
+        assert hashlib.sha1(jp_raw[:nbytes]).hexdigest()[:16]==want,"order mismatch rec%d"%ri
         rows.append({"key":"mtv_r%02d_%05x"%(ri,j),"jp":jp_txt,"en":en,
                      "lines":jp_txt.count(chr(10))+1,"jp_bytes":size})
         j+=8+size

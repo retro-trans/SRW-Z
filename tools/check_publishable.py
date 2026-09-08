@@ -41,6 +41,9 @@ RUN_CHARS = 20
 # japanese, plus the punctuation that appears inside a run of it
 JP = u"぀-ヿ一-鿿、。「」　！？（）・…"
 RUN = re.compile(u"[%s]{%d,}" % (JP, RUN_CHARS))
+# A glossary proper name, not a passage from the original script. Its length
+# exceeds the prose heuristic; keep the exception exact rather than relaxing it.
+ALLOWED_TERMS = {u"ウィリアム・ウォーレス・フィッツジェラルド"}
 ENTRY = re.compile(r"^\s*(\d+)\s*:\s*(['\"])")
 SKIP = (".png", ".jpg", ".gif", ".pdf", ".zip", ".exe", ".bin", ".chd")
 
@@ -49,7 +52,7 @@ ANY_JP = re.compile(u"[぀-ヿ一-鿿]")
 
 
 def offenders(text):
-    return RUN.findall(text)
+    return [run for run in RUN.findall(text) if run not in ALLOWED_TERMS]
 
 
 LATIN = re.compile(r"[A-Za-z]")

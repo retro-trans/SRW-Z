@@ -10,6 +10,49 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.72 (2026-09-08) - PS2 battle freeze fixed; full current translation
+
+- **The reported real-PS2 freeze is fixed.** The user confirmed Diagnostic C
+  works on their PS2. v0.9.72 uses that exact image, SHA1
+  `ffa3afe9c7dc700f6bffc9d863091a0d619972e3` (3,758,358,528 bytes).
+- Root cause: the SRVC builder retained old block padding after changing text
+  lengths. 254 of 353 block starts became unsafe for ordinary 32-bit EE reads;
+  162 were odd. The repaired archive restores the Japanese 16-byte alignment
+  with 2,173 added zero bytes and recomputed SEG offsets. Every existing block
+  payload is preserved. `srvc.build()` now maintains this invariant and
+  `audit_srvc_alignment.py` checks it before future builds.
+- **Includes everything already in the current English image:** all v0.9.71
+  translation, UI, font and executable patches, plus the subsequent working
+  corrections to dialogue pronouns/wording, Faye Xin Lu and Teral, and battle
+  captions with missing spaces or malformed ellipses. Those existing edits
+  were retained; no translation was reverted to make the hardware fix.
+- Compared with the shipped v0.9.71 image, changed game regions are STAGE,
+  SRVC.BIN and SRVC.SEG. Compared with the pre-fix working image, only SRVC.BIN,
+  SRVC.SEG and eight ISO9660 size bytes change. The executable and game file
+  table are unchanged. The repaired archive fits inside the original
+  1,618-sector reservation.
+- Validation: all 353 caption indexes resolve; all 81,029 pointers resolving
+  in v0.9.71 still resolve; structural intrusions 0; dead glossary links 0;
+  executable checks pass. Visible scan: 0 extra lines, untranslated dialogue,
+  invalid placeholders, literal escapes, empty bodies or mojibake. Its old
+  fixed-column width counts are informational for the proportional font;
+  the changed static dialogue was checked against the shipped pixel widths.
+- Full JP-to-v0.9.72 and v0.9.71-to-v0.9.72 xdelta patches are provided and
+  decoded back to the complete target image for verification. The optional
+  PCSX2 texture pack is unchanged.
+- Artifacts:
+  - `SRW Z English v0.9.72.chd`: 2,533,449,276 bytes, SHA1
+    `3be4c4002df47979226c6b3fccdf0aecf32fad30`.
+  - `SRWZ-English-v0.9.72.xdelta`: 5,724,789 bytes, SHA1
+    `3deb464078e473a7dc5982a72dc798e2982146fb`.
+  - `SRWZ-English-v0.9.71-to-v0.9.72.xdelta`: 19,689 bytes, SHA1
+    `20e484839e35a26b6799d395cd665a536bff1283`.
+  - `SRWZ-English-v0.9.68-to-v0.9.72.xdelta`: 95,816 bytes, SHA1
+    `49286443ec44be6277cfe493fe4ebf060c3616de`; decoded to the same target hash.
+- CHD verification passed both raw and overall SHA1 checks.
+- Working `srwz_cap.bin` now matches v0.9.72. Its previous image is retained
+  as `_work/iso/_pre0972.bin` (SHA1 `697fa3e227750962d078934196b47127bacaa6f6`).
+
 ## 0.9.71 (2026-09-07) - every speech line has its 「」 back; four names settled game-wide
 
 ### Brackets restored on 429 lines (the Back Log speaker colour)
@@ -329,7 +372,7 @@ Three screenshots, three name/punctuation defects.
   COMPDATA recompressed 144,574 B (71 sectors), dir record + file table
   (marker+0x28/+0x2C) updated and verified.
 - rec107 Johannes: 「Before paradise falls again, the Tree will free our world
-  from that vile power.」 (後は再度の楽園崩壊の前に…忌まわしき力より解放する; was
+  from that vile power.」 (the Japanese refers to liberation before paradise collapses again; was
   "Ere paradise falls again … from that curse", 92/95 slot).
 - Gates: verify_pointers vs JP 80,986 / 9 (baseline); srvc_index_audit OK.
 - Build: `SRW Z English v0.9.66.chd` sha1
@@ -966,7 +1009,7 @@ the 8-byte free-mode slot now holds `"Touga"` (7 B + 1 filler). The honorific an
 ellipsis don't fit the 8-byte slot, but the spoken name now shows instead of "...".
 tools/fix_eina_touga.py; source srvc_en.json[24702] updated to match.
 
-Restoring 「無音（本番では表示しません）……………」 (the silent-caption dev marker)
+Restoring the original silent-caption developer marker
 was investigated and is NOT feasible, and is also unnecessary:
   - The 328 marker slots hold "..." in 8-byte free-mode slots. The JP marker is
     38 bytes - it cannot be written in place (would need each slot to grow ~5x).
@@ -1586,7 +1629,7 @@ is a suffix of everything before it, which ordinary text never is.
 **Stage 35 without the corner brackets.** At the user's instruction, all 483
 rows of rec61 lost their 「」 and were re-wrapped, reclaiming 1,932 bytes and
 1,674 columns. The brackets do no work in the engine - a field is stored as
-`speaker 
+`speaker
  body-lines` and the renderer already takes line 1 as the name
 plate. Nor do they separate speech from thought: thought lines are written
 「(...)」, brackets AND parens, so the parens carry that. This is a trial on one
@@ -5053,7 +5096,7 @@ links, all ELF patches present, pointer gate OK at --min 85.
 
 - Literal backslash-n unescaped across ALL 205 records: 113 rows in rec104,
   107, 131, 135, 136, 139, 149 (163 occurrences). These rendered the characters
-  
+
  to the player inside the dialogue box - caught by a user screenshot.
   `fix_literal_nl.py` had reported 0 because it only reads the 26 exported
   records; rec104/107/136 alone held 134 of them. New
@@ -5739,7 +5782,8 @@ two mechanical scans that turned up real damage:
     now spell out "Turn A".
   - JAMMED WORDS from the old byte-fitter: "Notmy style,really...",
     "Sorry,butthis isn'toveryet!", "WhatifIdie,howyougonnaanswer?!".
-    One had lost the 'n' from its break and rendered "ire 1 and 2!".
+    One had lost the 'n' from its break and rendered "
+ire 1 and 2!".
   - 418 captions ended with a trailing line-break marker (a blank line
     under the text) - stripped mechanically.
 DETECTORS worth keeping: no-space-after-comma, double-space (finds
@@ -6735,13 +6779,13 @@ starts are byte-identical to JP), and MID-FIELD PAGE positions (JP-only,
 the original truncation bug). 0.8.1.4/5 discarded ALL offsets, so hit
 reactions showed the attacker's first line. v3 cave: keep base+offset;
 back-scan to the field's NUL boundary; offset AT a field start is trusted,
-mid-field offsets trigger the 
+mid-field offsets trigger the
  page scan (with last-page fallback).
 addu sites restored to original; caves rebuilt (34 words each,
 0x78BBA0/0x78BC40, fsz 0x1CE0).
 
 **SRVC caption polish** (tools/patch_srvc_polish.py): 13,823 English
-fields - fullwidth ．/… -> ASCII ./..., and 2,181 trailing literal 
+fields - fullwidth ．/… -> ASCII ./..., and 2,181 trailing literal
 
 stripped (each made an orphan blank/quote page). In-place, space re-padded,
 SEG offsets untouched.
@@ -6753,7 +6797,7 @@ Build: "SRWZ v0.8.1.6 TEST.chd"; delta v0.8.1.2 -> v0.8.1.6.
 
 ## 0.8.1.5 TEST (2026-08-20) - caption blank-page fallback
 
-0.8.1.4 showed BLANK captions when the EN line has fewer 
+0.8.1.4 showed BLANK captions when the EN line has fewer
 's than the JP
 had voice-synced pages (Denzel Ray Pistol). Both caves now track the
 current segment start (t8) and, when the scan runs out of text, re-show
@@ -6793,7 +6837,7 @@ stamped).
 
 **Voice captions no longer head-truncated.** Root cause: captions are PAGED
 (page-advance fn 0x2EA320, channel page counter +0x54, converter 0x2EA280
-turns literal 
+turns literal
  into 0x0A and fills the display buffer 0x5FDDB8). Each
 page's start = quote_base + a per-page BYTE OFFSET computed for the
 JAPANESE text - on English quotes page 2 landed mid-word ('"Target
@@ -6805,9 +6849,9 @@ daddu s0,a0,zero (ignore JP offset); 0x2EA47C jal converter -> jal cave
 0x78BBA0, which skips (page-1) literal "
 "s in the English text and
 tail-jumps to the converter. Impossible pages (JP had more pages than EN
-has 
+has
 's) show the remainder/blank instead of garbage. JP quotes use the
-same literal 
+same literal
  convention, so untranslated lines page as before.
 Found via user's remote save states + PCSX2 write breakpoints at 0x5FDDB8
 (freezes: memset clear 0x19DF28 <- 0x2EBDD0; MMI strlen; fill strcpy with

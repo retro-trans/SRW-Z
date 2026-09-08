@@ -91,6 +91,17 @@ def main():
             if any(off < v < zt for v in pm):
                 failed.append((k, 'a pointer aims inside this field'))
                 continue
+            # NOT EVERY FIELD IS A 3-LINE DIALOGUE BOX. Four rows (rec1 x2,
+            # rec25 x2) are long-form encyclopedia prose wrapped at about 36
+            # columns over 15-25 lines, with no speaker plate. wrap_field would
+            # read their first line as the speaker and rewrap the rest into
+            # three long dialogue lines - silently, since a short enough entry
+            # still comes out under the 3-line ceiling. Refuse them here, at
+            # the one choke point every sweep goes through, rather than relying
+            # on each caller to remember.
+            if eb[off:zt].count(b'\n') > 3:
+                failed.append((k, 'long-form prose, not a 3-line dialogue box'))
+                continue
             over = bm.get(off, 1) == 1
             nf, nl = A.wrap_field(fixes[k], over, adv)
             nb = nf.encode('cp932', 'strict')

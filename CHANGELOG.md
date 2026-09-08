@@ -10,7 +10,7 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased (2026-09-08) - stages 51-54, and two new defect classes
+## unreleased (2026-09-08) - stages 51-55, and three new defect classes
 
 No CHD built yet. Working `iso/srwz_cap.bin` only.
 
@@ -22,6 +22,8 @@ No CHD built yet. Working `iso/srwz_cap.bin` only.
 - **Stage 53** (`stg_089`, rec120, 654 rows): 106 rows corrected, 11 relocated.
 - **Stage 54** (`stg_090a`-`d`, recs 121-124, 555 rows): 89 rows corrected,
   6 relocated.
+- **Stage 55** (`stg_091a`/`b`, recs 125-126, 669 rows): 68 rows corrected,
+  4 relocated.
 
 ### A new defect class: battle-caption text inside STAGE dialogue
 
@@ -96,6 +98,41 @@ men with one name. 太一郎 is now Taichiro across 65 rows. Same class as
   (Lowen 89/35, Quattro 15/92), Mauar 34 vs Mouar 11, Astonaige 58 vs
   Astonage 0, Darrow 4 vs Dawell 3. See [[rank-taii-inconsistent]].
 
+### A third defect class: our own wrapper inserted a space after 》
+
+`reflow.tokenize` emitted a 《glossary link》 as a token of its own and split
+the text around it separately, so a link followed by punctuation became two
+tokens - 《Titans》 and "," - which reflow then joined with a space:
+「...The 《Titans》 , I presume.」 The space is real, written to the disc by
+every pass that re-wrapped such a line. **51 rows** shipped that way. The
+tokenizer now splits on spaces alone and masks the spaces INSIDE a link, so
+punctuation stays welded to whatever precedes it.
+
+### A guard on the apply path: not every field is a dialogue box
+
+Four rows (rec1 x2, rec25 x2) are long-form encyclopedia prose - 15 to 25 lines
+wrapped at about 36 columns, with no speaker plate. `wrap_field` would read the
+first line as the speaker and rewrap the rest into three long dialogue lines,
+and a short enough entry still comes out under the 3-line ceiling, so it would
+pass silently. `apply_lines_relocating.py` now refuses them at the one choke
+point every sweep goes through, rather than relying on each caller to remember.
+No applied sweep had touched one; the pending ellipsis sweep contained all four.
+
+### Punctuation brought to the house style
+
+ASCII "..." is the house ellipsis 24,087 rows to 402, so those 402 were the
+deviation - and a full-width … sits wider than three half-width dots, so it
+reads as a gap in an otherwise half-width line. **382 rows** converted; 20 are
+left because their records have no free space and U+2026 costs a byte less than
+"...". Also 19 rows that had a space between a word and its own punctuation
+(「Stay close to me, Lacus ...!」).
+
+Left alone deliberately: rec203, a radio-chat record with its own conventions
+("Name： text" with a full-width colon and ．．． throughout, no 「」 and no
+speaker line), and the full-width colon generally - ASCII ':' is 0x3A, inside
+the 0x2E-0x3D run the MENU blit reads as control codes, and the full-width form
+may well have been chosen to dodge exactly that.
+
 ### Names the user settled (2026-09-08)
 
 - 大尉 **splits by character**: Lowen is "Captain Lowen" (28 minority rows
@@ -105,8 +142,15 @@ men with one name. 太一郎 is now Taichiro across 65 rows. Same class as
 - Astonaige (not Astonage), Darrow (not Dawell), Mouar (not Mauar) - the last
   needed 22 SPEAKER PLATES rewritten as well as the bodies, which is why the
   sweep now covers both lines of the field.
-- Still open: ローラ, Loran's female alias, which ships as Lora and Lola on
-  plates and Laura in bodies, in scenes that reference each other.
+- ローラ, Loran's female alias, settled as **Lora** (44 on disc against Lola 12
+  and Laura 11). Checked first that every Lola and Laura row really is ローラ in
+  the japanese before sweeping - none belonged to another character.
+- **バジーナ is Bajeena**, caught by the user on the character-library panel.
+  The disc contradicted itself: COMPDATA already said Bajeena while the
+  dialogue (32 rows) and the ZKN library (PT rec123 CHFN, RT rec108/rec110
+  PLTN) said Bageena. The library is unreachable by a disc-wide search - its
+  payloads are XOR-0x5E obfuscated under the banlz compression - so it needs
+  `tools/zkn_rename.py`, which is how "Astonage" survived there once before.
 
 Eight glossary entries were wrong and are corrected: Zira->Jeela, Litz->Rietz,
 Bradman->Bloodman, Shishi->Sirius, Astonage->Astonaige, Kappei Jin->Jin Kappei,

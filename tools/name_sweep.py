@@ -83,6 +83,18 @@ SUBS = [
     (r'(?<![A-Za-z])Darwell(?![A-Za-z])', 'Darrow'),
     (r'(?<![A-Za-z])Mauar(?![A-Za-z])', 'Mouar'),
     (r'(?<![A-Za-z])Mauer(?![A-Za-z])', 'Mouar'),
+    # ローラ, Loran's female alias, shipped three ways: Lora 44, Lola 12,
+    # Laura 11. The user chose the commonest. Checked first that every Lola
+    # and Laura row really is ローラ in the japanese - none belonged to some
+    # other character - before sweeping.
+    (r'(?<![A-Za-z])Lola(?![A-Za-z])', 'Lora'),
+    (r'(?<![A-Za-z])Laura(?![A-Za-z])', 'Lora'),
+    # バジーナ. The user caught this on the character-library panel, which is
+    # a FOURTH place names live after the dialogue, COMPDATA and the ZKN
+    # library - COMPDATA already said Bajeena, so the disc contradicted
+    # itself. Same length, so it fits everywhere it appears; the ZKN copies
+    # need tools/zkn_rename.py, which this sweep cannot reach.
+    (r'(?<![A-Za-z])Bageena(?![A-Za-z])', 'Bajeena'),
     (r'(?<![A-Za-z])Kouji(?![A-Za-z])', 'Koji'),
     (r'(?<![A-Za-z])Vice General(?![A-Za-z])', 'Brigadier General'),
 ]

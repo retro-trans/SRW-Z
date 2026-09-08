@@ -84,15 +84,25 @@ def width(s, adv):
     return w
 
 
+SPACE_IN_LINK = u"\x01"
+
+
 def tokenize(body):
-    """Split the inner body into wrap tokens, keeping 《links》 whole."""
-    toks, i = [], 0
-    for m in LINK.finditer(body):
-        toks += body[i:m.start()].split(" ")
-        toks.append(m.group())          # the whole 《...》 as one token
-        i = m.end()
-    toks += body[i:].split(" ")
-    return [t for t in toks if t != ""]
+    """Split the inner body into wrap tokens, keeping 《links》 whole.
+
+    The old version emitted the link as a token of its own and split the text
+    around it separately, so a link followed by punctuation produced two
+    tokens - 《Titans》 and "," - which reflow then joined with a space:
+    「...The 《Titans》 , I presume.」 shipped on 44 rows that way. The space is
+    real, written to the disc by every pass that re-wrapped such a line.
+
+    Splitting on spaces alone gets both halves right - punctuation stays welded
+    to whatever precedes it - so the only thing that needs special handling is
+    a link that CONTAINS a space (《Space Science Laboratory》). Mask those,
+    split, unmask.
+    """
+    masked = LINK.sub(lambda m: m.group().replace(" ", SPACE_IN_LINK), body)
+    return [t.replace(SPACE_IN_LINK, " ") for t in masked.split(" ") if t]
 
 
 def reflow(inner, target, adv):

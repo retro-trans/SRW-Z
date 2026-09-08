@@ -10,9 +10,36 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased (2026-09-08) - stages 51-55, and three new defect classes
+## 0.9.73 (2026-09-08) - stages 51-55, and three new defect classes
 
-No CHD built yet. Working `iso/srwz_cap.bin` only.
+- Artifacts:
+  - `SRW Z English v0.9.73.chd`: 2,537,442,140 bytes, SHA1
+    `620ac2270a78cfad73fad594ee353fe3ac016c4d`. chdman verification passed
+    both raw and overall SHA1 checks.
+  - `SRWZ-English-v0.9.73.xdelta`: 5,729,150 bytes, SHA1
+    `df8c951ab52aa44186cbdf31e8c514ebf28e2622` (from the JP image
+    `e8dbe37e88afe8f82d48889b0775274ccde3cf99`).
+  - `SRWZ-English-v0.9.72-to-v0.9.73.xdelta`: 237,781 bytes, SHA1
+    `f9e64a7f7171a355bff191bbe717eedd4683b5c3` (from
+    `ffa3afe9c7dc700f6bffc9d863091a0d619972e3`).
+  - Target image `8750123f94cb976e095bccc9adf354c2c6d79635`, 3,758,358,528
+    bytes. **Both patches were decoded and hashed back to that target**, and
+    the v0.9.72 base was confirmed region-by-region against the build manifest
+    (STAGE, SRVC, ELF, ZKN_PT, ZKN_RT, COMPDATA, NISVDATA) rather than trusted
+    by filename.
+- Changed regions versus v0.9.72: STAGE, SRVC, ZKN_PT, ZKN_RT. Identical:
+  COMPDATA, ELF, HSFC, KVMDATA, MAPNAME, MTV_PROS, NISVDATA, SRVC_SEG, VT1,
+  ZKN_KW.
+- **SRVC changed although no captions were edited this build.** It is the
+  Saviour fix - 82 bytes, "You can't keep up with Saber!" -> "Can't keep up
+  with Saviour!" - which was made AFTER v0.9.72 was stamped and so never
+  shipped. Checked byte-for-byte against the archived v0.9.72 image before
+  building rather than assumed; an unexplained SRVC delta is exactly what
+  broke real hardware once.
+- Pre-build gates: integrity 0 problems, struct intrusions 0, 80,986 pointers
+  resolving / 9 not (the v0.9.72 baseline), 0 rows missing 「」, 0 dead
+  glossary links, SRVC index OK, SRVC 16-byte alignment clean, all ELF
+  patches present.
 
 ### Stages retranslated
 

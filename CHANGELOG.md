@@ -47,8 +47,6 @@ sight.
     `3deb464078e473a7dc5982a72dc798e2982146fb`.
   - `SRWZ-English-v0.9.71-to-v0.9.72.xdelta`: 19,689 bytes, SHA1
     `20e484839e35a26b6799d395cd665a536bff1283`.
-  - `SRWZ-English-v0.9.68-to-v0.9.72.xdelta`: 95,816 bytes, SHA1
-    `49286443ec44be6277cfe493fe4ebf060c3616de`; decoded to the same target hash.
 - CHD verification passed both raw and overall SHA1 checks.
 - Working `srwz_cap.bin` now matches v0.9.72. Its previous image is retained
   as `_work/iso/_pre0972.bin` (SHA1 `697fa3e227750962d078934196b47127bacaa6f6`).
@@ -100,6 +98,16 @@ At the user's direction ("follow you recommendation"):
 | japanese | was on disc | now | places |
 |---|---|---|---|
 | コトセット | Cattset 46 / Kotoseto 30 / Kotoset 20 | **Kotsett** | 96 |
+
+> **CORRECTION (2026-09-08): the Kotsett rename did NOT ship in 0.9.71 or
+> 0.9.72.** It was applied, then silently discarded when the image was rolled
+> back to the 0.9.70 build during the bracket-collision incident recorded
+> below; only the bracket pass was re-run afterwards, and I did not re-verify
+> the renames before building. 0.9.71/0.9.72 therefore still contain Cattset /
+> Kotoseto / Kotoset / Kotosetto (and Taiji). Re-applied 2026-09-08 and this
+> time verified on the image: Kotsett 105, all four old spellings 0.
+> **Lesson: after any rollback, re-verify every change made after the point
+> rolled back to - a gate that passes says nothing about work that vanished.**
 | ジエー | Jie 333 / Jiee 4 | **Jie** | 5 strays fixed |
 | 兜甲児 | Koji Kabuto 16 / reversed 4 | **Koji Kabuto** | 5 fixed |
 | 太極 | Taikyoku 57 / Taiji 10 | **Taikyoku** | 10 |
@@ -372,7 +380,7 @@ Three screenshots, three name/punctuation defects.
   COMPDATA recompressed 144,574 B (71 sectors), dir record + file table
   (marker+0x28/+0x2C) updated and verified.
 - rec107 Johannes: 「Before paradise falls again, the Tree will free our world
-  from that vile power.」 (the Japanese refers to liberation before paradise collapses again; was
+  from that vile power.」 (後は再度の楽園崩壊の前に…忌まわしき力より解放する; was
   "Ere paradise falls again … from that curse", 92/95 slot).
 - Gates: verify_pointers vs JP 80,986 / 9 (baseline); srvc_index_audit OK.
 - Build: `SRW Z English v0.9.66.chd` sha1
@@ -1009,7 +1017,7 @@ the 8-byte free-mode slot now holds `"Touga"` (7 B + 1 filler). The honorific an
 ellipsis don't fit the 8-byte slot, but the spoken name now shows instead of "...".
 tools/fix_eina_touga.py; source srvc_en.json[24702] updated to match.
 
-Restoring the original silent-caption developer marker
+Restoring 「無音（本番では表示しません）……………」 (the silent-caption dev marker)
 was investigated and is NOT feasible, and is also unnecessary:
   - The 328 marker slots hold "..." in 8-byte free-mode slots. The JP marker is
     38 bytes - it cannot be written in place (would need each slot to grow ~5x).
@@ -1629,7 +1637,7 @@ is a suffix of everything before it, which ordinary text never is.
 **Stage 35 without the corner brackets.** At the user's instruction, all 483
 rows of rec61 lost their 「」 and were re-wrapped, reclaiming 1,932 bytes and
 1,674 columns. The brackets do no work in the engine - a field is stored as
-`speaker
+`speaker 
  body-lines` and the renderer already takes line 1 as the name
 plate. Nor do they separate speech from thought: thought lines are written
 「(...)」, brackets AND parens, so the parens carry that. This is a trial on one
@@ -5096,7 +5104,7 @@ links, all ELF patches present, pointer gate OK at --min 85.
 
 - Literal backslash-n unescaped across ALL 205 records: 113 rows in rec104,
   107, 131, 135, 136, 139, 149 (163 occurrences). These rendered the characters
-
+  
  to the player inside the dialogue box - caught by a user screenshot.
   `fix_literal_nl.py` had reported 0 because it only reads the 26 exported
   records; rec104/107/136 alone held 134 of them. New
@@ -5782,8 +5790,7 @@ two mechanical scans that turned up real damage:
     now spell out "Turn A".
   - JAMMED WORDS from the old byte-fitter: "Notmy style,really...",
     "Sorry,butthis isn'toveryet!", "WhatifIdie,howyougonnaanswer?!".
-    One had lost the 'n' from its break and rendered "
-ire 1 and 2!".
+    One had lost the 'n' from its break and rendered "ire 1 and 2!".
   - 418 captions ended with a trailing line-break marker (a blank line
     under the text) - stripped mechanically.
 DETECTORS worth keeping: no-space-after-comma, double-space (finds
@@ -6779,13 +6786,13 @@ starts are byte-identical to JP), and MID-FIELD PAGE positions (JP-only,
 the original truncation bug). 0.8.1.4/5 discarded ALL offsets, so hit
 reactions showed the attacker's first line. v3 cave: keep base+offset;
 back-scan to the field's NUL boundary; offset AT a field start is trusted,
-mid-field offsets trigger the
+mid-field offsets trigger the 
  page scan (with last-page fallback).
 addu sites restored to original; caves rebuilt (34 words each,
 0x78BBA0/0x78BC40, fsz 0x1CE0).
 
 **SRVC caption polish** (tools/patch_srvc_polish.py): 13,823 English
-fields - fullwidth ．/… -> ASCII ./..., and 2,181 trailing literal
+fields - fullwidth ．/… -> ASCII ./..., and 2,181 trailing literal 
 
 stripped (each made an orphan blank/quote page). In-place, space re-padded,
 SEG offsets untouched.
@@ -6797,7 +6804,7 @@ Build: "SRWZ v0.8.1.6 TEST.chd"; delta v0.8.1.2 -> v0.8.1.6.
 
 ## 0.8.1.5 TEST (2026-08-20) - caption blank-page fallback
 
-0.8.1.4 showed BLANK captions when the EN line has fewer
+0.8.1.4 showed BLANK captions when the EN line has fewer 
 's than the JP
 had voice-synced pages (Denzel Ray Pistol). Both caves now track the
 current segment start (t8) and, when the scan runs out of text, re-show
@@ -6837,7 +6844,7 @@ stamped).
 
 **Voice captions no longer head-truncated.** Root cause: captions are PAGED
 (page-advance fn 0x2EA320, channel page counter +0x54, converter 0x2EA280
-turns literal
+turns literal 
  into 0x0A and fills the display buffer 0x5FDDB8). Each
 page's start = quote_base + a per-page BYTE OFFSET computed for the
 JAPANESE text - on English quotes page 2 landed mid-word ('"Target
@@ -6849,9 +6856,9 @@ daddu s0,a0,zero (ignore JP offset); 0x2EA47C jal converter -> jal cave
 0x78BBA0, which skips (page-1) literal "
 "s in the English text and
 tail-jumps to the converter. Impossible pages (JP had more pages than EN
-has
+has 
 's) show the remainder/blank instead of garbage. JP quotes use the
-same literal
+same literal 
  convention, so untranslated lines page as before.
 Found via user's remote save states + PCSX2 write breakpoints at 0x5FDDB8
 (freezes: memset clear 0x19DF28 <- 0x2EBDD0; MMI strlen; fill strcpy with

@@ -10,6 +10,29 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## unreleased - post-0.9.73 working image
+
+**The working `iso/srwz_cap.bin` no longer matches the shipped v0.9.73 CHD.**
+Stamped as `0.9.73+2`; STAGE differs, everything else is identical.
+
+- rec108, the Norb/Dewey confrontation (Eureka Seven), checked against the
+  japanese from a Back Log screenshot:
+  - 「お前の役になど立ちたくない。いや…協力したところで、お前はスカブコーラルと
+    対話する事は出来んよ」 shipped as "I don't wish to help you. No... even
+    helping, you could never speak with Coral." - "even helping" is not
+    grammatical, "Coral" dropped "Scub", and 対話 was flattened to "speak
+    with", which broke the callback to Dewey's very next line 「対話など必要ない」
+    ("Dialogue is needless"). Now "I won't help you. No... even so, you'd never
+    hold a dialogue with the Scub Coral."
+  - 頭でっかち is a know-it-all with no practical grounding, not a stubborn
+    one; "Pigheaded fool" -> "Know-it-all fool", which also sets up the rest of
+    the line (he does NOT know the Scub Coral's true intent). rec98 renders the
+    same word "egghead" for Apollo and is right to - different speaker, and a
+    monk does not say egghead.
+
+The other four lines in that exchange were checked and are accurate as they
+stand.
+
 ## 0.9.73 (2026-09-08) - stages 51-55, and three new defect classes
 
 - Artifacts:

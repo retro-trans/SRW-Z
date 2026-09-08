@@ -10,7 +10,7 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased (2026-09-08) - stages 51 and 52, and a new defect class
+## unreleased (2026-09-08) - stages 51-53, and two new defect classes
 
 No CHD built yet. Working `iso/srwz_cap.bin` only.
 
@@ -19,6 +19,7 @@ No CHD built yet. Working `iso/srwz_cap.bin` only.
 - **Stage 51** (`stg_087`, rec118, 777 rows): 48 rows corrected. 3 needed
   relocation, 4 more were reworded or relocated by hand.
 - **Stage 52** (`stg_088`, rec119, 980 rows): 193 rows corrected, 8 relocated.
+- **Stage 53** (`stg_089`, rec120, 654 rows): 106 rows corrected, 11 relocated.
 
 ### A new defect class: battle-caption text inside STAGE dialogue
 
@@ -50,10 +51,41 @@ flags rows whose twin holds a full translation while ours holds a short
 unrelated fragment. It found 37 disagreements and confirmed the four damaged
 records; 10 rows were repaired directly from the healthy twin.
 
+### A second defect class: the speaker plate names the wrong character
+
+Grouping every row by its JAPANESE speaker plate and looking for an English
+plate that disagrees with its own majority found 15 of them, and several name a
+different person outright: rec136 drew メーテル, ミーシャ and リンク all as
+"Maurice", モーリス as "Fudo", and rec154 drew チュイル as "Tsugumi". Two rows
+whose japanese plate is `$n` had been hardcoded to "Rand" and "Setsuko", so one
+route would have shown the other protagonist's name. 22 rows fixed.
+
+Widening the same audit to any plate minority under a third of its majority
+unified 83 more rows: Fil -> Phil, Gregg -> Greg, King Vega -> Emperor Vega,
+Kidd -> Kid, Koda -> Coda, Sofia -> Sophia, Dacosta -> DaCosta, Gauv -> Gove,
+Shiro -> Shirou, Rufira -> Lufira, "ZAFT officer" -> "ZAFT Officer". Two
+minorities were left alone deliberately: レイ (Rey Za Burrel vs Ray Beams, a
+split this project made on purpose - [[two-rei-characters]]) and ローラ, Loran's
+alias, which ships as Lora, Lola and Laura and needs one decision.
+
+A related collision needed splitting: 太一郎 (Dan Taichiro, God Sigma) and
+一太郎 (Jin Ichitaro, Zambot 3) both shipped as "Ichitaro" - 57 lines and 190 -
+and they speak in the SAME records (53, 64, 104, 120, 131), so a player met two
+men with one name. 太一郎 is now Taichiro across 65 rows. Same class as
+[[two-rei-characters]].
+
 ### Name spellings unified game-wide
 
 - Word-boundary rename (28 rows): Shin -> Shinn, Kouji -> Koji,
   Vice General -> Brigadier General.
+  That sweep also caught 神勝平, whose surname reads **Jin**, turning "Kappei
+  Shin" into "Kappei Shinn" - Shinn Asuka's name on Kappei's line. Both rows
+  are now "Jin Kappei", the form rec6 and rec26 already used, and 神ファミリー
+  is "Jin Family" rather than the mistranslated "God Family" (11 rows).
+- Bodies unified to their own speaker plate (52 rows): Zira/Jira -> Jeela,
+  Terral -> Teral, Leets -> Rietz. Plain majority calls where no plate exists:
+  Skullmoon and Skull Moon Union/Federation -> Skull Moon Alliance (連合 is
+  Alliance), Cosmozaurus -> Cosmosaurus.
 - Body text that contradicted its own on-screen speaker plate (52 of 53 rows;
   one in rec103 had no free space): Bradman -> Bloodman, Toga -> Touga,
   Basque -> Bask, Maintener -> Maintainer, Grand Knight -> Gran Knight.

@@ -10,7 +10,7 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased (2026-09-08) - stages 51-53, and two new defect classes
+## unreleased (2026-09-08) - stages 51-54, and two new defect classes
 
 No CHD built yet. Working `iso/srwz_cap.bin` only.
 
@@ -20,6 +20,8 @@ No CHD built yet. Working `iso/srwz_cap.bin` only.
   relocation, 4 more were reworded or relocated by hand.
 - **Stage 52** (`stg_088`, rec119, 980 rows): 193 rows corrected, 8 relocated.
 - **Stage 53** (`stg_089`, rec120, 654 rows): 106 rows corrected, 11 relocated.
+- **Stage 54** (`stg_090a`-`d`, recs 121-124, 555 rows): 89 rows corrected,
+  6 relocated.
 
 ### A new defect class: battle-caption text inside STAGE dialogue
 
@@ -93,6 +95,36 @@ men with one name. 太一郎 is now Taichiro across 65 rows. Same class as
   in opposite directions and each needs one decision: 大尉 as Captain vs Lt.
   (Lowen 89/35, Quattro 15/92), Mauar 34 vs Mouar 11, Astonaige 58 vs
   Astonage 0, Darrow 4 vs Dawell 3. See [[rank-taii-inconsistent]].
+
+### Names the user settled (2026-09-08)
+
+- 大尉 **splits by character**: Lowen is "Captain Lowen" (28 minority rows
+  swept), Quattro is "Lt. Quattro" (17 swept). The rank word is one japanese
+  word, but each man's majority form is the one the playtester has already read
+  for hours, so neither is swung to match the other.
+- Astonaige (not Astonage), Darrow (not Dawell), Mouar (not Mauar) - the last
+  needed 22 SPEAKER PLATES rewritten as well as the bodies, which is why the
+  sweep now covers both lines of the field.
+- Still open: ローラ, Loran's female alias, which ships as Lora and Lola on
+  plates and Laura in bodies, in scenes that reference each other.
+
+Eight glossary entries were wrong and are corrected: Zira->Jeela, Litz->Rietz,
+Bradman->Bloodman, Shishi->Sirius, Astonage->Astonaige, Kappei Jin->Jin Kappei,
+plus 太一郎/一太郎 and ランスロー・ダーウェル added.
+
+### New: `tools/name_sweep.py`
+
+The standing record of every name spelling this project has settled, applied
+game-wide and re-runnable - a fresh translation chunk keeps reintroducing a
+spelling its translator saw elsewhere on the disc, so this has to be re-run
+after each pass rather than done once. It also carries the reasoning, so a
+later pass does not relitigate a call: the plate wins over the body, the disc
+majority wins where no plate exists, and 神 read as "God" is a mistranslation
+of a surname rather than a preference. The names still open are listed in the
+docstring and deliberately kept out of the table.
+
+Also fixed 19 rows with a space between a word and its own punctuation
+(「Stay close to me, Lacus ...!」).
 
 ### Tooling corrections
 

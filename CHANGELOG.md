@@ -13,6 +13,51 @@ sight.
 ## unreleased - post-0.9.73 working image
 
 **The working `iso/srwz_cap.bin` no longer matches the shipped v0.9.73 CHD.**
+Only STAGE differs; everything else is identical.
+
+### rec108 re-reviewed: 154 of 697 rows were still wrong AFTER a retranslation
+
+Stage 45 was already "retranslated fresh from the JP by four sonnet subagents"
+in 0.9.53. Reading it again against the japanese changed **154 rows, 22%**.
+This is the honest measure of what that earlier pass left behind, and it was
+prompted by the user spot-checking two Back Log screenshots and finding four
+wrong lines out of eight.
+
+Every one of these reads as fluent, on-topic English. That is why they
+survived: a pass that reads the ENGLISH and asks "is this broken?" clears all
+of them. Only the japanese beside it shows the loss.
+
+  * connectors flattened - その結果 ("and as a result") to a bare "and", killing
+    the causal jab that is the whole line; のに, だが, だって, までは all dropped
+  * a callback broken - 対話 rendered "speak with" in one line and "Dialogue"
+    in the next, so Norb and Dewey stop arguing about the same word
+  * the wrong insult - 頭でっかち is a know-it-all, not a stubborn one
+    ("Pigheaded"); 学のない is uneducated, not "dumb"
+  * two machines read as one - 「サイコに…デストロイ」 is Psyco AND Destroy
+  * wrong referent - 「ノルブをどっちの方向から感じる！？」 is Eureka SENSING Norb,
+    shipped as "Which direction is Norb coming from?"; an order ABOUT Bask
+    shipped as an order TO Bask
+  * proper nouns lost or lowercased - ナチュラル is the SEED term "Natural",
+    賢人会議 is the Council of Sages, エルダー星 is the planet Eldar
+
+**No automated signal distinguishes the two passes.** The short-row ratio is
+0.2% in the sonnet-pass records (103-110) and 0.2% in this session's
+(111-126). The detectors that found the caption bleed cannot see this class at
+all; it costs a full read of the japanese.
+
+**Scope: stages 40-47 (recs 103-110, 4,958 rows) all went through that same
+pass.** rec108 is not special - it is the one the user happened to screenshot.
+
+### Also
+
+- The four lines the user checked directly, fixed before the full pass:
+  rec108's Norb/Dewey exchange, and 「お前らに与えてやれるものはほとんど無い」 -
+  "there's little left I can give you people" implied he had given some
+  already; ほとんど無い is "almost nothing".
+
+
+
+**The working `iso/srwz_cap.bin` no longer matches the shipped v0.9.73 CHD.**
 Stamped as `0.9.73+2`; STAGE differs, everything else is identical.
 
 - rec108, the Norb/Dewey confrontation (Eureka Seven), checked against the

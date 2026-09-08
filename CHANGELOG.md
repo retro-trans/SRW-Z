@@ -10,6 +10,77 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## unreleased (2026-09-08) - stages 51 and 52, and a new defect class
+
+No CHD built yet. Working `iso/srwz_cap.bin` only.
+
+### Stages retranslated
+
+- **Stage 51** (`stg_087`, rec118, 777 rows): 48 rows corrected. 3 needed
+  relocation, 4 more were reworded or relocated by hand.
+- **Stage 52** (`stg_088`, rec119, 980 rows): 193 rows corrected, 8 relocated.
+
+### A new defect class: battle-caption text inside STAGE dialogue
+
+Some dialogue fields keep their correct speaker plate but their **body is an
+unrelated battle-caption fragment** - rec136 has the japanese
+「メール／ツィーネ！カイメラは手抜きばっかりして、何を企んでいるのよ！？」 shipping as
+「Gwaaaah!」. Those strings live in the SRVC caption pool and nowhere in the
+record's japanese, so a bulk apply wrote caption text into dialogue slots with
+its row list offset. The speaker plates stayed right because they are
+regenerated from the japanese, which is why no gate ever caught it. Full write
+up in [[caption-bleed-into-stage]].
+
+- Detect by LENGTH RATIO, not by caption-pool membership. Matching english
+  against the SRVC pool returns 361 rows and nearly all are coincidences
+  ("Kamille!", "Understood!"). A real translation runs about 1.6-2.2x the
+  japanese character count.
+- Repaired **109 rows** across rec131, rec136, rec144, rec147, rec149 and
+  rec127. 15 more are queued: their slots were shrunk to fit the wrong short
+  text and those records have no free space left, so they need compressed
+  renderings rather than relocation.
+- Stage 52 carried a **26-row block** of the same damage, found while
+  retranslating it; those are included in the 193 above.
+
+### New: `tools/twin_audit.py`
+
+Most stages ship twice, once per protagonist route, with byte-identical
+japanese. The twin is therefore a free second opinion on every line. The tool
+flags rows whose twin holds a full translation while ours holds a short
+unrelated fragment. It found 37 disagreements and confirmed the four damaged
+records; 10 rows were repaired directly from the healthy twin.
+
+### Name spellings unified game-wide
+
+- Word-boundary rename (28 rows): Shin -> Shinn, Kouji -> Koji,
+  Vice General -> Brigadier General.
+- Body text that contradicted its own on-screen speaker plate (52 of 53 rows;
+  one in rec103 had no free space): Bradman -> Bloodman, Toga -> Touga,
+  Basque -> Bask, Maintener -> Maintainer, Grand Knight -> Gran Knight.
+- **Left alone deliberately**, because the disc majority and the glossary point
+  in opposite directions and each needs one decision: 大尉 as Captain vs Lt.
+  (Lowen 89/35, Quattro 15/92), Mauar 34 vs Mouar 11, Astonaige 58 vs
+  Astonage 0, Darrow 4 vs Dawell 3. See [[rank-taii-inconsistent]].
+
+### Tooling corrections
+
+- `apply_lines_relocating.py` is now **two phases** like `restore_brackets.py`:
+  every field that already fits is written first, then the free-gap list is
+  recomputed, then the movers go largest-first. Relocating against a gap list
+  taken before those writes tripped the "gap is not free" assertion and aborted
+  a whole run.
+- The merge's byte budget now **measures** the wrapped field instead of
+  modelling it as `len(field) + (lines - 1)`. A wrap does not add a byte when
+  the break falls on a space - reflow drops the space and joins with a newline.
+  The old estimate rejected valid rows and made translators shorten good lines
+  for nothing; stage 52 merged with 0 rejects under the measured budget.
+
+### Gates
+
+`fix_struct_intrusions --check` 0; `verify_pointers --against iso/srwz.bin`
+80,986 resolving / 9 not, unchanged from the 0.9.72 baseline;
+`restore_brackets` 0 rows missing 「」.
+
 ## 0.9.72 (2026-09-08) - PS2 battle freeze fixed; full current translation
 
 - **The reported real-PS2 freeze is fixed.** The user confirmed Diagnostic C

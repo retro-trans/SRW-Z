@@ -168,4 +168,5 @@ def main():
     return 0
 
 
-raise SystemExit(main())
+if __name__ == '__main__':          # importable: other tools reuse keys_of/wrap_field
+    raise SystemExit(main())

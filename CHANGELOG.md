@@ -15,6 +15,30 @@ sight.
 **The working `iso/srwz_cap.bin` no longer matches the shipped v0.9.73 CHD.**
 Only STAGE differs; everything else is identical.
 
+### A fourth defect class: choice prompts flattened into one bracket
+
+A choice prompt is four lines - speaker, label, one option per line - each
+carrying its own 「」. 15 of the 17 on the disc shipped as ONE bracketed run
+with straight quotes inside: 「Denzel's choice" "1. Escape the colony" "2.
+Recover the stolen Gundams」, which is what the player sees.
+
+Not a translator's error: `wrap_field` strips the outer bracket pair, collapses
+the newlines to spaces and re-wraps - correct for a one-line speech field,
+destructive for a list - so every pass that touched one flattened it further.
+rec110/rec111 kept the right shape, which is what confirmed the target rather
+than guessing at it.
+
+All 17 are correct now. They had to bypass the normal apply path entirely
+(anything through `wrap_field` re-flattens them) and were written verbatim with
+`tools/fix_lines_inplace.py`. 「」 costs 2 bytes where `"` cost 1, so four
+needed shorter option wording; where a prompt exists on both routes both got
+the same wording rather than letting the roomier slot diverge.
+
+Left alone at the user's direction: 《》 glossary link markers dropped from the
+english (the japanese has 《サイド３》 where ours says plain "Side 3"). Adding
+them back is not worth the risk - a term that does not match the keyword bank
+exactly crashes the scene.
+
 ### rec108 re-reviewed: 154 of 697 rows were still wrong AFTER a retranslation
 
 Stage 45 was already "retranslated fresh from the JP by four sonnet subagents"

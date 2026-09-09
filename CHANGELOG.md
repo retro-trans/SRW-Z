@@ -10,6 +10,60 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.77 (2026-09-09) - 頭翅 is Toma
+
+- Artifacts:
+  - `SRW Z English v0.9.77.chd`: 2,533,451,433 bytes, SHA1
+    `f3871216b1839dc7ab54ab64f7bd226cf65af5ac`. chdman verify passed both the
+    raw and the overall SHA1 check.
+  - Target image `6f02d01e0b86d53746d3cd9990986480eac037e3`.
+
+Follows the 堕天翅 pass in 0.9.76. 頭翅 reads トーマ - the Shadow Angels'
+front-line commander, Apollonius' former partner. The faction is named with
+翅: 音翅 オトハ, 両翅 モロハ, 双翅 フタバ, and 詩翅, which is Sirius' name after
+he awakens. We already rendered those from their kana; 頭翅 was the one spelled
+by transliteration.
+
+**Akurasu - this project's naming baseline - spells him Toma**, and
+corroborates Otoha, Moroha, Futaba, Sirius de Alisia and Shadow Angels (which
+independently confirms 0.9.76). The disc had "Touma" in 304 places. That is
+the case the naming rule exists for: a consistent majority is still a
+transliteration, and 304 rows agreeing did not make it right. See
+[[naming-baseline-wiki]].
+
+    304  Touma -> Toma        byte replace inside each string; "Toma" is
+                              shorter so every row shrinks - nothing moved,
+                              no pointer changed
+      1  "Toutenshi"          invented; 堕天翅 and 頭翅 blended into one word
+      3  "Head" (recaps)      the kanji, translated. Same byte length as
+                              "Toma", so the paragraphs keep their wrapping
+      2  "Lord Head-Wing" / "Head-Wing's voice"
+      1  "that Shadow Angel"  name replaced by the faction
+      1  "Zuuuushiiii!!"      hallucinated; 「頭翅アアアアアアアアアッ！！」 is
+                              nine ア, so "Tomaaaaaaaaa!!"
+      1  "Go get 'em!"        for 「逃げやがったか、頭翅！」 - Apollo shouting
+                              that Toma has FLED. The shipped line inverted
+                              who was doing what.
+
+Now 313 Toma on the disc, all 229 speaker plates included, and zero Touma,
+Toutenshi or Head-Wing.
+
+THE LINE-BREAK TRAP AGAIN, twice more in one tool, both caught in dry run:
+rec28's locator spanned a wrap ("that Shadow
+Angel") and matched nothing,
+and `find` returned only the first of two identical recap rows.
+`tools/fix_toma.py` now matches on FLATTENED text and applies to every
+occurrence. That is four times this session - the settled spelling is in
+`name_sweep.py` with the reasoning so a later pass cannot bring "Touma" back.
+See [[term-split-by-linebreak]].
+
+Left as-is, lossy but not wrong: rec21's 「頭翅様、今ひとつ…」 needs 36 bytes
+against a 31-byte slot to restore the address, and rec144/rec149 drop
+「頭翅の言っていた」 with 9 spare bytes.
+
+Gates: struct 0, integrity 0, control bytes clean, dead links 0, brackets 0,
+ELF patches present, pointers 80,986 / 9 (baseline).
+
 ## 0.9.76 (2026-09-09) - defeat conditions, the Shadow Angels, and the inline weapon labels
 
 - Artifacts:

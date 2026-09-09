@@ -172,6 +172,14 @@ SUBS = [
     (r'(?<![A-Za-z])Bageena(?![A-Za-z])', 'Bajeena'),
     (r'(?<![A-Za-z])Kouji(?![A-Za-z])', 'Koji'),
     (r'(?<![A-Za-z])Vice General(?![A-Za-z])', 'Brigadier General'),
+    # 頭翅 reads トーマ - the Shadow Angels' commander. Akurasu spells him
+    # Toma, along with Otoha, Moroha, Futaba and Shadow Angels. The disc had
+    # "Touma" in 304 places, which is a wapuro long vowel, not the baseline:
+    # a consistent majority is still a transliteration. Fixed in 0.9.77 by
+    # tools/fix_toma.py, which also repaired the rows that lost the name
+    # ("Toutenshi", "Head", "Head-Wing", and a hallucinated "Zuuuushiiii!!").
+    (r'(?<![A-Za-z])Touma(?![A-Za-z])', 'Toma'),
+    (r'(?<![A-Za-z])Toutenshi(?![A-Za-z])', 'Toma'),
 ]
 
 

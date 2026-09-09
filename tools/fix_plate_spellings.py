@@ -65,6 +65,14 @@ NAMES = {
     u'セシル': (u'Cecil', [u'Cecile']),
     u'シトラン': (u'Shitoran', [u'Citron', u'Citran']),
     u'連邦軍艦長': (u'Fed Captain', [u'Fed． Captain', u'Fed. Captain']),
+    # akurasu 2026-09-09: Loran's alias is Laura (episode titles "Laura's
+    # Cow", "Laura's Distant Howl"). The glossary said Lola and the disc
+    # said Lora 28 to 1 - both wrong, the same shape as Touma. This is the
+    # long-open ローラ item; see [[naming-baseline-wiki]].
+    u'ローラ': (u'Laura', [u'Lora', u'Lola']),
+    # akurasu spells the Xabungle medic Medick, matching the disc majority
+    # and contradicting the glossary's 'Medic'.
+    u'メディック': (u'Medick', [u'Medic']),
 }
 
 

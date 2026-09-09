@@ -89,6 +89,14 @@ RULINGS = [
     # "General" after it. 30 rows, invisible to the pattern above.
     (re.compile(r'Brigadier'), u'General', u'准将'),
     (re.compile(r'Arthur-san'), u'Mr. Arthur', u'アーサー'),
+    # 桂木桂 is Kei Katsuragi in the glossary and 47 times on the disc;
+    # 8 rows use japanese order. Same length, so it cannot overflow.
+    (re.compile(r'Katsuragi\s+Kei'), u'Kei Katsuragi', u'桂木桂'),
+    # "Senior Sirius" appears exactly once, against 20 "X-senpai" and 29
+    # bare "senpai" - and rec112 uses both forms for the same character.
+    # Same length, so it cannot overflow. The broader question of whether
+    # to romanise honorifics at all (137 rows) is still the user's.
+    (re.compile(r'Senior\s+Sirius'), u'Sirius-senpai', u'先輩'),
 ]
 
 

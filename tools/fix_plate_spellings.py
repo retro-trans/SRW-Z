@@ -90,6 +90,10 @@ NAMES = {
     # glossary contradicted itself with メカ鉄甲鬼 -> 'Mecha Tekkoki'.
     # One pattern fixes both, since "Mecha Tekkoki" contains it.
     u'鉄甲鬼': (u'Tekkouki', [u'Tekkoki']),
+    # "Alliance Ofcr" is a byte squeeze, not a choice - every comparable
+    # plate spells the rank out. 7 of 9 rows have room; the other 2 are
+    # one byte short and are relocated.
+    u'連合軍士官': (u'Alliance Officer', [u'Alliance Ofcr']),
 }
 
 

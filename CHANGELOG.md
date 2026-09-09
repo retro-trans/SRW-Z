@@ -10,6 +10,96 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## 0.9.76 (2026-09-09) - defeat conditions, the Shadow Angels, and the inline weapon labels
+
+- Artifacts:
+  - `SRW Z English v0.9.76.chd`: 2,533,451,399 bytes, SHA1
+    `823fa2879fc7008a5a1d6d9678256155c7a4672d`. chdman verify passed both the
+    raw and the overall SHA1 check.
+  - Target image `f01872e03375fb791253d8113621d756edcebd66`, 3,758,358,528 B.
+- 0.9.74 and 0.9.75 were built and superseded before anyone tested them.
+  0.9.74 = the ELF weapon labels; 0.9.75 = 0.9.74 + the defeat conditions and
+  the Lacus line. Numbers are never reused, so both are recorded here.
+
+### Defeat conditions were phrased as orders (90 strings)
+
+User screenshot, stage 46: the Defeat box read
+
+    1. Ally battleship lost
+    2. Defeat Kira.
+
+telling the player to shoot down their own Kira. 90 strings across ~60 stages
+were affected. The worst was rec29, whose VICTORY condition is "Reduce
+Gekko-Goh HP to 10% or less" and whose defeat condition shipped as "Defeat the
+enemy unit." - an instruction to destroy the one unit the stage requires you
+to keep alive.
+
+**The japanese cannot classify these on its own.** Both boxes use the same
+noun phrase 「〜の撃墜。」; rec48 has 「メカ鉄甲鬼の撃墜。」 as a victory condition
+and 「鉄甲鬼の撃墜。」 as a defeat condition in the same stage. The verb form
+「〜を撃墜する。」 is always an objective, but plenty of victory conditions use
+the noun form too, so grammar alone would have rewritten the wrong rows.
+Position is the other half: 「味方戦艦の撃墜。」 and 「いずれかの味方ユニットの
+撃墜。」 always head the defeat array, so a NOUN-form slot AFTER one of those is
+a defeat trigger. `tools/fix_defeat_conditions.py` requires both signals.
+
+76 rewritten in their own bytes, 14 moved into free space and repointed with
+restore_brackets' allocator. "Defeat X．" -> "X shot down．".
+
+### 堕天翅 settled on "Shadow Angels" (17 strings)
+
+Found while reviewing the rest of the briefing panel. Counted on the disc,
+flattened: 403 of 454 strings already used the glossary name. The rest did
+not - 12 said "Fallen Wings" (one whole record), 4 carried invented names
+("Dushantens" x2, "fallen insects", "Dekarar"), and one had shipped as raw
+japanese: 「堕天翅登場から４ターンが経過する。」 rendered as kanji in the SR Point
+box. `Dekarar's reach map west edge．` was a fabricated name AND broken word
+order; it now reads `Shadow Angels reach the west edge．`.
+
+TWO COUNTING MISTAKES WORTH REMEMBERING, both mine. `missing2_en.json` showed
+the term split six ways with lines truncated mid-sentence; the DISC was far
+healthier than that file, which is why it was treated as a lead and verified.
+Then a first count reported 75 bare "Angels" - they were `Shadow
+Angels`
+split across a line break, invisible to a raw match. The same trap then hit
+`fix_shadow_angels.py`, which reported success while leaving "Fallen Wings" in
+place because the term straddled a newline. It now flattens before replacing
+and asserts the term is actually gone. See [[term-split-by-linebreak]].
+
+### The weapon-panel labels the compiler inlined (0.9.74)
+
+`格闘武器 / 射撃武器 / 通常武器 / 合体・` are not text on either disc. The
+compiler inlined them into lui/ori immediates stored with unaligned swl/swr
+pairs, so the only contiguous copy is the one the routine writes at runtime -
+a 31 MB scan of EE RAM with the panel on screen found it nowhere else. Found
+by scanning the ELF for the immediates BYTE-SWAPPED (a `sw` of cp932 bytes
+loads the little-endian value, so 通常 is `lui 0xED8F` / `ori 0xCA92`, not
+imm 0x92CA). Now Melee weapon / Ranged weapon / Normal / Combo. See
+`tools/patch_weapon_labels.py` and `tools/elf_inline_strings.py`.
+
+### Also
+
+- `パイロット能力` (VA 0x4459D0) was still japanese on the pilot list, alone
+  among translated neighbours -> "Pilot Stats".
+- The Bazaar buy popup shipped `" will be bought.` with a RAW 0x2E. That byte
+  is a command to the menu blit - it ate the terminator and ran into the next
+  field. `apply_elf.py` defaults to plain-ascii mode, so the entry never got
+  the private half-width period; `ui_batch9.py` now carries explicit bytes.
+- `patch_elf_labels.py` had gone stale on two entries ("Will Cap+" and
+  "Ignore Sz" on disc vs the table's longer forms), which made the whole tool
+  assert and die. Synced to what shipped.
+- rec109, Lacus: the re-read had fixed 「Blame lies with the Council of Sages」
+  (the japanese blames 「全て戦わせようとする者」) but dropped 「賢人会議とその
+  協力者達…」 entirely. The slot allows 96 bytes and the largest free gap in
+  that record is 86, so it could not be relocated; the japanese third clause
+  is an apposition, so it merges: 「...Fighters aren't wrong, nor pacifists...
+  The Council of Sages makes them fight...」 (93 B).
+
+Gates before the build: struct intrusions 0, integrity 0 problems,
+control bytes clean over 4,092 strings, dead links 0, brackets 0 missing,
+all ELF patches present, pointers 80,986 / 9 (the documented baseline, so the
+14 relocations repointed cleanly).
+
 ## unreleased - post-0.9.73 working image
 
 ### Weapon-panel labels: the ones the compiler inlined into MIPS code

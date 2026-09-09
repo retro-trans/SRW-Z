@@ -1,119 +1,194 @@
 # -*- coding: utf-8 -*-
-"""Give the Shadow Angels their names back in COMPDATA.
+u"""Settle 堕天翅 on one english name, and fix the strings that lost it.
 
-The twelve wing generals of Aquarion are written in kanji and READ as names:
+堕天翅 is Genesis of Aquarion's antagonists. analysis/glossary.json has
+settled the name as "Shadow Angels" and 403 of the 454 strings whose
+japanese carries the term already use it. The rest do not, and this
+closes the gap.
 
-    \u982d\u7fc5 Touma   \u97f3\u7fc5 Otoha   \u591c\u7fc5 Johannes   \u4e21\u7fc5 Moroha
-    \u7df4\u7fc5 Renshi  \u525b\u7fc5 Goushi  \u53cc\u7fc5 Futaba     \u667a\u7fc5 Shiruha
-    \u8a69\u7fc5 Sirius
+Counted on the disc, flattened (a term split across a line break is
+invisible to a raw match - see [[term-split-by-linebreak]], which is why
+an earlier count of mine read 75 bare "Angels" that were really
+"Shadow\\nAngels"):
 
-The dialogue knows this - STAGE renders every one of them by name, and does so
-UNANIMOUSLY: 229 speaker lines say Touma, 213 Sirius, 62 Moroha, 61 Otoha, 39
-Johannes, 36 Futaba, 13 Shiruha, 12 Renshi, 5 Goushi, with not one exception
-between them. COMPDATA translated the same kanji LITERALLY instead:
+    Shadow Angel(s)   403      the settled name
+    bare "Angels"      20      anaphora after a full mention - left alone
+    no term            14      "they"/"them" - left alone
+    Fallen Wings       12      a second name used through one record
+    invented name       4      "Dushantens", "Dekarar", "fallen insects"
+    UNTRANSLATED        1      the english field is the japanese, verbatim
 
-    Headwing  Soundwing  Nightwing  Bothwing  Trainwing
-    Sturdywing  Twinwing  Wisewing  Poemwing
+The eleven "Fallen Wings" rows whose japanese uses 「」 go through
+apply_lines_relocating, which re-wraps them. This tool takes the six that
+cannot: one parenthesised thought (its japanese uses （）, so it has no
+export key at all - see [[dialogue-identified-by-japanese-bracket]]),
+three long-form recap paragraphs that the relocating applier refuses by
+design, and the two briefing conditions, which are not dialogue fields.
 
-COMPDATA supplies the speaker label over a battle caption, so the same
-character announced herself as "Moroha" in a cutscene and "Bothwing" in the
-battle that followed. Reported from a screenshot: "who is Bothwing?"
+Replacements are DERIVED from each row's own text, never retyped. The
+recaps are re-wrapped to their own existing width, because "Dushantens"
+-> "Shadow Angels" pushes one line from 56 to 59 columns.
 
-\u8a69\u7fc5 -> Sirius looks like a collision, because \u30b7\u30ea\u30a6\u30b9 (Sirius de Alisia) is a
-separate pilot with his own record. It is not our doing: \u591c\u7fc5 reads Johannes,
-so these kanji are name-readings, and the game gives both characters the same
-name. Kept as the dialogue has it rather than invented around.
-
-Every replacement is shorter than the literal it replaces, so each is written
-in place and NUL-padded; no field moves.
-
-Usage: fix_shadow_angels.py <iso> [--write]
+Usage: fix_shadow_angels.py <iso> <jp-iso> [--write]
 """
 import os
-import re
 import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import banlz
+import export_proofread as EP
+import fix_stranded_strings as F
+import fix_struct_intrusions as X
 
-SECTOR = 2048
-NAME = "COMPDATA.BN"
-ROOM = 1823200 - 1823000
-FIX = [(b"Headwing", b"Touma"), (b"Soundwing", b"Otoha"),
-       (b"Nightwing", b"Johannes"), (b"Bothwing", b"Moroha"),
-       (b"Trainwing", b"Renshi"), (b"Sturdywing", b"Goushi"),
-       (b"Twinwing", b"Futaba"), (b"Wisewing", b"Shiruha"),
-       (b"Poemwing", b"Sirius")]
+SEC, LBA, SIZE = 2048, 1651029, 3910128
+NL = "\n"
+
+# (record, a substring that identifies the row, old, new)
+# old=None means the whole field is replaced - those two are the briefing
+# conditions, whose japanese is a bare noun phrase and not a dialogue box.
+EDITS = [
+    (22, u"A war between humans and the", u"Fallen Wings", u"Shadow Angels",
+     "speaker"),
+    (0, u"Then the enemy Dushantens appeared", u"Dushantens",
+     u"Shadow Angels", "prose"),
+    (0, u"joined the chaos", u"Dushantens", u"Shadow Angels", "prose"),
+    (0, u"repelled the fallen insects", u"fallen insects", u"Shadow Angels",
+     "prose"),
+    # 堕天翅のマップ西端到達。 - "Dekarar" is not a name in this game, and the
+    # word order was broken too. Its siblings read "Coralians reach the
+    # south edge" / "Soleil reaches the map edge．"
+    (37, u"reach map west edge", None, u"Shadow Angels reach the west edge．",
+     "full"),
+    # 堕天翅登場から４ターンが経過する。 shipped as raw japanese. Full-width
+    # digits, like every other condition string in this panel.
+    (117, u"堕天翅登場", None,
+     u"Survive ４ turns after Shadow Angels appear．", "full"),
+]
 
 
-def table_entry(head):
-    n = head.find(NAME.encode())
-    while n >= 0:
-        if head[n - 8:n] == (chr(92) * 2 + "DATA" + chr(92) * 2).encode():
-            return n
-        n = head.find(NAME.encode(), n + 1)
-    raise SystemExit("file-table entry for COMPDATA.BN not found")
+def rewrap(body, width):
+    u"""Re-flow one paragraph to `width`, keeping blank lines."""
+    out = []
+    for para in body.split(NL + NL):
+        words = para.split()
+        line, lines = "", []
+        for w in words:
+            if line and len(line) + 1 + len(w) > width:
+                lines.append(line)
+                line = w
+            else:
+                line = w if not line else line + " " + w
+        if line:
+            lines.append(line)
+        out.append(NL.join(lines))
+    return (NL + NL).join(out)
+
+
+def field_at(b, i):
+    u"""The whole NUL-delimited string containing byte offset i."""
+    s = b.rfind(b"\x00", 0, i) + 1
+    z = b.find(b"\x00", i)
+    return s, z
 
 
 def main():
-    iso = sys.argv[1]
+    iso, jpiso = sys.argv[1], sys.argv[2]
     write = "--write" in sys.argv
-    f = open(iso, "rb")
-    head = f.read(4 * 1024 * 1024)
-    n = table_entry(head)
-    lba, sectors = struct.unpack_from("<II", head, n + 0x20)
-    f.seek(lba * SECTOR)
-    cur = f.read(max(sectors, ROOM) * SECTOR)
-    f.close()
-    d, _ = banlz.decompress_record(cur, 0)
-    d = bytearray(d)
-
-    total = 0
-    for old, new in FIX:
-        hits = [m.start() for m in re.finditer(re.escape(old), bytes(d))]
-        whole = []
-        for h in hits:
-            z = d.find(b"\x00", h)
-            # only a COMPLETE field, never a substring of a longer string
-            if z - h == len(old):
-                whole.append(h)
-        print("   %-11s -> %-9s %d field(s)%s"
-              % (old.decode(), new.decode(), len(whole),
-                 "" if len(whole) == len(hits)
-                 else "  (%d partial match(es) left alone)"
-                      % (len(hits) - len(whole))))
-        for h in whole:
-            d[h:h + len(old)] = new + bytes(len(old) - len(new))
-        total += len(whole)
-    print("%d field(s) renamed" % total)
-    if not write:
-        print("(dry run - pass --write to apply)")
-        return 0
-
-    blob = banlz.compress_record(bytes(d))
-    back, _ = banlz.decompress_record(blob, 0)
-    if back != bytes(d):
-        raise SystemExit("banlz roundtrip failed - not writing")
-    need = (len(blob) + SECTOR - 1) // SECTOR
-    if need > ROOM:
-        raise SystemExit("needs %d sectors, only %d free" % (need, ROOM))
-    g = open(iso, "r+b")
-    g.seek(lba * SECTOR)
-    g.write(blob + bytes(sectors * SECTOR - len(blob)))
-    g.seek(n + 0x24)
-    g.write(struct.pack("<I", need))
-    p = head.find(NAME.encode())
-    rec = p - 33
-    if struct.unpack_from("<I", head, rec + 2)[0] == lba:
-        g.seek(rec + 10)
-        g.write(struct.pack("<I", len(blob)))
-        g.seek(rec + 14)
-        g.write(struct.pack(">I", len(blob)))
+    f = open(iso, "r+b" if write else "rb")
+    f.seek(LBA * SEC)
+    raw = bytearray(f.read(SIZE))
+    live = [(h, bytearray(d)) for h, d in banlz.decompress_all(bytes(raw))
+            if isinstance(h, int) and d is not None]
+    heads = sorted(h for h, _ in live)
+    g = open(jpiso, "rb")
+    g.seek(LBA * SEC)
+    jp = [d for h, d in banlz.decompress_all(g.read(SIZE))
+          if isinstance(h, int) and d is not None]
     g.close()
-    print("COMPDATA rewritten (%d bytes, %d sectors)" % (len(blob), need))
+
+    touched = {}
+    done = 0
+    for rec, locator, old, new, kind in EDITS:
+        d = live[rec][1]
+        eb = bytes(d)
+        jb = bytes(jp[rec])
+        i = eb.find(locator.encode("cp932"))
+        if i < 0:
+            print("  rec%-4d locator not found: %r" % (rec, locator))
+            continue
+        off, z = field_at(eb, i)
+        cur = eb[off:z].decode("cp932")
+        k = z
+        while k < len(eb) and eb[k] == 0:
+            k += 1
+        budget = k - off - 1
+        if kind == "full":
+            nxt = new
+        elif kind == "speaker":
+            # FLATTEN BEFORE REPLACING. The term is split across a line
+            # break here, so "Fallen\nWings" does not match "Fallen Wings" -
+            # which is exactly how this tool missed it on its first run.
+            sp, _, body = cur.partition(NL)
+            width = max(len(x) for x in body.split(NL))
+            nxt = sp + NL + rewrap(" ".join(body.split()).replace(old, new),
+                                   width)
+        else:
+            width = max(len(x) for x in cur.split(NL))
+            nxt = rewrap(" ".join(cur.split()).replace(old, new), width)
+        if old is not None and old in " ".join(nxt.split()):
+            print("  rec%-4d term survived the replace, SKIPPED" % rec)
+            continue
+        nb = nxt.encode("cp932")
+        if len(nb) > budget:
+            print("  rec%-4d %d B > budget %d, SKIPPED" % (rec, len(nb), budget))
+            continue
+        smask = X.safe_mask(jb)
+        if not all(d[x] == 0 and smask[x] for x in range(z, off + len(nb))):
+            print("  rec%-4d growth would cross structure, SKIPPED" % rec)
+            continue
+        pm = F.pointer_map(eb)
+        if any(off < v < max(z, off + len(nb)) for v in pm):
+            print("  rec%-4d a pointer aims inside this field, SKIPPED" % rec)
+            continue
+        d[off:off + len(nb)] = nb
+        for x in range(off + len(nb), max(z, off + len(nb))):
+            d[x] = 0
+        d[off + len(nb)] = 0
+        touched[rec] = True
+        done += 1
+        print("  rec%-4d @%#07x  %d -> %d lines, %d -> %d B"
+              % (rec, off, cur.count(NL) + 1, nxt.count(NL) + 1,
+                 len(cur.encode("cp932")), len(nb)))
+        print("       was %r" % cur.replace(NL, " | ")[:74])
+        print("       now %r" % nxt.replace(NL, " | ")[:74])
+
+    print("")
+    print("strings fixed: %d of %d" % (done, len(EDITS)))
+    if not touched or not write:
+        if touched:
+            print("(dry run - pass --write to apply)")
+        f.close()
+        return 0
+    for rec in sorted(touched):
+        h = live[rec][0]
+        nxt = min([x for x in heads if x > h] or [len(raw)])
+        blob = banlz.compress_record(bytes(live[rec][1]))
+        if len(blob) > nxt - h:
+            blob = banlz.compress_record_optimal(bytes(live[rec][1]))
+        assert len(blob) <= nxt - h, "rec%d over slot" % rec
+        raw[h:h + len(blob)] = blob
+        for x in range(h + len(blob), nxt):
+            raw[x] = 0
+    after = [h for h, x in banlz.decompress_all(bytes(raw))
+             if isinstance(h, int) and x is not None]
+    assert after == heads, "STAGE record set changed"
+    f.seek(LBA * SEC)
+    f.write(bytes(raw))
+    f.close()
+    print("STAGE written")
     return 0
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+if __name__ == '__main__':
+    raise SystemExit(main())

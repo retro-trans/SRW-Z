@@ -5,7 +5,10 @@ BATCH = {
     0x33D9F0: "：Remove part",
     0x33DA00: "No upgrade parts can be sold.",
     0x33DA50: "\"",   # popup opener (was 「; tail below closes with \")
-    0x33DA60: "\" will be bought.",
+    # explicit bytes: apply_elf.py defaults to plain-ascii mode and a raw
+    # 0x2E is a CONTROL CODE to the menu blit - it ate the terminator and
+    # ran into the next field. 0x8540 is the private half-width period.
+    0x33DA60: b"\" will be bought\x85\x40",
     0x33DA80: "Are you sure?",
     0x33DAB0: " BS to sell.",
     0x33DB90: "：Prev",

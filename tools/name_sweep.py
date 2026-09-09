@@ -112,7 +112,7 @@ SUBS = [
     (r'(?<![A-Za-z])space-time', 'spacetime'),
     # spelled-out ranks; "New Fed" is a standalone word 64 times (the 235 a
     # reader reported was the substring inside "New Federation")
-    (r'(?<![A-Za-z])Brig\. Gen\.', 'Brigadier General'),
+    (r'(?<![A-Za-z])Brig\. Gen\.', 'General'),  # 准将 ruling 2026-09-09
     (r'(?<![A-Za-z])New Earth Fed(?![A-Za-z])', 'New Earth Federation'),
     (r'(?<![A-Za-z])New Fed(?![A-Za-z])', 'New Federation'),
     (r'(?<![A-Za-z])Rep\.(?= [A-Z])', 'Representative'),
@@ -171,7 +171,7 @@ SUBS = [
     # need tools/zkn_rename.py, which this sweep cannot reach.
     (r'(?<![A-Za-z])Bageena(?![A-Za-z])', 'Bajeena'),
     (r'(?<![A-Za-z])Kouji(?![A-Za-z])', 'Koji'),
-    (r'(?<![A-Za-z])Vice General(?![A-Za-z])', 'Brigadier General'),
+    (r'(?<![A-Za-z])Vice General(?![A-Za-z])', 'General'),  # 准将 ruling 2026-09-09
     # 頭翅 reads トーマ - the Shadow Angels' commander. Akurasu spells him
     # Toma, along with Otoha, Moroha, Futaba and Shadow Angels. The disc had
     # "Touma" in 304 places, which is a wapuro long vowel, not the baseline:
@@ -179,6 +179,13 @@ SUBS = [
     # tools/fix_toma.py, which also repaired the rows that lost the name
     # ("Toutenshi", "Head", "Head-Wing", and a hallucinated "Zuuuushiiii!!").
     (r'(?<![A-Za-z])Touma(?![A-Za-z])', 'Toma'),
+    # User rulings 2026-09-09. 准将 was General 154 / Brigadier General 17
+    # with BOTH forms nine rows apart in one rec111 scene, plus 30 rows of a
+    # third bare 'Brigadier X'. アーサーさん was a dead heat, 3 and 3.
+    (r'(?<![A-Za-z])Brigadier General(?![A-Za-z])', 'General'),
+    (r'(?<![A-Za-z])Brigadier(?![A-Za-z])', 'General'),
+    (r'(?<![A-Za-z])Arthur-san(?![A-Za-z])', 'Mr. Arthur'),
+
     (r'(?<![A-Za-z])Toutenshi(?![A-Za-z])', 'Toma'),
 ]
 

@@ -30,10 +30,18 @@ LABELS = [
     # level-up / pilot skill panel: names longer than ~12 chars run past the
     # box (user screenshot: "Focused Attack"). Match the abbreviations already
     # used elsewhere - "Chain Atk", "Support Atk", "Ignore Size".
-    (0x434918, b"Will Limit Break", b"Will Cap Up"),
+    # 0.9.74: these two were shortened again by a later pass and the
+    # table went stale, which made the whole tool unrunnable
+    # (it asserts on anything it does not recognise). Synced to
+    # what is actually on the disc.
+    (0x434918, b"Will Limit Break", b"Will Cap+"),
     (0x434A28, b"Assist Attack", b"Assist Atk"),
     (0x434A90, b"Focused Attack", b"Focus Atk"),
-    (0x434B30, b"Ignore Size Diff", b"Ignore Size"),
+    (0x434B30, b"Ignore Size Diff", b"Ignore Sz"),
+    # pilot-list stat header, missed by every earlier pass: its own
+    # neighbours ("Stats1", "Skills", "Sup Atk", "Spirits") are all
+    # english, so this one label was left reading japanese on screen.
+    (0x4459D0, bytes.fromhex("83708343838d83628367945c97cd"), b"Pilot Stats"),
 ]
 
 

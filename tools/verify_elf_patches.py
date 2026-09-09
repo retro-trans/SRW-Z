@@ -42,6 +42,18 @@ BYTES_CHECKS = [
     ("name separator space", 0x442710, bytes([0x25, 0x73, 0x20, 0x25, 0x73, 0, 0])),
 ]
 
+# The weapon-panel labels are carried in instruction immediates, not in the
+# string table, so no byte check can see them - pull the expected words from
+# the patcher itself so there is one source of truth. See
+# patch_weapon_labels.py for why they are inline at all.
+try:
+    import patch_weapon_labels as _wl
+    for _n, _jp, _en, _edits in _wl.SITES:
+        for _va, _orig, _new in (_edits[0], _edits[-1]):
+            CHECKS.append(("inline " + _n, _va, _new))
+except ImportError:
+    pass
+
 
 def main():
     iso_path = sys.argv[1]

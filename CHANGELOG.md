@@ -12,6 +12,61 @@ sight.
 
 ## unreleased - post-0.9.73 working image
 
+### Weapon-panel labels: the ones the compiler inlined into MIPS code
+
+User screenshot: the weapon panel still read 格闘武器 and 通常武器 while its
+own neighbours (MAP weapon / ALL weapon / PLA weapon / Beam weapon) had been
+english for ages. They were invisible to every text pass because **they are
+not text**: the compiler inlined them, carrying four bytes at a time in a
+lui/ori immediate pair and storing them with an unaligned swl/swr pair, so
+"格闘武器（　　）" exists only as sixteen bytes spread over eight instruction
+immediates. Neither disc image contains the string - the japanese one does not
+either - and a full 31 MB scan of EE RAM with the panel on screen found it in
+exactly one place: the display struct the routine had just written.
+
+What settled it was scanning the ELF for the immediates, byte-swapped. A `sw`
+of cp932 bytes loads the LITTLE-ENDIAN value, so 通常 is not imm 0x92CA but
+lui 0xED8F / ori 0xCA92. The first scan looked for the character codes, found
+nothing, and nearly closed the question as "pre-rendered graphics".
+
+    +0x0e  weapon class      格闘武器（　　） -> Melee weapon
+                             射撃武器（　　） -> Ranged weapon
+    +0x30  weapon attribute  通常武器         -> Normal
+                             合体・           -> Combo   (dead on every path)
+
+The empty full-width parens are padding - nothing writes inside them - so the
+english drops them and spends the bytes on the whole word.
+
+`tools/patch_weapon_labels.py` (idempotent, `--revert`, `--check`) keeps the
+instruction layout byte for byte and changes only imm16 fields. One exception:
+通常武器 took its second word from `$s0`, loaded as 武器 by whichever class
+branch ran, which cannot stay shared once the two class labels differ. That
+branch has six slots and a spare nop, so it now loads both words itself; its
+explicit terminator is dropped because "Normal" carries its own NUL.
+
+`tools/elf_inline_strings.py` finds this class of string in general - it walks
+basic blocks, replays the stores and reports each run with the instruction
+carrying every byte. Run over the whole ELF it says the only inline japanese
+left is dashes, ideographic spaces, and numeric constants that happen to
+decode as kanji. `verify_elf_patches.py` now takes its expected words straight
+from the patcher, and was tested in both directions (revert -> 8 FAILs).
+
+Nothing here can use a digit, '.', '/' or ':' - 0x2E-0x3D are control codes to
+the menu blit.
+
+### Two side findings
+
+`パイロット能力` (VA 0x4459D0) was still japanese on the pilot list, alone
+among translated neighbours - now "Pilot Stats".
+
+`patch_elf_labels.py` had gone stale on two entries: the disc holds
+"Will Cap+" and "Ignore Sz" where the table still expected "Will Cap Up" and
+"Ignore Size". Because the tool asserts on anything it does not recognise,
+that made the whole tool unrunnable. Synced to what shipped.
+
+Both changes are also live in the running PCSX2 session via PINE, so the
+labels can be checked on that screen before a build.
+
 ### The whole sonnet pass re-read: 1,308 of 4,958 rows were wrong (26.4%)
 
 Stages 40-47 (recs 103-110) were "retranslated fresh from the japanese" by

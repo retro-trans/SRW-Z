@@ -101,6 +101,33 @@ NAMES = {
     # Every unmarked row is Roger on Big Duo, Alan Gabriel and 'the truth' -
     # Schwarzwald. The glossary's シュバルツ -> Schwarz was the source.
     u'シュバルツ': (u'Schwarzwald', [u'Schwarz']),
+    # 無限獄, Asakim's curse: Endless Hell 3 / Infinite Prison 3 /
+    # Infinite Hell 1, and rec113 and rec139 are ROUTE TWINS of the same
+    # line rendered two different ways. No baseline anywhere, so the user's
+    # standing permission applies: 無限 is precisely 'infinite', and Asakim
+    # says he was DAMNED (堕落した) into it, which is a hell, not a prison.
+    u'無限獄': (u'Infinite Hell', [u'Endless Hell', u'Infinite Prison']),
+    # akurasu's Shadow Angel list: Futaba, Johannes, Lensi, Moroha, Otoha,
+    # Shilha, Toma. Ours matched on five and transliterated two - the same
+    # shape as Touma and Lora. 剛翅 (Goushi) is not on akurasu, so it stays.
+    u'智翅': (u'Shilha', [u'Shiruha']),
+    u'練翅': (u'Lensi', [u'Renshi']),
+    # akurasu spells the Siberian Railway president Kizz Munt. The disc says
+    # Kids 236 to 1 - another consistent majority that is simply wrong, like
+    # Touma and Lora. Same length, so nothing can overflow.
+    u'キッズ': (u'Kizz', [u'Kids']),
+    # From the glossary-vs-disc audit. Where the glossary was the minority
+    # it is corrected instead; where the disc was wrong it is swept.
+    #   セリアン: Apollonius' lover is Celiane (Aquarion wiki). The disc had
+    #   Celian 22 / Serian 9 / Celiane 4 - three ways for one character.
+    u'セリアン': (u'Celiane', [u'Celian', u'Serian']),
+    #   バジーナ: name_sweep already enforces Bajeena (32 v 3); the GLOSSARY
+    #   said Bageena, contradicting our own tool.
+    u'バジーナ': (u'Bajeena', [u'Bageena']),
+    u'ママドゥ': (u'Mamadou', [u'Mamadu']),
+    u'パプティ': (u'Papty', [u'Papti']),
+    u'グローマ': (u'Gloma', [u'Groma']),
+    u'オーバーセンス': (u'Over Sense', [u'Oversense']),
 }
 
 

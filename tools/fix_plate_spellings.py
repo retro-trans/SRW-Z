@@ -94,6 +94,13 @@ NAMES = {
     # plate spells the rank out. 7 of 9 rows have room; the other 2 are
     # one byte short and are relocated.
     u'連合軍士官': (u'Alliance Officer', [u'Alliance Ofcr']),
+    # RESOLVED 2026-09-09, and the opposite of what I first assumed.
+    # シュバルツ is NOT a shared plate: ブルーダー appears in ZERO records, so
+    # Gundam X's Schwarz Bruder is never named on this disc, while the Big O
+    # markers シュバルツバルト / ゼーバッハ appear in rec24/45/108/113/131.
+    # Every unmarked row is Roger on Big Duo, Alan Gabriel and 'the truth' -
+    # Schwarzwald. The glossary's シュバルツ -> Schwarz was the source.
+    u'シュバルツ': (u'Schwarzwald', [u'Schwarz']),
 }
 
 

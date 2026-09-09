@@ -45,7 +45,9 @@ SAMA = {
     'Dianna': 'Lady', 'Edel': 'Lady', 'Lacus': 'Lady',
     'Teral': 'Lord', 'Toma': 'Lord', 'Gainer': 'Lord', 'Gagarn': 'Lord',
     'Paptimus': 'Lord', 'Kei': 'Lord', 'Beck': 'Lord',
-    'Kappei': 'Master', 'Negotiator': 'Mr.',
+    # "Master Kappei" is 2 bytes longer than the slot allows; Lord is
+    # the same length as the romaji form and fits.
+    'Kappei': 'Lord', 'Negotiator': 'Mr.',
 }
 SAN = {
     'Reccoa': 'Ms.', 'Mizuki': 'Ms.', 'Leele': 'Ms.', 'Silvia': 'Ms.',
@@ -102,6 +104,11 @@ def main():
                     new = cand
                 else:
                     squeezed += 1
+            # $nさん: the protagonist is Rand OR Setsuko depending on route,
+            # so Mr./Ms. cannot be chosen. Drop the suffix - natural english
+            # and gender-safe. Always shorter, so it always fits.
+            if u'さん' in j:
+                new = re.sub(r'[$]n-san', '$n', new)
             if new == e:
                 continue
             nb = new.encode('cp932')

@@ -73,6 +73,23 @@ NAMES = {
     # akurasu spells the Xabungle medic Medick, matching the disc majority
     # and contradicting the glossary's 'Medic'.
     u'メディック': (u'Medick', [u'Medic']),
+    # Neither akurasu nor the wider web documents these four, so the user
+    # left the choice to me (2026-09-09). Decided on the katakana:
+    #   ガッハ is ga-h-ha, so Gahha. "Gappa" would be ガッパ - the disc's own
+    #   "I'm Gappa Wingail" self-introduction is a misreading, and the plate
+    #   majority happens to be right.
+    u'ガッハ': (u'Gahha', [u'Gappa', u'Gaha']),
+    u'バレター': (u'Valetar', [u'Valter']),
+    #   僧 is specifically a monk, which outweighs a 9-to-7 split on a role
+    #   label rather than a name.
+    u'ヴォダラク僧': (u'Vodarac Monk', [u'Vodarac Priest']),
+    #   dead tie 3/3, so match this project's wapuro style (シトラン->Shitoran)
+    u'ロロット': (u'Rorotto', [u'Lolot']),
+    u'暗殺部隊': (u'Assassin', [u'Assassin Unit', u'Assassins']),
+    # 鉄甲鬼: plate and glossary both say Tekkouki (146 v 54), but the
+    # glossary contradicted itself with メカ鉄甲鬼 -> 'Mecha Tekkoki'.
+    # One pattern fixes both, since "Mecha Tekkoki" contains it.
+    u'鉄甲鬼': (u'Tekkouki', [u'Tekkoki']),
 }
 
 

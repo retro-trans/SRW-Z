@@ -12,6 +12,87 @@ sight.
 
 ## unreleased - post-0.9.73 working image
 
+### The whole sonnet pass re-read: 1,308 of 4,958 rows were wrong (26.4%)
+
+Stages 40-47 (recs 103-110) were "retranslated fresh from the japanese" by
+sonnet subagents in 0.9.51-0.9.70. Re-reading all 4,958 rows against the
+japanese changed **1,308 of them**, consistently a quarter of every record:
+
+    rec103 97/414  23.4%     rec107 248/850  29.2%
+    rec104 119/693 17.2%     rec108 154/697  22.1%
+    rec105 83/326  25.5%     rec109 265/841  31.5%
+    rec106 83/315  26.3%     rec110 259/822  31.5%
+
+The user prompted this by screenshotting two Back Log pages and finding four
+wrong lines out of eight. rec108 was checked first and came in at 22%; it
+turned out to be on the LOW side.
+
+Every one of these errors reads as fluent, on-topic english - which is exactly
+why a pass that reads the english and asks "is this broken?" cleared them all:
+
+  * その結果 ("and as a result") flattened to a bare "and"; のに, だが, だって,
+    さえ, も, までは, 確かに, やはり dropped; それなのに (adversative) shipped as
+    a causal "So"
+  * 対話 rendered "speak with" in one line and "Dialogue" in the next, so two
+    characters stop arguing about the same word
+  * 「ギンガナムは私共々ディアナ様を手にかける」 as "**Dianna** means to kill Lady
+    Dianna along with me" - the villain's name replaced by his victim's
+  * 「サイコに…デストロイ」 (two machines) read as one; この者達 (four people) as
+    "himself"; 数億 as "millions"
+  * 許しをもらって生きてる is PERMISSION, shipped as forgiveness, so the line
+    answered a question nobody asked
+  * Futaba called "she" in four rows; 双翅 as "Soshi" against 49 "Futaba"
+
+**No automated signal separates the two passes.** The short-row ratio is 0.2%
+in the sonnet records and 0.2% in this session's. The detectors that found the
+caption bleed and the wrong speaker plates are blind to this class; it costs a
+full read of the japanese. See [[sonnet-pass-error-rate]].
+
+### Names settled, and names deliberately left
+
+`tools/name_sweep.py` grew to the standing record of every settled spelling,
+with the evidence in comments. Added this pass: Thoov (user), Rietz, Jeela,
+Lufira, Lucille, Lina, Ken-Goh, Gagarn, Dominus, Zonder Epta, Futaba, Ageha
+Plan, Vega Alliance, Emperor Vega, Council of Sages, Tresor, Zora, Gran
+Knights, Nu Gundam, Black History, spacetime (unhyphenated), spacetime tremor,
+Antarctica, Lady Dianna, mobile suit, and the abbreviations New Fed / New Earth
+Fed / Brig. Gen. / Capt. / Cmdr. / Rep. / N.Fed spelled out.
+
+Three judgment calls worth recording:
+
+  * **Harry holds BOTH ranks** - 中尉 in 49 rows and 大尉 in 15. A majority
+    sweep would have collapsed a real distinction, so each row was fixed
+    against its own japanese: 中尉 -> Lt. Harry, 大尉 -> Captain Harry.
+  * **ルナ is three things** - 琉菜 (Gravion), ルナマリア's nickname, and
+    Aquarion's Vector Luna machine. The orthographic rule ("kanji is Gravion,
+    katakana is Lunamaria") is FALSE: 15 of 26 candidate rows were the machine
+    and one was Gravion's Luna written in katakana. Only the SPEAKER separates
+    them - Shinn is the one who calls Lunamaria ルナ. See tools/luna_split.py.
+  * **The term bank was wrong.** The glossary mapped νガンダム to "v Gundam" -
+    a different mech - and was feeding that to every reader. Fixed at source.
+
+Left for one user decision each, because the disc genuinely splits: 准将 for
+Blex (General 10 / Brigadier 9) and Edel (General 154 / Brigadier General 17),
+総統 for Gattler (Fuhrer 10 / Supreme Commander 2), キエルお嬢様 (Lady 28 /
+Miss 24), 無限獄 (three forms over 7 lines), Eldar vs Eldars, and the ~50
+romaji honorifics.
+
+### Operational
+
+  * `analysis/proofread_new/` was a stale export from 2026-08-31 that two
+    readers grepped and reported backwards from ("Bageena 32 / Bajeena 0",
+    "Elder 130 / Eldar 45"). Renamed `_STALE_..._DO_NOT_USE`.
+  * Applying a sweep over ~70 records at once was OOM-killed twice. Twelve
+    records per run is safe; the write is one pass at the end so nothing
+    partial lands, but verify with integrity.py afterwards.
+  * The export's `slot` is one byte optimistic against what
+    apply_lines_relocating accepts on some rows - budget trims to `slot - 1`.
+  * **Reader-reported disc counts are unreliable** - "New Fed 235" is 64 (they
+    matched the substring inside "New Federation"), "Ageha Plan 95" is 5,
+    "Miss Kihel 5" is 24. Every sweep here was re-counted first.
+
+
+
 **The working `iso/srwz_cap.bin` no longer matches the shipped v0.9.73 CHD.**
 Only STAGE differs; everything else is identical.
 

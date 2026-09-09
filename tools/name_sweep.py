@@ -61,6 +61,81 @@ SUBS = [
     (r'(?<![A-Za-z])Zeera(?![A-Za-z])', 'Jeela'),
     (r'(?<![A-Za-z])Terral(?![A-Za-z])', 'Teral'),
     (r'(?<![A-Za-z])Leets(?![A-Za-z])', 'Rietz'),
+    # リーツ: plate says Rietz 63, and all four stray "Ritz" rows have リーツ
+    # in their japanese, so they are the same man
+    (r'(?<![A-Za-z])Ritz(?![A-Za-z])', 'Rietz'),
+    # the Gravion team: Gran Knights 65, Grand Knights 24, no plate to appeal to
+    (r'(?<![A-Za-z])Grand Knights(?![A-Za-z])', 'Gran Knights'),
+    (r'(?<![A-Za-z])Grand Knight(?![A-Za-z])', 'Gran Knight'),
+    # 黒い歴史 is the same Turn A concept as 黒歴史 - "Black History" 296 on
+    # disc, "Dark History" 0. A second english term for one japanese idea is
+    # worse than a slightly loose match.
+    (r'(?<![A-Za-z])Dark History(?![A-Za-z])', 'Black History'),
+    # 大尉 for Roberto: Captain 11 on disc against 5 strays, same per-character
+    # rule the user set for Lowen and Quattro
+    (r'(?<![A-Za-z])Lieutenant Roberto(?![A-Za-z])', 'Captain Roberto'),
+    (r'(?<![A-Za-z])Lt\. Roberto(?![A-Za-z])', 'Captain Roberto'),
+    # 少尉 is Ensign game-wide; Athena is the one stray
+    (r'(?<![A-Za-z])Lt\. Athena(?![A-Za-z])', 'Ensign Athena'),
+    # 時空震動: tremor 13, quake 3, vibration 2, shock 1
+    (r'(?<![A-Za-z])spacetime quake(?![A-Za-z])', 'spacetime tremor'),
+    (r'(?<![A-Za-z])spacetime vibration(?![A-Za-z])', 'spacetime tremor'),
+    (r'(?<![A-Za-z])spacetime shock(?![A-Za-z])', 'spacetime tremor'),
+    # ゾラ 26 v 16, トレゾア: Tresor is the majority spelling
+    # トーブ: the user confirmed the glossary form 2026-09-09; the disc had
+    # drifted to Toube on 8 rows
+    (r'(?<![A-Za-z])Toube(?![A-Za-z])', 'Thoov'),
+    # body strays against a correct plate: Jeela 38, Lufira 5, Maintainer 11
+    (r'(?<![A-Za-z])Jeera(?![A-Za-z])', 'Jeela'),
+    (r'(?<![A-Za-z])Rufira(?![A-Za-z])', 'Lufira'),
+    (r'(?<![A-Za-z])Menteiner(?![A-Za-z])', 'Maintainer'),
+    # ベガ大王: the plates were unified earlier; 14 bodies still say King
+    (r'(?<![A-Za-z])King Vega(?![A-Za-z])', 'Emperor Vega'),
+    # the term bank had νガンダム as "v Gundam" - a different mech entirely.
+    # Glossary corrected 2026-09-09; disc had 6 Nu against 2 v.
+    (r'(?<![A-Za-z])v Gundam(?![A-Za-z])', 'Nu Gundam'),
+    (r'(?<![A-Za-z])Xinlu(?![A-Za-z])', 'Xin Lu'),
+    # all verified against the japanese in the rows themselves, not by eye:
+    # every Reena/Rina row has リーナ, every Kengo row has ケンゴウ, every
+    # "South Pole" row has 南極
+    (r'(?<![A-Za-z])Dianna-sama(?![A-Za-z])', 'Lady Dianna'),
+    # 双翅 is Futaba 49 times; three rows use the on'yomi. The route twin
+    # of one of them already says Futaba for byte-identical japanese.
+    (r'(?<![A-Za-z])Soshi(?![A-Za-z])', 'Futaba'),
+    # Harry holds BOTH ranks: 中尉 in 49 rows and 大尉 in 15. So 中尉 takes the
+    # majority "Lt. Harry" (30 v 19) and 大尉 takes "Captain Harry" - the two
+    # 大尉 rows that said Lt. are fixed separately, against their own japanese.
+    (r'(?<![A-Za-z])Lieutenant Harry(?![A-Za-z])', 'Lt. Harry'),
+    # 125 lowercase against 18 capitalised
+    (r'(?<![A-Za-z])Mobile Suit(?![A-Za-z])', 'mobile suit'),
+    # 341 unhyphenated against 87 hyphenated; the hyphen form is stale
+    (r'(?<![A-Za-z])space-time', 'spacetime'),
+    # spelled-out ranks; "New Fed" is a standalone word 64 times (the 235 a
+    # reader reported was the substring inside "New Federation")
+    (r'(?<![A-Za-z])Brig\. Gen\.', 'Brigadier General'),
+    (r'(?<![A-Za-z])New Earth Fed(?![A-Za-z])', 'New Earth Federation'),
+    (r'(?<![A-Za-z])New Fed(?![A-Za-z])', 'New Federation'),
+    (r'(?<![A-Za-z])Rep\.(?= [A-Z])', 'Representative'),
+    # lone strays against a settled majority
+    (r'(?<![A-Za-z])Ruchil(?![A-Za-z])', 'Lucille'),
+    (r'(?<![A-Za-z])Zonder Eputa(?![A-Za-z])', 'Zonder Epta'),
+    (r'(?<![A-Za-z])Council of the Wise(?![A-Za-z])', 'Council of Sages'),
+    # アゲハ構想 was split three ways with no majority (Plan 5, Swallowtail 6,
+    # Initiative 3); the romanised name matches how this project treats other
+    # proper nouns, and "Swallowtail" is a calque invented in recs 110/111.
+    (r'(?<![A-Za-z])Swallowtail [Pp]lan(?![A-Za-z])', 'Ageha Plan'),
+    (r'(?<![A-Za-z])Ageha Initiative(?![A-Za-z])', 'Ageha Plan'),
+    (r'(?<![A-Za-z])Reena(?![A-Za-z])', 'Lina'),
+    (r'(?<![A-Za-z])Rina(?![A-Za-z])', 'Lina'),
+    (r'(?<![A-Za-z])Kengo(?![A-Za-z])', 'Ken-Goh'),
+    (r'(?<![A-Za-z])South Pole(?![A-Za-z])', 'Antarctica'),
+    (r'(?<![A-Za-z])N\.Fed(?![A-Za-z])', 'New Federation'),
+    # abbreviations against an overwhelming spelled-out majority
+    (r'(?<![A-Za-z])Cmdr\.', 'Commander'),
+    (r'(?<![A-Za-z])Capt\.(?! Quattro)', 'Captain'),
+    (r'(?<![A-Za-z])Zola(?![A-Za-z])', 'Zora'),
+    (r'(?<![A-Za-z])Trezoa(?![A-Za-z])', 'Tresor'),
+    (r'(?<![A-Za-z])Trezor(?![A-Za-z])', 'Tresor'),
     (r'(?<![A-Za-z])Mwu(?![A-Za-z])', 'Mu'),
     (r'(?<![A-Za-z])Bradman(?![A-Za-z])', 'Bloodman'),
     (r'(?<![A-Za-z])Toga(?![A-Za-z])', 'Touga'),

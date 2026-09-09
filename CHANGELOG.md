@@ -10,6 +10,76 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## unreleased - the stage 48+ re-read
+
+Reading stages 48 and 49 end to end (rec111 883 rows, rec112 705 rows)
+found ONE mistranslation between them. Stages 48+ really were done by the
+better process, unlike the 26% sonnet range. The value came from AUDITS
+rather than from reading rows, and that is the lesson of this pass:
+
+    scene captions      116 rows   a whole class no pass had ever seen
+    split speaker plates 250 rows  25 names drawn two or three ways
+    准将 -> General       82 rows   user ruling
+    term drift           77 rows   new Federation, Overdevil, Garnahan
+    honorifics           59 rows   -sama/-san -> the english title
+    ellipses           1,112 rows  ".." -> "..." where bytes allowed
+    鉄甲鬼 unified        83 rows   the glossary contradicted itself
+
+### Scene captions were invisible to every pass
+
+A location caption has no speaker and no 「」, and the proofread export
+defines a dialogue row BY the japanese 「 - so not one of these was ever in
+a sheet. 1,281 are translated and 116 were simply missed, still rendering
+as kanji. Names came from the disc's own ～...～ variants where they
+existed (～Ryujinmaru - Deck～, ～Salta Base - Hangar～). Two were wrong
+rather than missing: "King Vial Hangar" and "A．GAMA - Internal".
+
+### The plate audit was the single most productive check
+
+Every japanese speaker plate, against its english. 25 names rendered two
+or three ways - and the plate is drawn beside every line that character
+speaks, so each one contradicted itself on screen. NOT swept: レイ (Rey
+385 / Ray 77) and シュバルツ (Schwarzwald 58 / Schwarz 37) are two
+characters sharing a plate, and unifying them would have been the error.
+
+### akurasu overruled the disc AND the glossary, twice more
+
+ローラ is Laura, from the Turn A episode titles - the glossary said Lola
+and the disc said Lora 28 to 1. メディック is Medick. Both are the Touma
+shape: a consistent disc majority that is simply wrong. See
+[[naming-baseline-wiki]].
+
+Where akurasu is silent the user left the choice to me, and the katakana
+decided it: ガッハ is ga-h-ha so Gahha, not the "Gappa" of the disc's own
+self-introduction line, which is a misreading. ヴォダラク僧 is Vodarac Monk
+because 僧 is specifically a monk.
+
+### Honorifics: counting reversed my instinct
+
+I assumed romaji was the house style. It is not - 様 runs Lady 399 / Lord
+314 / Master 29 against 28 -sama, and さん runs Mr./Ms./Miss 219 against 37
+-san. So -sama and -san were converted to whatever title the disc already
+uses for that character; -senpai, -chan and -kun were KEPT, because no
+english form has ever been used for them and they carry meaning it cannot
+replicate ("It's Faye-chan, not Hei-chan" is a joke about the suffix).
+
+### 40 undocumented plates recorded
+
+The user's rule is that the glossary must hold every term in the library.
+桂 - Kei Katsuragi, the Orguss protagonist - had no entry at all, and
+checking it found the disc using BOTH name orders, 47 Kei Katsuragi to 8
+Katsuragi Kei. Glossary 1,027 -> 1,067. "Alliance Ofcr" was NOT recorded
+as canonical: it is a byte squeeze, and the rank is now spelled out.
+
+### The line-break trap, four more times
+
+A term that wraps is invisible to a raw match. It defeated the count (75
+bare "Angels" were really "Shadow
+Angels"), then two of my own fix tools,
+which reported success while changing nothing. Every matcher in this pass
+now flattens first and asserts the term actually changed. See
+[[term-split-by-linebreak]].
+
 ## 0.9.77 (2026-09-09) - 頭翅 is Toma
 
 - Artifacts:

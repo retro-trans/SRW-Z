@@ -56,6 +56,21 @@ tools/fix_terms_grow.py carried a rule spelling ガガーン "Gagaan", which
 the disc has never used once. Running it would have introduced a spelling
 no reader has seen; it now says Gagarn.
 
+### And I wrapped one of the fixes to the wrong box
+
+Rubina's replacement line was hand-wrapped to ~46 columns - the SCENE
+width - but that row is an OVER-MAP row, 400 px not 505. It measured
+411 px. Nothing in the write path caught it: the byte budget was fine,
+fix_lines_inplace only checks bytes and the 3-line cap, and integrity,
+control bytes and pointers were all green. `export_proofread.py` catches
+it, because it records `box`/`px`/`pxlimit` per row and ends with "rows
+ALREADY over the box" - that count went 4 -> 5, and back to 4 once the
+line was re-wrapped to three narrower ones (356 px).
+
+So the rule is: after any hand-wrapped line fix, re-run the export and
+read its last line. The remaining 4 are the pre-existing rec1/rec25
+library entries, unchanged.
+
 ### One more mistranslation, from the route twin
 
 rec131's Teral says "For my men who fell to Teral's ambition" where the

@@ -70,7 +70,7 @@ def paint(record, version, author, font):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('iso',type=Path);p.add_argument('--version',default='v0.9.79')
-    p.add_argument('--author',default='github.com\\retro-trans')
+    p.add_argument('--author',default='github.com/retro-trans')
     p.add_argument('--font',type=Path,default=Path(r'C:\Windows\Fonts\arialbd.ttf'))
     p.add_argument('--compressor',type=Path,help='Optional compiled banlz_pack_fast executable')
     p.add_argument('--work',type=Path,required=True);p.add_argument('--write',action='store_true')

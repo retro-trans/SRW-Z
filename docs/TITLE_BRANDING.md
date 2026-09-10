@@ -8,7 +8,7 @@ decodes to 2,349,392 bytes. Its bright background TIM2 starts at `0x1B10D0`:
 `tools/patch_title_branding.py` draws two right-aligned labels using existing
 palette colors and a one-pixel dark outline. The version begins at y=402;
 the author begins at y=420. Both end at x=622, leaving an 18-pixel right margin.
-v0.9.79 uses `v0.9.79` and `github.com\retro-trans` exactly as requested.
+v0.9.79 uses `v0.9.79` and `github.com/retro-trans` exactly as requested.
 
 Only the bright title background is changed. The logo, menus, darker
 background, palette, executable, subtitle data, bank offsets and decoded

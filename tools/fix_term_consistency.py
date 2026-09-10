@@ -100,6 +100,13 @@ RULINGS = [
     # "General" after it. 30 rows, invisible to the pattern above.
     (re.compile(r'Brigadier'), u'General', u'准将'),
     (re.compile(r'Arthur-san'), u'Mr. Arthur', u'アーサー'),
+    # A full rank audit (prompted by 准将 shipping in SIX english words)
+    # found the same shape elsewhere. The unambiguous one is the
+    # abbreviation: name_sweep settled 中尉 as 'Lt.' and the disc agrees
+    # 119 to 78. 'Lieutenant Commander' is a DIFFERENT rank (少佐) and is
+    # excluded. Shorter, so nothing can overflow.
+    (re.compile(r'Lieutenant(?!\s+Commander)'), u'Lt.', u'中尉'),
+    (re.compile(r'Lieutenant(?!\s+Commander)'), u'Lt.', u'大尉'),
     # 桂木桂 is Kei Katsuragi in the glossary and 47 times on the disc;
     # 8 rows use japanese order. Same length, so it cannot overflow.
     (re.compile(r'Katsuragi\s+Kei'), u'Kei Katsuragi', u'桂木桂'),

@@ -65,6 +65,17 @@ NEWFED = (u'新連邦', u'新地球連邦')
 FIXES = [
     (111, u'Hughes Gauli, the Ceiling of Yapan',
      u'Hughes Gauli, the Ceiling of Yapan', u"Hughes Gauli of Yapan's Ceiling"),
+    # 准将 -> General (user ruling) reached the disc in THREE forms I swept,
+    # but six rows used other rank words entirely and were invisible to all of
+    # them. Fixed per row, because "Colonel Bask Om" in rec119/rec127 is
+    # genuinely 大佐 and must not move.
+    (0, u'Admiral Edel', u'Admiral Edel', u'General Edel'),
+    (49, u'Commodore Edel Bernal', u'Commodore Edel Bernal',
+     u'General Edel Bernal'),
+    (49, u'Commodore Bernal', u'Commodore Bernal', u'General Bernal'),
+    (117, u'Vice Admiral Edel', u'Vice Admiral Edel', u'General Edel'),
+    (147, u'Vice Commander', u'Vice Commander', u'General'),
+    (151, u'Colonel-or Black Charisma', u'Colonel', u'General'),
 ]
 
 # User rulings, 2026-09-09. Both were dead-heat inconsistencies the disc

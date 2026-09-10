@@ -128,6 +128,12 @@ NAMES = {
     u'パプティ': (u'Papty', [u'Papti']),
     u'グローマ': (u'Gloma', [u'Groma']),
     u'オーバーセンス': (u'Over Sense', [u'Oversense']),
+    # internal strays only: the disc is otherwise unanimous on these two.
+    # (akurasu spells them Hola / Adette-with-one-t etc, but the disc and
+    # glossary agree across 1,300+ rows and that is the user's call, not
+    # mine - see the note in CHANGELOG.)
+    u'ホーラ': (u'Hora', [u'Hola']),
+    u'アデット': (u'Adette', [u'Adet']),
 }
 
 

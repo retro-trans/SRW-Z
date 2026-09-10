@@ -28,6 +28,14 @@ instruction: do not use two dots where there are spare bytes. 227 of those
 rows have ZERO spare and were plainly squeezed to fit, so they keep the
 two-dot form; everything with room is expanded.
 
+KNOWN HAZARD, found afterwards by reading rec120: a japanese stutter
+sits on the NAME (ガ、ガガーン様 = "G-Gagarn-sama"), so moving the
+title in front leaves the stutter on the wrong word - "G-Lord Gagarn"
+instead of "L-Lord Gagarn". Two rows were damaged this way and repaired
+by hand. Any future run must re-check:
+    grep for r"([A-Za-z])-(Lord|Lady|Master|Mr\.|Ms\.|Miss) "
+and reletter the stutter to match the new first word.
+
 Usage: fix_honorifics_ellipsis.py <iso> <jp-iso> [--write]
 """
 import os

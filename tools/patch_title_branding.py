@@ -49,10 +49,21 @@ def paint(record, version, author, font):
     for text,top in [(version,402),(author,420)]:
         box=idraw.textbbox((0,0),text,font=face)
         width,height=box[2]-box[0],box[3]-box[1]
+        # Give the URL separator room so its outline does not merge with m/r.
+        parts=[text]
+        gap=0
+        if text==author and '/' in text:
+            left,right=text.split('/',1)
+            parts=[left,'/',right]
+            gap=3
+            width=sum(idraw.textbbox((0,0),part,font=face)[2] for part in parts)+gap*2
         if width>220 or height>15:raise ValueError('Release label exceeds reserved corner')
         x=w-18-width;y=top-box[1]
-        sd.text((x,y),text,font=face,fill=1,stroke_width=1,stroke_fill=1)
-        idraw.text((x,y),text,font=face,fill=1)
+        cursor=x
+        for part in parts:
+            sd.text((cursor,y),part,font=face,fill=1,stroke_width=1,stroke_fill=1)
+            idraw.text((cursor,y),part,font=face,fill=1)
+            cursor+=idraw.textbbox((0,0),part,font=face)[2]+gap
         boxes.append(dict(text=text,box=[x,top,x+width,top+height]))
     sm,im=shadow.load(),ink.load();changed=[]
     for y in range(h):

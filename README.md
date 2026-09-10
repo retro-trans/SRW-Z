@@ -145,6 +145,13 @@ project like this shut down.
 
 ## Credits
 
+We use the [Bizin Gothic font by yuru7](https://github.com/yuru7/bizin-gothic)
+in this translation. Thank you to its creators and contributors.
+
+The Best edition build draws on the technical knowledge shared by
+[dyzz/srwz-zh](https://github.com/dyzz/srwz-zh/). Their research helped us
+adapt our English translation to the Japanese The Best release.
+
 | Role | |
 |---|---|
 | Project lead | pow |

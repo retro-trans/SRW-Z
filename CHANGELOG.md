@@ -10,6 +10,65 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
+## unreleased - a player report, and two more pools the sweeps cannot see
+
+Five screenshots from a player, taken on an older build. Three were already
+fixed or were never bugs; two were real and are fixed here. Both real ones are
+the SAME shape as the rec0 discovery: a pool that no tool can address.
+
+### Kazami's line had lost a noun
+
+    Kazami
+    (First demons and...)
+
+風見（まずは鬼と堕天翅か…） - 堕天翅, the Shadow Angels, is simply gone.
+The slot holds 31 bytes and the honest line needs 50, so it was cut.
+
+It had never been REACHABLE. A parenthesised thought carries no 「, so the
+export produces no key for it, and apply_lines_relocating.py - the only tool
+that can grow a row - takes keys. New tools/fix_offset_rows.py addresses a row
+by OFFSET and appends past the record end with a pointer rewrite, the mechanism
+fix_truncated_rows.py already proved. Now reads "(First the demons and the
+Shadow Angels...)", 336 px against the 400 px over-map limit.
+
+Note the row is invisible to the box gate too, for the same reason - the
+"rows over the box" count in export_proofread never included it. Measured by
+hand instead.
+
+### ブライ大帝 was "Brai" in 20 battle captions
+
+name_sweep has carried ブライ -> Burai for many builds, but it reads
+dialogue.json, which is STAGE only. The SRVC caption pool is outside it, so the
+rule had never once reached these lines - the rec0 lesson repeating in a third
+place.
+
+Captions may not change length (scripted attack sequences fetch their lines by
+byte offset from tables we do not rebuild), and "Burai" is a byte longer than
+"Brai", so each line pays for it internally. Two of the six lose the title:
+
+    "Prepare, Emperor Brai!"       -> "Ready yourself, Burai!"
+    "End, Emperor Brai!"           -> "Burai, this is it!"
+    "Emperor Brai, prepare!"       -> "Emperor Burai, perish!"
+    "Em-Emperor Brai!!"            -> "E-Emperor Burai!!"
+    "E-Emperor Brai! Forgive me!"  -> "E-Emperor Burai! Pardon me!"
+    "This life's already Brai's!"  -> "My life is Emperor Burai's!"
+
+### The three that were not bugs
+
+  Gura's nested 「   already fixed; rec112 and rec128 both read clean.
+  fullwidth ＺＥＵＴＨ  NOT OURS. The row stores $c and so does the JAPANESE;
+                    the game expands the token and draws the team name on a
+                    fullwidth pitch. No fullwidth ZEUTH exists on the disc.
+  ASCII "..."       house style: all 48,987 SRVC captions use it, 「」 is the
+                    STAGE convention.
+
+Left alone as judgement calls: "Hyakki Hundred" for 百人衆 (consistent across
+the unit plate and dialogue), and Kei's line, which rec110 and rec111 render
+two different ways from identical japanese - route twins that drifted.
+
+Gates: SRVC index OK (353 blocks), struct intrusions 0, integrity 0 problems,
+pointers 80,986 / 9 (baseline), rows over the box 4 (unchanged).
+
 ## 0.9.78 (2026-09-10) - the stage 48+ re-read, and the pool no pass could see
 
 - Artifacts:

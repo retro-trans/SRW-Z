@@ -59,11 +59,13 @@ RULES = [
     (u"ディアナ", "Diana", "Dianna"),
     # Gaiking names - undocumented in English, decided for consistency:
     # アフロディア Aphrodia (matches Aphrodite), スカルムーン Skull Moon
-    # as two words, ガガーン Gagaan keeping the long vowel.
+    # as two words, ガガーン Gagarn. This rule said "Gagaan" until 2026-09-10;
+    # the disc has never once spelled it that way (Gagarn 205, Gagan 5), so a
+    # run of this file would have introduced a spelling no reader has seen.
     (u"アフロディア", "Afrodia", "Aphrodia"),
     (u"スカルムーン", "Skullmoon", "Skull Moon"),
-    (u"ガガーン", "Gagan", "Gagaan"),
-    (u"ガガーン", "Gaga", "Gagaan"),
+    (u"ガガーン", "Gagan", "Gagarn"),
+    (u"ガガーン", "Gaga", "Gagarn"),
 ]
 
 

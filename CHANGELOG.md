@@ -25,6 +25,50 @@ rather than from reading rows, and that is the lesson of this pass:
     ellipses           1,112 rows  ".." -> "..." where bytes allowed
     鉄甲鬼 unified        83 rows   the glossary contradicted itself
 
+### rec0: 110 summaries no pass had ever read
+
+Reading stage 60 (rec121) turned up "Skullmoon" against 50 "Skull Moon
+Alliance", and chasing that one word found the pool behind it. rec0 holds
+the "story so far" recap shown before each stage. It has no 「」, so by
+[[dialogue-identified-by-japanese-bracket]] dialogue.json never exported
+it, the sheets never held it, and name_sweep - which reads that json - has
+never touched a single one of these fields. Every decision this project
+has settled was still stale in there.
+
+    stray tails          7 fields   "with Baldios．s．", "of Chiram．D"
+    ascii punctuation    1 field    "." where the other 109 use ．
+    name strays         34 fields   Duke Fried/Freed, Quinshtain, Terar,
+                                    Gaizok, Vodarlak, Gagan, Dark History
+
+The tails are the odd part: a stray letter welded on after the closing
+period, in the string rather than past its terminator. Not a truncation,
+and not in the japanese.
+
+Six of those spellings were against BOTH the glossary and an overwhelming
+disc majority - Duke Fleed 126 to 8, Teral 617 to 2, Quinstein 218 to 1 -
+so they are now rules in name_sweep rather than a one-off fix. Three
+"Black History" and three "Council of Sages" were only found because
+fix_stage_summaries flattens before it substitutes: they straddle a line
+break, and a literal-space pattern has now silently lost to that in five
+separate sweeps ([[term-split-by-linebreak]]).
+
+tools/fix_terms_grow.py carried a rule spelling ガガーン "Gagaan", which
+the disc has never used once. Running it would have introduced a spelling
+no reader has seen; it now says Gagarn.
+
+### One more mistranslation, from the route twin
+
+rec131's Teral says "For my men who fell to Teral's ambition" where the
+japanese reads ガガーンの野望 - Gagarn's ambition. Its twin in rec120 has it
+right, which is what makes the pair worth reading together
+([[route-records-and-pronouns]]). Same class as
+[[vocative-became-speaker-name]]: the MT reached for the speaker's own
+name.
+
+Rubina's line lost スカルムーン連合 entirely and named "Eldar" instead - a
+different faction that exists in this game - and Quattro named the same
+faction "Scalmoon Alliance" in one route and "Scalum Union" in the other.
+
 ### Scene captions were invisible to every pass
 
 A location caption has no speaker and no 「」, and the proofread export

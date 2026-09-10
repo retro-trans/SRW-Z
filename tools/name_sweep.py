@@ -187,6 +187,29 @@ SUBS = [
     (r'(?<![A-Za-z])Arthur-san(?![A-Za-z])', 'Mr. Arthur'),
 
     (r'(?<![A-Za-z])Toutenshi(?![A-Za-z])', 'Toma'),
+
+    # Found 2026-09-10 in the rec0 stage-summary prose, a pool dialogue.json
+    # never exported and this sweep had therefore never reached. Each stray is
+    # against BOTH the glossary and an overwhelming disc majority, counted on
+    # rows whose japanese actually holds the name:
+    #   Duke Fleed 126 v Fried 5 / Freed 3   Quinstein 218 v Quinshtain 1
+    #   Teral 617 v Terar 2                  Gaizock 183 v Gaizok 4
+    #   Vodarac 85 v Vodarak 6 / Vodarlak 2  Gagarn 205 v Gagan 5
+    # tools/fix_terms_grow.py still carries an older 'Gagaan' rule for
+    # ガガーン; the disc has never once spelled it that way, so Gagarn wins.
+    (r'(?<![A-Za-z])Duke Fried(?![A-Za-z])', 'Duke Fleed'),
+    (r'(?<![A-Za-z])Duke Freed(?![A-Za-z])', 'Duke Fleed'),
+    (r'(?<![A-Za-z])Quinshtain(?![A-Za-z])', 'Quinstein'),
+    (r'(?<![A-Za-z])Quinshtein(?![A-Za-z])', 'Quinstein'),
+    (r'(?<![A-Za-z])Terar(?![A-Za-z])', 'Teral'),
+    (r'(?<![A-Za-z])Gaizok(?![A-Za-z])', 'Gaizock'),
+    (r'(?<![A-Za-z])Vodarlak(?![A-Za-z])', 'Vodarac'),
+    (r'(?<![A-Za-z])Vodarak(?![A-Za-z])', 'Vodarac'),
+    (r'(?<![A-Za-z])Gagan(?![A-Za-z])', 'Gagarn'),
+    # 連合 again: two more spellings of スカルムーン the earlier rules missed,
+    # both in Quattro lines that are route twins of each other.
+    (r'(?<![A-Za-z])Scalmoon(?![A-Za-z])', 'Skull Moon'),
+    (r'(?<![A-Za-z])Scalum Union(?![A-Za-z])', 'Skull Moon Alliance'),
 ]
 
 

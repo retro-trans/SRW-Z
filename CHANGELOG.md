@@ -10,7 +10,29 @@ both CHDs (~7 GB, ~15 min) plus a sector-level diff. Entries below say *what
 changed*, not just *what was intended* — v1.27's entry names both suspects on
 sight.
 
-## unreleased - the stage 48+ re-read
+## 0.9.78 (2026-09-10) - the stage 48+ re-read, and the pool no pass could see
+
+- Artifacts:
+  - `SRW Z English v0.9.78.chd`: 2,537,441,997 bytes, SHA1
+    `cf4a49299caffe9ebe5115cc85ecb8577221b881`. chdman verify passed both the
+    raw and the overall SHA1 check.
+  - Target image `8c626fa230fd7c2105833594e336c16d8e913ba6`, 3,758,358,528 B.
+- Gates: struct intrusions 0, control bytes OK (4,092 UI strings), brackets 0
+  missing, SRVC index OK (353 blocks), SRVC alignment eof_mod16 0, integrity 0
+  problems, dead links 0, pointers 80,986 / 9 (baseline), ELF patches present,
+  rows over the box 4 (the pre-existing rec1/rec25 library entries).
+- `stamp_build.py --diff 0.9.77 0.9.78`: **STAGE is the only file that
+  changed.** COMPDATA, ELF, HSFC, KVMDATA, MAPNAME, MTV_PROS, NISVDATA, SRVC,
+  SRVC_SEG, VT1, ZKN_KW, ZKN_PT and ZKN_RT are byte-identical to 0.9.77.
+
+  Noted because the CHD came out ~4 MB LARGER than 0.9.77 and I flagged that
+  as a possible discontinuity mid-build. It is not one: this project's CHDs
+  have ranged over 2,532-2,578 MB across ~145 builds, the target image is the
+  same size as every other, verify passes both SHA1 checks, and the diff above
+  shows nothing but STAGE moved. Compression variance in one region, no
+  content lost. Recorded so the next person to notice the number does not
+  re-open it.
+
 
 Reading stages 48 and 49 end to end (rec111 883 rows, rec112 705 rows)
 found ONE mistranslation between them. Stages 48+ really were done by the

@@ -10,8 +10,10 @@ SAFE by construction:
   * only fields whose body is 「..」 (a dialogue) are touched; the speaker plate
     (line 0) is preserved verbatim.
   * 《glossary links》 are kept whole (never split across a line break).
-  * $-control codes ($n/$c = runtime name of UNKNOWN width) make a field SKIP,
-    so we never mis-measure a line that expands at runtime.
+  * $-control codes ($n/$c) are SUBSTITUTED for measurement by width(), using
+    the default protagonist and team names - they were called "of UNKNOWN
+    width" and skipped until 2026-09-10, which is why 231 rows shipped
+    overflowing their box. See NAME_TOKENS below.
   * result must be <= 3 body lines and <= the slot's byte budget, else SKIP.
   * reflow only removes/rebalances spaces+newlines, so bytes never grow.
 
@@ -36,6 +38,36 @@ OVERMAP_PX, SCENE_PX = 400, 505
 CHARS = [0x2E, 0x22, 0x27, 0x21, 0x2C, 0x2D, 0x3F] + list(range(0x30, 0x3A)) + \
         list(range(0x41, 0x5B)) + list(range(0x61, 0x7B))
 LINK = re.compile(r"《[^》]*》")     # 《...》 kept whole
+
+# THE RUNTIME NAME TOKENS. width() used to measure "$n" as the two ASCII
+# characters $ and n - 22px - because the expansion was called "of UNKNOWN
+# width" and $-fields were simply skipped. They are not unknown: the game ships
+# two protagonists and the token draws one of their names. Measuring them as
+# literals under-counted by up to 120px and left 231 rows overflowing their box,
+# two of which a player reported as clipped Asakim lines.
+#
+# The budget is the DEFAULT name, by the user's ruling of 2026-09-10: a custom
+# name cannot be measured, so the wider of the two shipped defaults is the
+# yardstick. A player who renames longer can still clip - an accepted limit.
+# $c is the worst offender despite being five letters: the team name draws
+# FULLWIDTH. See [[name-token-width-budget]].
+NAME_TOKENS = {
+    "$F": "Setsuko・Ohara",              # 142px (Rand・Travis is 119)
+    "$n": "Setsuko",                         #  70px
+    "$f": "Setsuko",                         #  70px
+    "$l": "Travis",                          #  57px
+    "$c": "ＺＥＵＴＨ",  # 105px, drawn fullwidth
+}
+
+
+def expand_tokens(s):
+    """Substitute the runtime name tokens so a line can be MEASURED honestly.
+
+    Only ever used for measurement - nothing written to the disc is expanded.
+    """
+    for k, v in NAME_TOKENS.items():
+        s = s.replace(k, v)
+    return s
 
 
 def load_adv(iso):
@@ -74,7 +106,7 @@ def boxmap(d):
 
 def width(s, adv):
     w = 0
-    for ch in s:
+    for ch in expand_tokens(s):
         if ch == " ":
             w += 13
         elif ord(ch) < 128:

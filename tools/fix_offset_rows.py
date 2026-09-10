@@ -35,7 +35,14 @@ BASE = 0x7566F0
 
 # (rec, offset) -> the full field, speaker line included
 FIX = {
-    (112, 0x192e0): u'Kazami\n(First the demons and the Shadow\nAngels...)',
+    # 総統 -> Supreme Commander (user ruling 2026-09-10). These four are
+    # the rows apply_lines_relocating could not place: rec104/rec107 have no
+    # free gap left, and the rec109 row is a parenthesised THOUGHT, so it has
+    # no key for a keyed tool to address at all.
+    (104, 0x14870): "Teral\n「It's only duty and loyalty to Supreme Commander\nGattler holding it back.」",
+    (104, 0x186ad): 'Aphrodia\n「That is the duty of our Supreme Commander, Lord\nGattler.」',
+    (107, 0x201d0): "Aphrodia\n「...I can't... I cannot betray Supreme\nCommander Gattler...」",
+    (109, 0x168e0): 'Lancerow\n(So Supreme Commander Seidel moved up\nthe drop time to make that happen...)',
 }
 
 

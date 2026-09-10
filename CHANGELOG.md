@@ -16,6 +16,132 @@ Five screenshots from a player, taken on an older build. Three were already
 fixed or were never bugs; two were real and are fixed here. Both real ones are
 the SAME shape as the rec0 discovery: a pool that no tool can address.
 
+### Two user rulings: 総統 and the Xabungle names
+
+**総統 -> Supreme Commander, all 27 rows.** The user's condition was "if it's
+not too long", and the first fit-check said only 10 of 27 could take it -
+"Supreme Commander" is 10 bytes longer than "Fuhrer". That check was measuring
+the BYTE SLOT, which is not a real constraint: STAGE rows are addressed by
+absolute pointers, so a row that outgrows its slot relocates. Against what
+actually bounds them - box width and the 3-line cap - 26 of 27 fit, and the
+27th fits once appended past its record end. Widest result 491 px against 505.
+
+    10 written in place
+    13 relocated into free gaps
+     4 appended past the record end (rec104 x2, rec107, and rec109, which is
+       a parenthesised THOUGHT and therefore has no key at all)
+
+Strays folded in: "Chief Gattler" x1 and "President Seidel" x2. Note 総統 is
+worn by TWO characters - Gattler and Seidel - and the ruling is applied
+uniformly; the 大尉 precedent would allow splitting it per character if the
+user ever wants that.
+
+**Xabungle -> akurasu, 766 changes in three pools.** Re-confirmed against
+akurasu.net/wiki/Combat_Mecha_Xabungle before sweeping, because 766
+occurrences is not something to change from a note - and one of the four I had
+recorded was WRONG:
+
+    エルチ     Elche 337 -> Elchi      (akurasu: Elchi Cargo)
+    ホーラ     Hora  135 -> Hola
+    コトセット Kotsett 105 -> Cotset    (I had recorded "Kotset")
+    ダイク     Daiku  44 -> Dike
+
+The official Blu-rays also use "Elchi" - the katakana and the voice acting are
+unambiguous, and "Elche" was always the disputed reading. Every replacement is
+the same length or SHORTER, which is the only reason this could reach SRVC at
+all, where a caption may not change length.
+
+    STAGE dialogue + plates  632
+    SRVC battle captions     130   (tools/fix_srvc_words.py, new)
+    COMPDATA pilot names       4   (Elche P, Elche P(E), Elche, Daiku)
+
+ブルーメ/Burume is on akurasu but appears NOWHERE in this game - another
+inflated claim of mine. アデット is not on akurasu at all, so Adette stands on
+the disc majority.
+
+The scale I quoted the user moved three times before it was right: "1,300+
+rows", then 638, then 755, finally 766. The first two counted only STAGE
+dialogue - the same blind spot that has run through this whole session.
+
+### 月光蝶: the weapon-list squeeze bought nothing
+
+A player reported "M-Fly Sys". Three english forms shipped for one japanese
+weapon: the dialogue had it right (Moonlight Butterfly, 26 rows), the weapon
+list said "Moonlight Btrfly", and the battle captions say "M-Fly" (13
+captions, from tools/gen_weapons.py).
+
+The list form was squeezed against the OLD fixed-width assumption of 17
+half-width characters. The column is 221 px and the font is proportional:
+"Moonlight Butterfly" measures 183 px and fits with 38 px to spare. Fixed in
+place - the entry had 7 spare bytes and needed 3 - which matters because the
+pool is ALREADY repacked and apply_pool.py keys off the SHIPPED offsets, so
+running it for a three-byte change would have moved every string in the pool.
+
+The captions remain abbreviated: a raw SRVC edit may not change a string's
+length and "Moonlight Butterfly" is 14 bytes longer than "M-Fly". 12 of the 13
+could carry the full name if the surrounding words give way; that trade is the
+user's call and is still open.
+
+### The protagonist's name had no width budget at all
+
+A player sent two clipped Asakim lines. The cause is not those rows:
+
+    reflow_dialogue.width() measured "$n" as the two ASCII characters
+    $ and n - 22 px - and the reflow pass SKIPPED any field holding a
+    $ code, on the grounds that the runtime name was "of UNKNOWN width".
+
+It is not unknown. The game ships two protagonists and the token draws one of
+their names. export_proofread's box gate calls that same width(), so **not one
+of the 5,263 $-token rows had ever been measured honestly**, and 231 of them
+overflow:
+
+    $n  Setsuko          70 px   measured as 22   107 rows
+    $F  Setsuko・Ohara   142 px   measured as 22     2 rows
+    $c  ＺＥＵＴＨ         105 px   measured as 22   124 rows
+    $f  Setsuko          70 px   measured as 22
+    $l  Travis           57 px   measured as 18
+
+$c is the worst offender despite being five letters, because the team name is
+drawn FULLWIDTH - the same thing the earlier ＺＥＵＴＨ screenshot showed.
+
+THE BUDGET IS THE DEFAULT NAME, by the user's ruling: a custom name cannot be
+measured, so the wider of the two shipped defaults is the yardstick. A player
+who renames longer can still clip - an accepted limit, not an open question.
+
+Every one of the 231 fixed by RE-WRAPPING alone: no text changed, no row grew,
+none needed a fourth line, none left its slot, no glossary link split.
+
+**And the first attempt at that silently did nothing.** apply_lines_relocating
+does not write text verbatim - it calls wrap_field, which flattens the body and
+re-wraps it with width(), the very function that mis-measured. It undid every
+row and reported "231 written in place". Only 7 landed, found by re-running the
+audit rather than trusting the tool.
+
+So the fix went where it belonged, one line in width():
+
+    for ch in expand_tokens(s):      # was: for ch in s
+
+reflow_dialogue.NAME_TOKENS is now the single source of truth and every
+consumer - wrap_field, reflow, apply_lines_relocating, the box gate - measures
+correctly at once. fix_name_token_overflow.py imports it rather than keeping a
+copy. The module docstring's claim that skipping $-fields meant "we never
+mis-measure a line that expands at runtime" was exactly backwards and is gone.
+
+### 無限獄 was still split, and 無限の牢獄 never was
+
+Chasing "Infinite Prison" in the same screenshots: it is NOT a missed sweep.
+無限の牢獄, the Shadow Angels' sealing of Atlandia, is a different term from
+無限獄, Asakim's curse - 牢獄 literally is a prison - and rendering them
+differently is correct. Both are in the glossary now.
+
+But a real split was hiding under it: 無限獄 shipped as BOTH "Infinite Hell"
+(4 rows) and "Endless Hell" (3). Those three sat at exactly 41/41, 47/47 and
+78/78 bytes and "Infinite" is a byte longer than "Endless", so the sweep
+skipped every one in silence. Three more defects came out of the cluster:
+rec140's "the Infinite Hell,." - malformed, and その記憶を奪われた dropped
+entirely - rec139's two-dot "accursed..", and no closing period on either
+route twin of one japanese line.
+
 ### Kazami's line had lost a noun
 
     Kazami

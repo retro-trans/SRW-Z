@@ -128,11 +128,19 @@ NAMES = {
     u'パプティ': (u'Papty', [u'Papti']),
     u'グローマ': (u'Gloma', [u'Groma']),
     u'オーバーセンス': (u'Over Sense', [u'Oversense']),
-    # internal strays only: the disc is otherwise unanimous on these two.
-    # (akurasu spells them Hola / Adette-with-one-t etc, but the disc and
-    # glossary agree across 1,300+ rows and that is the user's call, not
-    # mine - see the note in CHANGELOG.)
-    u'ホーラ': (u'Hora', [u'Hola']),
+    # XABUNGLE, settled by the user 2026-09-10: use akurasu. Re-confirmed
+    # against akurasu.net/wiki/Combat_Mecha_Xabungle before sweeping, because
+    # 755 occurrences across three pools is not something to change on a note -
+    # Elchi Cargo, Hola, Cotset Memamu, Dike. The official Blu-rays also use
+    # "Elchi". Every replacement is the same length or SHORTER, so nothing can
+    # overflow anywhere, which is what makes this safe in SRVC too.
+    #   エルチ    Elche 337 -> Elchi     コトセット Kotsett 105 -> Cotset
+    #   ホーラ    Hora  135 -> Hola      ダイク    Daiku    44 -> Dike
+    u'エルチ': (u'Elchi', [u'Elche']),
+    u'ホーラ': (u'Hola', [u'Hora']),
+    u'コトセット': (u'Cotset', [u'Kotsett', u'Kotset']),
+    u'ダイク': (u'Dike', [u'Daiku']),
+    # アデット is NOT on akurasu, so the disc majority stands.
     u'アデット': (u'Adette', [u'Adet']),
 }
 

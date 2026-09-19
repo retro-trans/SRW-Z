@@ -47,3 +47,7 @@ tools/gen_missing3_en.py
 # Regenerated locally from YOUR disc - both hold the japanese side
 analysis/weapons_en.json
 analysis/build_manifest.json
+
+# Local release inputs for the shared Retro Trans builder
+release-local.json
+*.vpk

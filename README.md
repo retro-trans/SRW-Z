@@ -6,7 +6,7 @@ SLPS-25887), plus the English translation built with it.
 ## Contribute
 
 The project is mostly done but we haven't tested every route yet, and human
-proofreading has covered 363 lines so far out of 87,000. If you want to
+proofreading has covered 2,389 lines so far out of 87,835. If you want to
 contribute to this project or the next in any way — be it bug reports,
 proofreading or playtesting — please join my Discord:
 
@@ -156,7 +156,7 @@ adapt our English translation to the Japanese The Best release.
 |---|---|
 | Project lead | pow |
 | Proofreading | Valz, Hakhan Dakharan |
-| | *363 lines read against the Japanese so far - see [Human proofreading](#human-proofreading)* |
+| | *2,389 lines read against the Japanese so far - see [Human proofreading](#human-proofreading)* |
 | Playtesting | pow, KagamineRin, Melfice, Melfice's friend |
 
 Translation passes, tooling and reverse engineering were done with Claude
@@ -172,10 +172,18 @@ the builds that shipped broken and why.
 
 ### Human proofreading
 
-Every line is machine-translated first. So far a human has read **363 lines**
-against the Japanese - 279 of 68,114 dialogue lines and 84 of 19,213 battle
-lines - and rewrote 132 of them. The rest they read and passed, which is work
-too.
+Every line is machine-translated first. So far a human has read **2,389 lines**
+against the Japanese - 1,139 of 68,622 dialogue lines (1.66%) and 1,250 of
+19,213 battle lines (6.51%) - and supplied replacement English on 1,886 of
+them. The rest they read and passed, which is work too.
+
+Of those rewrites, **1,154 are live in the build** so far: 555 dialogue lines
+and 599 battle captions. The gap is not backlog. Most of the remainder are
+rows where the proofreader typed out the line and concluded it was already
+right, so there was nothing to change. A smaller number could not be applied
+and say so in the workbook: 7 battle captions need more bytes than the field
+holds, and 44 target text that an earlier pass had already corrected, which
+is a fault in our caption index rather than in their work.
 
 That does not count the machine passes, which have been over the whole script
 several times. This number is only about human eyes, and mixing the two would

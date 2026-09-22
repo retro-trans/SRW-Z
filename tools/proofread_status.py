@@ -31,7 +31,11 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "analysis", "sheet_entries.json")
 # denominators: the whole worklist, so the share is not flattering
-TOTAL_DIALOGUE = 68114
+# 68,622 is what export_proofread.py yields today. The old 68,114 predated
+# both the stranded-string recovery and the removal of 8 phantom rows the
+# exporter used to invent, so it understated the worklist - and a stale
+# denominator flatters the share, which is the wrong direction to be wrong.
+TOTAL_DIALOGUE = 68622
 TOTAL_CAPTIONS = 19213
 
 

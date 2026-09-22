@@ -25,54 +25,52 @@ The Best patch remains experimental.
 
 ### Apply
 
-**Windows patcher:** [Retro Trans](https://github.com/retro-trans/retro-trans-tools)
-provides a desktop interface for applying translation patches. Download the app
-from its Releases page, choose **Apply xdelta**, then select your source game
-image, the matching patch below and a new output filename.
+**The easiest way:** Using our tools [Retro Trans](https://github.com/retro-trans/retro-trans-tools) provides a desktop interface for applying translation patches. Download the app from its Releases page, choose **Automatic** tab, select your source game image (.iso or .chd), wait for the app to analyze it then click Patch.
 
-Download the patch from the [v0.9.85 release](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.85):
+**Other ways**: [DeltaPatcher](https://github.com/marco-calautti/DeltaPatcher) accepts the same `.xdelta` files. Select your unpacked `.bin`/`.iso` as the original file and the appropriate patch.
+
+**Command line**: Get [xdelta3 here](https://github.com/jmacd/xdelta). `chdman.exe` is included with [MAME](https://www.mamedev.org/release.html); you do not need to install or run MAME.
+
+You need your own Japanese disc image, or the matching published English v0.9.83 image for an upgrade. Choose the patch that matches your edition; the two editions are not interchangeable.
 
 | Your source image | Patch |
 |---|---|
-| Clean original Japanese edition, SLPS-25887 | `SRWZ-English-v0.9.85.xdelta` |
-| Clean Japanese The Best edition, SLPS-73270 | `SRWZ-English-Best-v0.9.85.xdelta` |
-| Published original-edition English v0.9.83 | `SRWZ-English-v0.9.83-to-v0.9.85.xdelta` |
-| Published The Best edition English v0.9.83 | `SRWZ-English-Best-v0.9.83-to-v0.9.85.xdelta` |
+| Original Japanese release, SLPS-25887 | `SRWZ-English-v0.9.85.xdelta` |
+| Japanese The Best release, SLPS-73270 | `SRWZ-English-Best-v0.9.85.xdelta` |
+| Original-edition English v0.9.83 | `SRWZ-English-v0.9.83-to-v0.9.85.xdelta` |
+| The Best edition English v0.9.83 | `SRWZ-English-Best-v0.9.83-to-v0.9.85.xdelta` |
 
-Full patches require clean Japanese ISO/BIN images. Upgrade patches require the
-exact published v0.9.83 image of the matching edition; local test builds may
-have different hashes. Check `README-v0.9.85.txt` in the release for source and
-output hashes. Both patch routes produce the same v0.9.85 output within each
-edition. Keep checksum checking enabled.
+**Original Japanese edition:**
 
-**Command line, original Japanese edition:**
-
-```sh
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" "SRWZ-English-v0.9.85.xdelta" "SRWZ English v0.9.85.iso"
+```
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.85.xdelta "SRWZ English v0.9.85.iso"
 ```
 
-**Command line, Japanese The Best edition:**
+**Japanese The Best edition:**
 
-```sh
-xdelta3 -d -s "Super Robot Taisen Z [The Best] [J].iso" "SRWZ-English-Best-v0.9.85.xdelta" "SRWZ English Best v0.9.85.iso"
+```
+xdelta3 -d -s "Super Robot Taisen Z [The Best] [J].iso" SRWZ-English-Best-v0.9.85.xdelta "SRWZ English Best v0.9.85.iso"
 ```
 
-For an upgrade, use the matching published v0.9.83 image and upgrade patch
-from the table in the same command format. [DeltaPatcher](https://github.com/marco-calautti/DeltaPatcher)
-also accepts these `.xdelta` files.
+**Already on original-edition v0.9.83?** Use the smaller upgrade patch:
 
-**If you have a `.chd`**, extract it first, then use `game.bin` as your source:
+```
+xdelta3 -d -s "SRWZ English v0.9.83.iso" SRWZ-English-v0.9.83-to-v0.9.85.xdelta "SRWZ English v0.9.85.iso"
+```
 
-```sh
+**Already on The Best edition v0.9.83?** Use its upgrade patch:
+
+```
+xdelta3 -d -s "SRWZ English Best v0.9.83.iso" SRWZ-English-Best-v0.9.83-to-v0.9.85.xdelta "SRWZ English Best v0.9.85.iso"
+```
+
+**If you have a `.chd`**, unpack it first, then apply the matching patch to `game.bin`:
+
+```
 chdman extractcd -i "your-game.chd" -o tmp.cue -ob game.bin
 ```
 
-Get [xdelta3](https://github.com/jmacd/xdelta) for the command-line method.
-`chdman.exe` is included with [MAME](https://www.mamedev.org/release.html);
-you do not need to install or run MAME. Do not apply the patch directly to a CHD.
-
-Use an in-game memory-card save when changing builds. Emulator save states
-contain the executable and resources from the old build.
+A `.chd` cannot be patched directly. If the patcher reports a checksum mismatch, check your source edition and version against the hashes in `README-v0.9.85.txt`. Do not disable source verification. Upgrade patches require the exact published v0.9.83 outputs; local test builds with the same version label may differ. Full and upgrade patches produce identical v0.9.85 output within each edition.
 
 ### Sharper UI art (optional)
 

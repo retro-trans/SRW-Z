@@ -1,7 +1,7 @@
 # Super Robot Taisen Z — translation project
 
 An open toolchain for translating **Super Robot Taisen Z** (PlayStation 2,
-SLPS-25887), plus the English translation built with it.
+SLPS-25887 and The Best SLPS-73270), plus the English translation built with it.
 
 ## Contribute
 
@@ -14,49 +14,76 @@ proofreading or playtesting — please join my Discord:
 
 ## Play it
 
-Get `SRWZ-English-v0.9.6.xdelta` from the
-[latest release](../../releases/latest). You need your own copy of the game.
+The latest release is **[v0.9.85](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.85)**,
+with separate patches for the original Japanese edition (**SLPS-25887**) and
+**The Best edition (SLPS-73270)**. You need your own copy of the matching game.
 
-**If you have a `.iso`** - one command:
+This release includes translation updates, King Vega terminology,
+corrected chapter title cards, and the previous interface and dialogue fixes.
+See the release notes for the full changelog and remaining playtesting checks.
+The Best patch remains experimental.
+
+### Apply
+
+**Windows patcher:** [Retro Trans](https://github.com/retro-trans/retro-trans-tools)
+provides a desktop interface for applying translation patches. Download the app
+from its Releases page, choose **Apply xdelta**, then select your source game
+image, the matching patch below and a new output filename.
+
+Download the patch from the [v0.9.85 release](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.85):
+
+| Your source image | Patch |
+|---|---|
+| Clean original Japanese edition, SLPS-25887 | `SRWZ-English-v0.9.85.xdelta` |
+| Clean Japanese The Best edition, SLPS-73270 | `SRWZ-English-Best-v0.9.85.xdelta` |
+| Published original-edition English v0.9.83 | `SRWZ-English-v0.9.83-to-v0.9.85.xdelta` |
+| Published The Best edition English v0.9.83 | `SRWZ-English-Best-v0.9.83-to-v0.9.85.xdelta` |
+
+Full patches require clean Japanese ISO/BIN images. Upgrade patches require the
+exact published v0.9.83 image of the matching edition; local test builds may
+have different hashes. Check `README-v0.9.85.txt` in the release for source and
+output hashes. Both patch routes produce the same v0.9.85 output within each
+edition. Keep checksum checking enabled.
+
+**Command line, original Japanese edition:**
 
 ```sh
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.6.xdelta "SRWZ English.iso"
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" "SRWZ-English-v0.9.85.xdelta" "SRWZ English v0.9.85.iso"
 ```
 
-**If you have a `.chd`** - extract it first, then the same command:
+**Command line, Japanese The Best edition:**
 
 ```sh
-chdman extractcd -i "Super Robot Taisen Z (Japan).chd" -o tmp.cue -ob game.bin
-xdelta3 -d -s game.bin SRWZ-English-v0.9.6.xdelta "SRWZ English.iso"
+xdelta3 -d -s "Super Robot Taisen Z [The Best] [J].iso" "SRWZ-English-Best-v0.9.85.xdelta" "SRWZ English Best v0.9.85.iso"
 ```
 
-You need [xdelta3](https://github.com/jmacd/xdelta-gpl/releases), and `chdman`
-only if your copy is a `.chd`. chdman has no download of its own - it is one of
-the command-line tools inside the MAME package, so take the Windows build from
-[mamedev.org/release.html](https://www.mamedev.org/release.html) and pull
-`chdman.exe` out of it; you do not need to install or run MAME. Neither tool
-ships here. Prefer clicking? **DeltaPatcher** does the xdelta step for you.
+For an upgrade, use the matching published v0.9.83 image and upgrade patch
+from the table in the same command format. [DeltaPatcher](https://github.com/marco-calautti/DeltaPatcher)
+also accepts these `.xdelta` files.
+
+**If you have a `.chd`**, extract it first, then use `game.bin` as your source:
+
+```sh
+chdman extractcd -i "your-game.chd" -o tmp.cue -ob game.bin
+```
+
+Get [xdelta3](https://github.com/jmacd/xdelta) for the command-line method.
+`chdman.exe` is included with [MAME](https://www.mamedev.org/release.html);
+you do not need to install or run MAME. Do not apply the patch directly to a CHD.
+
+Use an in-game memory-card save when changing builds. Emulator save states
+contain the executable and resources from the old build.
 
 ### Sharper UI art (optional)
 
-`SRWZ-texture-pack.zip` is optional and PCSX2-only. It is not needed to play
-in English - it swaps in crisp 4x versions of the eight pieces of
-**intermission** art the game draws as textures rather than as text:
+English interface artwork and the SRW title logo are included in the patches.
+The optional `SRWZ-texture-pack.zip` provides sharper PCSX2 intermission artwork
+for the original edition. It is unchanged from v0.9.83 and has not been
+revalidated against v0.9.85's native artwork; Best support remains unverified.
 
-| | | | |
-|---|---|---|---|
-| INTERMISSION | Data | Next Map | Bazaar |
-| Units | Pilots | Squads | Options |
-
-That is all of it. Everything else you see in English - the intermission
-status bar (SR Points, Funds, EP, BS), the bazaar Buy/Sell buttons, and every
-menu, dialogue and data screen - is translated **inside the patch** and needs
-no texture pack.
-
-These eight are static art on the disc, so the pack keeps working across patch
-versions. Copy its `textures` folder into your PCSX2 user directory, giving
-`textures/SLPS-25887/replacements/*.png`, then tick **Settings -> Graphics ->
-Texture Replacement -> Load Textures**.
+For the original edition, copy its `textures` folder into your PCSX2 user
+directory, giving `textures/SLPS-25887/replacements/*.png`, then enable
+**Settings -> Graphics -> Texture Replacement -> Load Textures**.
 
 ## Check the translation
 

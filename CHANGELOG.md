@@ -1,3 +1,17 @@
+## 0.9.87 (2026-10-10) - dialogue, interface and Best Stage 41 fixes
+
+* **Best Stage 41 transition repaired.** Corrects event constants that were mistakenly relocated as text addresses, including the values used when choosing Next Map for Stage 41. The user reported that the transition was fixed during testing. The adapter now guards these constants in future builds.
+* **Spirit Command layout corrected.** Aligns the right-hand command names and keeps effect descriptions to two lines above the target row. Hope names Faith consistently; Brave and Pierce descriptions match the native effects. All 35 descriptions fit their measured space.
+* **MAP weapon details clarified.** Replaces the ambiguous IFF labels with **Friendly Fire: Yes/No** and separates the crowded labels, values and icons. Targeting behavior is unchanged.
+* **Remaining battle and map labels translated.** Adds English stat-debuff popups, including Mobility Down, plus ATK/CTR badges and the support-defense badge with its level number retained.
+* **Squad menus repaired.** Translates Confirm/Cancel buttons, repairs the assembled join messages, shortens and aligns the join prompts, and keeps squad-naming descriptions and help within their rows.
+* **Mode and Bazaar screens translated.** Translates Final Stage and Normal/EX Hard/Special Mode artwork, corrects mode descriptions and alignment, and translates the Bazaar heading and all 30 advert instances (12 distinct messages), including the Tin Goldfish and Solar Panel notices.
+* **Dialogue grammar and meaning corrected.** Fixes missing subjects and awkward wording throughout the reported scenes and related lines, including Neo's reliance on Rosamia, Getter weapon comparisons, Bello's question, Dokuganki and the Vice Minister, Holland, Roger/Dorothy, Athrun, and Meer's siren remark. Gainer refers to the enemy's healing wounds. Stage 45 now uses English emphasis quotes and a clear new-possibility exchange; Faye's line distinguishes her earlier sortie from its present consequence.
+* **Glossary and encyclopedia corrections.** Translates the scene-local Dinosaur Empire heading, puts Gym Ghingnham's name in the correct order, and corrects male pronouns for Schlan and Marin. The D.O.M.E. and recovery-team scenes were checked against the Japanese and clarified.
+* **Previous fixes retained.** Includes all v0.9.86 repairs, including the Best archive-boundary and scene-pointer fixes, translated world-map labels, Stage headings, Q&A/tutorial repairs and English artwork. Both title screens now display v0.9.87.
+
+Both complete builds passed the cumulative structural and preservation checks, including strict decoding of all 205 scenario records and checks for the preceding fixes. All four full/upgrade patches were applied to their exact source images and reproduced the expected complete output SHA-256 hashes. The release includes the canonical Retro Trans manifest, validation record, checksum lists and a README with source/output hashes.
+
 # SRW Z English — build changelog
 
 One entry per CHD built, **including throwaway diagnostics**. Started 2026-08-17

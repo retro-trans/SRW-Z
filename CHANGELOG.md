@@ -1,3 +1,15 @@
+## 0.9.88 (2026-10-19) - cumulative names, mission conditions and native battle labels
+
+* **Battle-animation graphics translated.** Adds Canceller, Standby, Parry, Shield Defense, Afterimage and Barrier Field using native game assets. Translates the Prevail badge and the Mech menu's Charge, Turns and Combine labels. The original palettes, indicators and animation data are preserved.
+* **Mission conditions corrected.** Rephrases reported defeat conditions as losses rather than instructions to defeat allied units. Episode 58's turn-limit condition now fits its panel, with all three defeat entries occupying three lines. Native turn limits and gameplay rules are unchanged.
+* **Names and terminology made consistent.** Corrects Olba, Gundam Virsago/Virsago CB, Chaos Caper, Touga Tenkuuji, Kizz Munt, Hugi Zeravire, Zieg Ericmeyer and Lambias in the reviewed menus, dialogue and encyclopedia entries. Repairs Gran-Nights default squad names and uses the Coralians in the reviewed collective references.
+* **Reported dialogue and captions polished.** Includes the Stage 52/53 wording and wrapping corrections, the secret G-Bit Bazaar request, Shagia's true-victors line, Minako's peace remark, Cosmosaurus consistency, and Gainer's Chain Gun Chain shout. Retains the intervening Holland, Roger, Garrod, Schlan/Lowen and related corrections.
+* **Encyclopedia descriptions repaired.** Restores or reflows reported character/mech entries, including T-Bone, Dove and King of Vega, and fixes related name references without changing statistics.
+* **Remaining labels and help repaired.** Translates the reported Requiem/lunar terrain labels, Federation Forces headings and prologue cards, and retains the Best weapon-help and tutorial corrections.
+* **Previous release fixes retained.** Preserves the v0.9.87 Best Stage 41 repair, Spirit Command/MAP weapon layouts and earlier cumulative fixes. Both title screens identify this release as v0.9.88.
+
+Both title-stamped builds passed full-disc preservation comparisons and the complete cumulative validators, including strict checks of all 205 scenario records. Every full and upgrade patch was decoded from its exact source image and checked against the complete output SHA-256. Source/output hashes and validation records are included in the release assets.
+
 ## 0.9.87 (2026-10-10) - dialogue, interface and Best Stage 41 fixes
 
 * **Best Stage 41 transition repaired.** Corrects event constants that were mistakenly relocated as text addresses, including the values used when choosing Next Map for Stage 41. The user reported that the transition was fixed during testing. The adapter now guards these constants in future builds.

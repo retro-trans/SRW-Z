@@ -1,3 +1,14 @@
+## 0.9.89 (2026-10-26) - reviewed dialogue, VWF typography and English birthdays
+
+* **Reviewed dialogue through the endings.** Integrates the reviewed package for both protagonists and their branches: 68,945 selected rows, including 62,015 changed rows per edition. Translation accuracy, editorial review, rechecking substantive edits and proofreading were used for the package. Protected or deferred rows retain their prior wording; this is not a claim of complete human proofreading.
+* **Consistent terminology and reported wording fixes.** Includes the intervening glossary/name corrections, GERWALK, Gallia, Gagan, Lyubov, Bachclone and related reported dialogue corrections. Repairs the Trapar/Rivalry Zone glossary alignment and uses the corrected Glory Star battle shout.
+* **VWF Latin letters, numbers and punctuation.** Converts visible fullwidth text in dialogue, voice captions and existing narration to the corresponding variable-width glyphs. Control codes, runtime placeholders, glossary identities, caption timing and narration fragments are preserved. This includes Latin text such as PS2.
+* **Native spacing and birthdays repaired.** Fixes the spacing regression from the earlier VWF Latin local test, including overlapping native date/quotation characters. Profile birthdays now use unambiguous English month names, such as Aug 9, without changing the selected date.
+* **Terrain, pilot labels and help.** Translates the remaining audited terrain labels, restores the full Insight help text and corrects AEUG pilot display names. Retains the earlier native interface, mission-condition and encyclopedia repairs.
+* **Release version updated.** Both title screens identify these cumulative builds as v0.9.89.
+
+The release candidates passed whole-disc comparisons against the hash-verified local inputs: only the planned title span changed, and the decoded title differs only at the version pixels. The English birthday formatter and every other disc member were checked against the preceding verified spacing build. Prior dialogue integration records report strict validation of all 205 scenario records. All four full/upgrade patches were decoded from their exact source images and checked against complete output sizes and SHA-256 hashes. The manifest identifies local input and tool fingerprints separately from the upstream repository snapshot.
+
 ## 0.9.88 (2026-10-19) - cumulative names, mission conditions and native battle labels
 
 * **Battle-animation graphics translated.** Adds Canceller, Standby, Parry, Shield Defense, Afterimage and Barrier Field using native game assets. Translates the Prevail badge and the Mech menu's Charge, Turns and Combine labels. The original palettes, indicators and animation data are preserved.

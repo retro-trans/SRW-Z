@@ -1,3 +1,13 @@
+## 0.9.90 (2026-10-29) - battle captions, dialogue layout and UI fixes
+
+- **All 30,861 live battle captions retranslated and reviewed.** The wording passed accuracy review, editorial review, rechecking of substantive changes, and final proofreading. Native voice-cue identities, deliberate fragments, controls and timing selections are preserved. The caption storage and display buffers were expanded to support the complete wording rather than clipping to the old byte limit. Final text is fitted to two lines using the installed font.
+- **Scene and map dialogue rewrapped.** Uses the actual font widths and the different box widths. Only words that need to move are carried to the next line; valid layouts are retained. Links, runtime names and full meaning are preserved.
+- **Quotation and terminology fixes.** English quotation marks around The Big and the reported Gravion episode title; Gekkostate Hangar, Kid and MexBrute corrections; repaired PLANT and Junius Treaty glossary destinations.
+- **Squad and unit names.** Complete audit of 383 native squad labels, with the remaining Japanese labels translated. Shorter Airmaster Burst and Leopard Destroy unit-menu names prevent clipping.
+- **Battle and command UI.** Defense banner, TRI Charge, faction/pilot/weapon labels, KuRaiOh headers and the enemy Spirit target repaired. Ally / Enemies now uses consistent wording and compact positions in both toggle states.
+- **The Best episode-47 startup repairs.** Retains the scenario dispatch and complete startup fixes for the reported Next Map/title-card failures. The withdrawn Kamille-focus experiment is not included.
+- **Release identification.** Both title screens now show v0.9.90. All earlier cumulative fixes are retained.
+
 ## 0.9.89 (2026-10-26) - reviewed dialogue, VWF typography and English birthdays
 
 * **Reviewed dialogue through the endings.** Integrates the reviewed package for both protagonists and their branches: 68,945 selected rows, including 62,015 changed rows per edition. Translation accuracy, editorial review, rechecking substantive edits and proofreading were used for the package. Protected or deferred rows retain their prior wording; this is not a claim of complete human proofreading.

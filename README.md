@@ -14,70 +14,43 @@ proofreading or playtesting — please join my Discord:
 
 ## Play it
 
-The latest release is **[v0.9.89](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.89)**,
-with separate full and published-v0.9.88 upgrade patches for the original
+The latest release is **[v0.9.90](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.90)**,
+with separate full and published-v0.9.89 upgrade patches for the original
 Japanese edition (**SLPS-25887**) and **The Best edition (SLPS-73270)**.
-This release includes the reviewed dialogue package through the endings,
-VWF typography, native spacing fixes and English profile birthdays.
-The Best patch remains experimental; newest fresh-boot visual checks remain
-pending. See the release notes for included fixes and source-only work that
-has not yet reached these builds.
+It includes all 30,861 live battle captions retranslated and reviewed,
+dialogue rewrapping, translated squad names, compact command-menu spacing,
+and the cumulative fixes since v0.9.89. The Best edition remains experimental;
+full playtesting and selected visual checks remain pending.
 
 ### Apply
 
-**The easiest way:** Using our tools [Retro Trans](https://github.com/retro-trans/retro-trans-tools) provides a desktop interface for applying translation patches. Download the app from its Releases page, choose **Automatic** tab, select your source game image (.iso or .chd), wait for the app to analyze it then click Patch.
-
-**Other ways**: [DeltaPatcher](https://github.com/marco-calautti/DeltaPatcher) accepts the same `.xdelta` files. Select your unpacked `.bin`/`.iso` as the original file and the appropriate patch.
-
-**Command line**: Get [xdelta3 here](https://github.com/jmacd/xdelta). `chdman.exe` is included with [MAME](https://www.mamedev.org/release.html); you do not need to install or run MAME.
-
-You need your own Japanese disc image, or the matching published English v0.9.88 image for an upgrade. Choose the patch that matches your edition; the two editions are not interchangeable.
+Use [Retro Trans](https://github.com/retro-trans/retro-trans-tools), or apply the matching `.xdelta` with DeltaPatcher or xdelta3. You need your own unpacked Japanese disc image, or the exact published English v0.9.89 image for an upgrade.
 
 | Your source image | Patch |
 |---|---|
-| Original Japanese release, SLPS-25887 | `SRWZ-English-v0.9.89.xdelta` |
-| Japanese The Best release, SLPS-73270 | `SRWZ-English-Best-v0.9.89.xdelta` |
-| Original-edition English v0.9.88 | `SRWZ-English-v0.9.88-to-v0.9.89.xdelta` |
-| The Best edition English v0.9.88 | `SRWZ-English-Best-v0.9.88-to-v0.9.89.xdelta` |
+| Original Japanese release, SLPS-25887 | `SRWZ-English-v0.9.90.xdelta` |
+| Japanese The Best release, SLPS-73270 | `SRWZ-English-Best-v0.9.90.xdelta` |
+| Original-edition English v0.9.89 | `SRWZ-English-v0.9.89-to-v0.9.90.xdelta` |
+| The Best edition English v0.9.89 | `SRWZ-English-Best-v0.9.89-to-v0.9.90.xdelta` |
 
-**Original Japanese edition:**
+The editions are not interchangeable. Local test builds labelled v0.9.89 may differ from the published release and are not upgrade sources. Full and upgrade patches produce the same output within each edition. Check the source hashes in `README-v0.9.90.txt` if your patcher reports a mismatch; keep checksum verification enabled.
 
-```
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.89.xdelta "SRWZ English v0.9.89.iso"
-```
-
-**Japanese The Best edition:**
+For example:
 
 ```
-xdelta3 -d -s "Super Robot Taisen Z [The Best] [J].iso" SRWZ-English-Best-v0.9.89.xdelta "SRWZ English Best v0.9.89.iso"
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.90.xdelta "SRW Z English Original v0.9.90.iso"
 ```
 
-**Already on original-edition v0.9.88?** Use the smaller upgrade patch:
+For The Best, use its own source image and `SRWZ-English-Best-v0.9.90.xdelta`. For manual patching of a CHD, extract it to an ISO/BIN first; Retro Trans Automatic supports compatible CHD inputs.
 
-```
-xdelta3 -d -s "SRWZ English v0.9.88.iso" SRWZ-English-v0.9.88-to-v0.9.89.xdelta "SRWZ English v0.9.89.iso"
-```
-
-**Already on The Best edition v0.9.88?** Use its upgrade patch:
-
-```
-xdelta3 -d -s "SRWZ English Best v0.9.88.iso" SRWZ-English-Best-v0.9.88-to-v0.9.89.xdelta "SRWZ English Best v0.9.89.iso"
-```
-
-**If you have a `.chd`**, unpack it first, then apply the matching patch to `game.bin`:
-
-```
-chdman extractcd -i "your-game.chd" -o tmp.cue -ob game.bin
-```
-
-The manual xdelta command requires an unpacked image; Retro Trans Automatic can handle supported CHD inputs. If the patcher reports a checksum mismatch, check your source edition and version against the hashes in `README-v0.9.89.txt`. Do not disable source verification. Upgrade patches require the exact published v0.9.88 outputs; local test builds with the same version label may differ. Full and upgrade patches produce identical v0.9.89 output within each edition.
+**Boot the new image fresh and load an in-game memory-card save.** Old emulator save states can retain the previous executable and graphics.
 
 ### Sharper UI art (optional)
 
 English interface artwork and the SRW title logo are included in the patches.
 The optional `SRWZ-texture-pack.zip` provides sharper PCSX2 intermission artwork
 for the original edition. It is unchanged from v0.9.83 and has not been
-revalidated against v0.9.89's native artwork; Best support remains unverified.
+revalidated against v0.9.90's native artwork; Best support remains unverified.
 
 For the original edition, copy its `textures` folder into your PCSX2 user
 directory, giving `textures/SLPS-25887/replacements/*.png`, then enable

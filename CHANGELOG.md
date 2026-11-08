@@ -1,3 +1,11 @@
+## 0.9.91 (2026-11-08) - official Gundam names and screenshot fixes
+
+- **Official Gundam names and terminology.** Zeta Gundam, Char's Counterattack, Gundam X, Turn A Gundam and SEED names now follow [Gundam Official](https://gundam-official.com/). Dedicated English series profiles take precedence where pages disagree. Native identities distinguish shared names, and supported accents retain the official spelling.
+- **Complete DATA HELP review.** All 532 descriptions were checked against Japanese. Corrected missing and misleading wording, restored complete size/squad explanations, preserved inline icons, and repaired the native English text measurement and parser handling. The earlier debug pass covered 2,128 CPU traces across both editions and both help fonts.
+- **Screenshot and encyclopedia corrections.** Mental Defense, Lifting Technique, Positron Reflector, Glomar, Sara, Emaan Sldr., Hyaku-Shiki, Scub, Pancha Fruit, Toma and Cherubim Sur le Kubera; complete Moroha/Toma/Cherubim descriptions; pennant text fitting and meaning; corrected Cagalli wording and the Beams articles; Fed Captain prevents pilot-panel overlap. Removed the two reported Japanese Parts inventory column headings.
+- **Consistent source handling.** Native-bound rules, exact guarded overlays and installed-font fitting preserve unrelated names, controls, mission logic and voice identities. All previous cumulative caption, dialogue, UI and Best startup fixes are retained.
+- **Release identification.** Both title screens show v0.9.91.
+
 ## 0.9.90 (2026-10-29) - battle captions, dialogue layout and UI fixes
 
 - **All 30,861 live battle captions retranslated and reviewed.** The wording passed accuracy review, editorial review, rechecking of substantive changes, and final proofreading. Native voice-cue identities, deliberate fragments, controls and timing selections are preserved. The caption storage and display buffers were expanded to support the complete wording rather than clipping to the old byte limit. Final text is fitted to two lines using the installed font.

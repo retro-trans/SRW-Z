@@ -10,7 +10,7 @@ proofreading has covered 2,389 lines so far out of 87,835. If you want to
 contribute to this project or the next in any way — be it bug reports,
 proofreading or playtesting — please join my Discord:
 
-**[discord.gg/MssepShjmB](https://discord.gg/MssepShjmB)**
+**[discord.gg/nZBZfTDfCP](https://discord.gg/nZBZfTDfCP)**
 
 ## Play it
 

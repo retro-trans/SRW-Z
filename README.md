@@ -14,34 +14,35 @@ proofreading or playtesting — please join my Discord:
 
 ## Play it
 
-The latest release is **[v0.9.91](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.91)**,
-with separate full and published-v0.9.90 upgrade patches for the original
+The latest release is **[v0.9.92](https://github.com/retro-trans/SRW-Z/releases/tag/v0.9.92)**,
+with separate full and published-v0.9.91 upgrade patches for the original
 Japanese edition (**SLPS-25887**) and **The Best edition (SLPS-73270)**.
-It aligns Gundam names with the dedicated official English series profiles,
-includes the complete DATA HELP review, and retains the cumulative
-caption, dialogue and screenshot fixes since v0.9.90. The Best edition remains experimental;
-full playtesting and selected visual checks remain pending.
+It fixes Best scene sound IDs, DATA HELP spillover, Spirit/Parts text overflow,
+Gekko/Eiji captions and dialogue, Bry/Hidlar naming and the Brockary weapon name.
+Official Gundam naming and all earlier cumulative fixes are retained.
+The Best edition remains experimental; fresh in-game visual/audio confirmation
+and full playtesting remain pending.
 
 ### Apply
 
-Use [Retro Trans](https://github.com/retro-trans/retro-trans-tools), or apply the matching `.xdelta` with DeltaPatcher or xdelta3. You need your own unpacked Japanese disc image, or the exact published English v0.9.90 image for an upgrade.
+Use [Retro Trans](https://github.com/retro-trans/retro-trans-tools), or apply the matching `.xdelta` with DeltaPatcher or xdelta3. Use your own unpacked Japanese disc image, or the exact published English v0.9.91 image for an upgrade.
 
 | Your source image | Patch |
 |---|---|
-| Original Japanese release, SLPS-25887 | `SRWZ-English-v0.9.91.xdelta` |
-| Japanese The Best release, SLPS-73270 | `SRWZ-English-Best-v0.9.91.xdelta` |
-| Original-edition English v0.9.90 | `SRWZ-English-v0.9.90-to-v0.9.91.xdelta` |
-| The Best edition English v0.9.90 | `SRWZ-English-Best-v0.9.90-to-v0.9.91.xdelta` |
+| Original Japanese release, SLPS-25887 | `SRWZ-English-v0.9.92.xdelta` |
+| Japanese The Best release, SLPS-73270 | `SRWZ-English-Best-v0.9.92.xdelta` |
+| Original-edition English v0.9.91 | `SRWZ-English-v0.9.91-to-v0.9.92.xdelta` |
+| The Best edition English v0.9.91 | `SRWZ-English-Best-v0.9.91-to-v0.9.92.xdelta` |
 
-The editions are not interchangeable. Local test builds labelled v0.9.90 may differ from the published release and are not upgrade sources. Full and upgrade patches produce the same output within each edition. Check the source hashes in `README-v0.9.91.txt` if your patcher reports a mismatch; keep checksum verification enabled.
+The editions are not interchangeable. Local test builds labelled v0.9.91 may differ from the published release and are not upgrade sources. Full and upgrade patches produce the same output within each edition. Keep source checksum verification enabled; exact source/output hashes are in `README-v0.9.92.txt` and `BUILD-MANIFEST.json`.
 
 For example:
 
 ```
-xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.91.xdelta "SRW Z English Original v0.9.91.iso"
+xdelta3 -d -s "Super Robot Taisen Z (Japan).iso" SRWZ-English-v0.9.92.xdelta "SRW Z English Original v0.9.92.iso"
 ```
 
-For The Best, use its own source image and `SRWZ-English-Best-v0.9.91.xdelta`. For manual patching of a CHD, extract it to an ISO/BIN first; Retro Trans Automatic supports compatible CHD inputs.
+For manual patching of a CHD, extract it to an ISO/BIN first; Retro Trans Automatic supports compatible CHD inputs.
 
 **Boot the new image fresh and load an in-game memory-card save.** Old emulator save states can retain the previous executable and graphics.
 
@@ -50,7 +51,7 @@ For The Best, use its own source image and `SRWZ-English-Best-v0.9.91.xdelta`. F
 English interface artwork and the SRW title logo are included in the patches.
 The optional `SRWZ-texture-pack.zip` provides sharper PCSX2 intermission artwork
 for the original edition. It is unchanged from v0.9.83 and has not been
-revalidated against v0.9.91's native artwork; Best support remains unverified.
+revalidated against v0.9.92's native artwork; Best support remains unverified.
 
 For the original edition, copy its `textures` folder into your PCSX2 user
 directory, giving `textures/SLPS-25887/replacements/*.png`, then enable

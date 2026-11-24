@@ -1,3 +1,14 @@
+## 0.9.92 (2026-11-24) - scene sounds, text fit and naming fixes
+
+- **Best edition scene sounds.** Corrected 46 stale Original-edition sound IDs across two scenario records, including the reported drinking and confrontation scenes. The corrected commands now match Japanese Best. All 1,182 scene sound commands across all 205 scenarios were checked; adapter validation now rejects this mismatch. The Original edition's sound commands are unchanged.
+- **DATA HELP spillover.** Fixed Robot File, Character File and control-list prompt termination around inline icons, which could draw unrelated terrain-rank help after the intended prompt. The fix passed native CPU draw traces in both help fonts. All 532 reviewed DATA HELP payloads and their owners are preserved.
+- **Spirit Command text fit.** Mercy and Pierce (Direct Hit) now fit the two effect rows above Target while retaining their mechanics.
+- **Parts descriptions.** Fitted 12 oversized descriptions in the shared Parts/Bazaar table, including Linear Seat, Haro and Hyper Jammer. The full 67-slot table (66 unique descriptions) was checked against installed font widths and the three-row lower box; range exclusions and other mechanics are retained.
+- **Gekko and Eiji corrections.** Three infirmary captions now say Gekko Infirmary rather than Getter Infirmary. Four Loran lines referring to Eiji Shigure now use Eiji rather than Aijee. Existing Gekkostate Hangar captions are retained.
+- **Bry and Hidlar consistency.** User-approved Bry / Emperor Bry and Hidlar / Marshal Hidlar now agree across pilot labels, encyclopedia text, dialogue, battle captions and a save recap: 381 affected text fields per edition, with existing glossary identities retained.
+- **Weapon and encyclopedia fit.** Brockary Full Pwr now matches the mech name through all six name owners. Both Black Dominator description forms were reflowed within their text box without changing their words or paragraph boundaries. Linear Seat, Haro and Hyper Jammer were read back and remeasured again for the latest screenshot reports.
+- **Cumulative fixes retained.** Official Gundam names still follow [Gundam Official](https://gundam-official.com/), with dedicated English series profiles taking precedence. All earlier caption, dialogue, DATA HELP, UI, mission-condition and Best startup fixes remain included.
+
 ## 0.9.91 (2026-11-08) - official Gundam names and screenshot fixes
 
 - **Official Gundam names and terminology.** Zeta Gundam, Char's Counterattack, Gundam X, Turn A Gundam and SEED names now follow [Gundam Official](https://gundam-official.com/). Dedicated English series profiles take precedence where pages disagree. Native identities distinguish shared names, and supported accents retain the official spelling.
